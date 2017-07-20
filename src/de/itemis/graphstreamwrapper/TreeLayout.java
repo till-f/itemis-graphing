@@ -5,6 +5,7 @@ import org.graphstream.ui.geom.Point2;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class TreeLayout extends PipeBase implements Layout
         private String _id;
         private HashMap<String, InternalNode> _targetNodes = new HashMap<String, InternalNode>();
 
-        private Integer _requiredSpace = null;
+        private Double _requiredSpace = null;
         private Double _layoutX = null;
         private Double _layoutY = null;
 
@@ -52,7 +53,7 @@ public class TreeLayout extends PipeBase implements Layout
 
         public List<InternalNode> getTargets()
         {
-            LinkedList<InternalNode> targets = new LinkedList<InternalNode>();
+            ArrayList<InternalNode> targets = new ArrayList<InternalNode>();
             for (InternalNode n : _targetNodes.values())
             {
                 targets.add(n);
@@ -60,35 +61,39 @@ public class TreeLayout extends PipeBase implements Layout
             return targets;
         }
 
-        public int getRequiredSpace()
+        public double getRequiredSpace()
         {
             if (_requiredSpace != null)
-                return _requiredSpace.intValue();
+                return _requiredSpace.doubleValue();
 
-            _requiredSpace = 0;
-            for (InternalNode target : this.getTargets())
+            _requiredSpace = 0.0;
+            for (InternalNode target : getTargets())
             {
                 _requiredSpace += target.getRequiredSpace();
             }
-            if (_requiredSpace == 0) _requiredSpace = 1;
+            if (_requiredSpace == 0.0) _requiredSpace = 1.0;
 
-            return _requiredSpace.intValue();
+            return _requiredSpace.doubleValue();
         }
 
-        public void computePosition(int mainOffset, double internalOffset, int parentCount, int level)
+        public void computePosition(int mainOffset, double internalOffset, int level)
         {
             if (_layoutX != null && _layoutY != null)
                 return;
 
-            double correction = (parentCount - 1) / 2.0;
-            _layoutX = HORIZONTAL_SPACE_FACTOR * (mainOffset + internalOffset - correction);
+            double correction = getRequiredSpace() / 2 - 0.5;
+            _layoutX = HORIZONTAL_SPACE_FACTOR * (mainOffset + internalOffset + correction);
             _layoutY = VERTICAL_SPACE_FACTOR * level;
 
-            double subInternalOffset = internalOffset - correction;
-            for (InternalNode target : this.getTargets())
+            double subInternalOffset = internalOffset;
+            int trgtCount = getTargets().size();
+            for (int idx=0; idx < trgtCount; idx++)
             {
-                target.computePosition(mainOffset, subInternalOffset, this._targetNodes.size(), level-1);
-                subInternalOffset += target.getRequiredSpace();
+                getTargets().get(idx).computePosition(mainOffset, subInternalOffset, level-1);
+                if (idx+1 < trgtCount)
+                {
+                    subInternalOffset += (getTargets().get(idx).getRequiredSpace() + getTargets().get(idx+1).getRequiredSpace()) / 2;
+                }
             }
         }
 
@@ -158,7 +163,6 @@ public class TreeLayout extends PipeBase implements Layout
 
         fromToArray[0].addTarget(fromToArray[1]);
         _nodeIDToParentNodesMap.get(toId).add(fromToArray[0]);
-
     }
 
     public void edgeRemoved(String sourceId, long timeId, String edgeId)
@@ -216,9 +220,8 @@ public class TreeLayout extends PipeBase implements Layout
         int mainOffset = 0;
         for (InternalNode n : _rootNodes)
         {
-            int mainSpace = n.getRequiredSpace();
-            n.computePosition(mainOffset, 0, 1,0);
-            mainOffset += mainSpace;
+            n.computePosition(mainOffset, 0.0, 0);
+            mainOffset += n.getRequiredSpace();
         }
     }
 

@@ -78,6 +78,13 @@ public class ExampleGraph {
         creator.addEdge("&2E", "&2", "E", true);
         creator.addEdge("FE", "F", "E", true);
 
+        creator.addNode("&3", "&", "operator" );
+        creator.addEdge("A&3", "A", "&3", true);
+        creator.addNode("G", "G" );
+        creator.addNode("H", "H" );
+        creator.addEdge("&3G", "&3", "G", true);
+        creator.addEdge("&3H", "&3", "H", true);
+
         creator.addSpriteToNode("A1", "A", new Point3(0.3, 0, -14),"Sprite A1", null);
         creator.addSpriteToNode("A2", "A", new Point3(0.3, 0, 14),"Sprite A2", "RAP");
 
