@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: gs-ui-1.3.jar gs-core-1.3.jar gs-algo-1.3.jar
+
