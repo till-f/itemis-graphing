@@ -145,6 +145,9 @@ public class TreeLayout extends PipeBase implements Layout
     {
         for(InternalNode child : parent.getTargets())
         {
+            if (tree.hasNode(child))
+                continue;
+
             tree.addChildren(parent, child);
             fillAbegoTree_recursive(tree, child);
         }
