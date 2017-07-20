@@ -106,16 +106,19 @@ public class PanZoomMouseManager implements MouseManager, MouseWheelListener {
     {
         _view.requestFocus();
 
-        // Unselect all.
-        if (!event.isShiftDown()) {
-            for (Node node : _graph) {
-                if (node.hasAttribute("ui.selected"))
-                    node.removeAttribute("ui.selected");
-            }
+        if (event.getButton() != 3)
+        {
+            // Unselect all.
+            if (!event.isShiftDown()) {
+                for (Node node : _graph) {
+                    if (node.hasAttribute("ui.selected"))
+                        node.removeAttribute("ui.selected");
+                }
 
-            for (GraphicSprite sprite : _graph.spriteSet()) {
-                if (sprite.hasAttribute("ui.selected"))
-                    sprite.removeAttribute("ui.selected");
+                for (GraphicSprite sprite : _graph.spriteSet()) {
+                    if (sprite.hasAttribute("ui.selected"))
+                        sprite.removeAttribute("ui.selected");
+                }
             }
         }
 
