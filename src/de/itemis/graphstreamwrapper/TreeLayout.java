@@ -1,20 +1,16 @@
 package de.itemis.graphstreamwrapper;
 
+import org.abego.treelayout.util.DefaultConfiguration;
+import org.abego.treelayout.util.DefaultTreeForTreeLayout;
 import org.graphstream.stream.PipeBase;
-import org.graphstream.ui.geom.Point2;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 public class TreeLayout extends PipeBase implements Layout
 {
-    protected final double HORIZONTAL_SPACE_FACTOR;
-    protected final double VERTICAL_SPACE_FACTOR;
-
     protected boolean _isLayouted = false;
     protected long _lastComputeTime = 0;
 
@@ -22,106 +18,21 @@ public class TreeLayout extends PipeBase implements Layout
     protected HashMap<String, LinkedList<InternalNode>> _nodeIDToParentNodesMap = new HashMap<String, LinkedList<InternalNode>>();
     protected HashMap<String, InternalNode[]> _edgeIDToNodesMap = new HashMap<String, InternalNode[]>();
 
-    protected class InternalNode
-    {
-        private String _id;
-        private HashMap<String, InternalNode> _targetNodes = new HashMap<String, InternalNode>();
+    protected final DefaultConfiguration<InternalNode> _layouterConfiguration;
+    protected final InternalNodeExtendProvider _nodeExtentProvider;
 
-        private Double _requiredSpace = null;
-        private Double _layoutX = null;
-        private Double _layoutY = null;
-
-        public InternalNode(String id)
-        {
-            _id = id;
-        }
-
-        public void removeTarget(String id)
-        {
-            _targetNodes.remove(id);
-        }
-
-        public void addTarget(InternalNode n)
-        {
-            _targetNodes.put(n.getID(), n);
-        }
-
-        public String getID()
-        {
-            return _id;
-        }
-
-        public List<InternalNode> getTargets()
-        {
-            ArrayList<InternalNode> targets = new ArrayList<InternalNode>();
-            for (InternalNode n : _targetNodes.values())
-            {
-                targets.add(n);
-            }
-            return targets;
-        }
-
-        public double getRequiredSpace()
-        {
-            if (_requiredSpace != null)
-                return _requiredSpace.doubleValue();
-
-            _requiredSpace = 0.0;
-            for (InternalNode target : getTargets())
-            {
-                _requiredSpace += target.getRequiredSpace();
-            }
-            if (_requiredSpace == 0.0) _requiredSpace = 1.0;
-
-            return _requiredSpace.doubleValue();
-        }
-
-        public void computePosition(int mainOffset, double internalOffset, int level)
-        {
-            if (_layoutX != null && _layoutY != null)
-                return;
-
-            double correction = getRequiredSpace() / 2 - 0.5;
-            _layoutX = HORIZONTAL_SPACE_FACTOR * (mainOffset + internalOffset + correction);
-            _layoutY = VERTICAL_SPACE_FACTOR * level;
-
-            double subInternalOffset = internalOffset;
-            int trgtCount = getTargets().size();
-            for (int idx=0; idx < trgtCount; idx++)
-            {
-                getTargets().get(idx).computePosition(mainOffset, subInternalOffset, level-1);
-                if (idx+1 < trgtCount)
-                {
-                    subInternalOffset += (getTargets().get(idx).getRequiredSpace() + getTargets().get(idx+1).getRequiredSpace()) / 2;
-                }
-            }
-        }
-
-        public Point2 getPosition()
-        {
-            if (_layoutX == null || _layoutY == null)
-                throw new UnsupportedOperationException("getPosition requires computePosition() to be called");
-
-            return new Point2(_layoutX, _layoutY);
-        }
-
-        public void reset() {
-            _requiredSpace = null;
-            _layoutX = null;
-            _layoutY = null;
-        }
-    }
+    protected double _gapBetweenNodes;
 
     public TreeLayout()
     {
-        HORIZONTAL_SPACE_FACTOR = 1.0;
-        VERTICAL_SPACE_FACTOR = 1.0;
+        this(0.5, 0.5);
     }
 
-    public TreeLayout(double horizontalSpaceFactor, double verticalSpaceFctor)
+    public TreeLayout(double gapBetweenLevels, double gapBetweenNodes)
     {
-        HORIZONTAL_SPACE_FACTOR = horizontalSpaceFactor;
-        VERTICAL_SPACE_FACTOR = verticalSpaceFctor;
+        _gapBetweenNodes = gapBetweenNodes;
+        _layouterConfiguration = new DefaultConfiguration<InternalNode>(gapBetweenLevels, gapBetweenNodes);
+        _nodeExtentProvider = new InternalNodeExtendProvider();
     }
 
     public void nodeAdded(String sourceId, long timeId, String nodeId)
@@ -197,7 +108,7 @@ public class TreeLayout extends PipeBase implements Layout
     {
         resetLayout();
 
-        computeLayout();
+        computeAndPublishLayout();
 
         publishLayout();
 
@@ -213,23 +124,38 @@ public class TreeLayout extends PipeBase implements Layout
         }
     }
 
-    private void computeLayout()
+    private void computeAndPublishLayout()
     {
-        LinkedList<InternalNode> _rootNodes = getRootNodes();
-
-        int mainOffset = 0;
-        for (InternalNode n : _rootNodes)
+        double offset = 0;
+        for (InternalNode root : getRootNodes())
         {
-            n.computePosition(mainOffset, 0.0, 0);
-            mainOffset += n.getRequiredSpace();
+            DefaultTreeForTreeLayout<InternalNode> tree = new DefaultTreeForTreeLayout<InternalNode>(root);
+            fillAbegoTree_recursive(tree, root);
+
+            org.abego.treelayout.TreeLayout<InternalNode> treeLayout = new org.abego.treelayout.TreeLayout<InternalNode>(tree, _nodeExtentProvider, _layouterConfiguration);
+            for(InternalNode n : treeLayout.getNodeBounds().keySet())
+            {
+                n.place(treeLayout.getNodeBounds().get(n).x + offset, treeLayout.getNodeBounds().get(n).y * -1);
+            }
+            offset += treeLayout.getBounds().getWidth() + _gapBetweenNodes;
+        }
+    }
+
+    private void fillAbegoTree_recursive(DefaultTreeForTreeLayout<InternalNode> tree, InternalNode parent)
+    {
+        for(InternalNode child : parent.getTargets())
+        {
+            tree.addChildren(parent, child);
+            fillAbegoTree_recursive(tree, child);
         }
     }
 
     private void publishLayout()
     {
-        for (InternalNode n : _nodeIDToNodeMap.values()) {
+        for (InternalNode n : _nodeIDToNodeMap.values())
+        {
             sendNodeAttributeChanged(sourceId, n.getID(), "xyz", null,
-                    new double[] { n.getPosition().x, n.getPosition().y, 0 });
+                    new double[] { n.getX(), n.getY(), 0 });
         }
     }
 
@@ -350,7 +276,7 @@ public class TreeLayout extends PipeBase implements Layout
         {
             indentStr += "  ";
         }
-        System.out.println(indentStr + n.getID() + " " + n.getRequiredSpace() + ", x=" + n.getPosition().x + "y=" + n.getPosition().y);
+        System.out.println(indentStr + n.getID());
 
         indent++;
         for (InternalNode target : n.getTargets())
