@@ -4,12 +4,14 @@ import org.graphstream.ui.geom.Point2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class InternalNode
 {
     private String _id;
     private HashMap<String, InternalNode> _targetNodes = new HashMap<String, InternalNode>();
+    private LinkedList<InternalNode> _sourceNodes = new LinkedList<InternalNode>();
 
     private Double _requiredSpace = null;
     private Double _x = null;
@@ -20,14 +22,24 @@ public class InternalNode
         _id = id;
     }
 
+    public void addTarget(InternalNode n)
+    {
+        _targetNodes.put(n.getID(), n);
+    }
+
     public void removeTarget(String id)
     {
         _targetNodes.remove(id);
     }
 
-    public void addTarget(InternalNode n)
+    public void addSource(InternalNode n)
     {
-        _targetNodes.put(n.getID(), n);
+        _sourceNodes.add(n);
+    }
+
+    public void removeSource(InternalNode n)
+    {
+        _sourceNodes.remove(n);
     }
 
     public String getID()
@@ -45,10 +57,27 @@ public class InternalNode
         return targets;
     }
 
+    public List<InternalNode> getSources() {
+        ArrayList<InternalNode> sources = new ArrayList<InternalNode>();
+        for (InternalNode n : _sourceNodes)
+        {
+            sources.add(n);
+        }
+        return sources;
+    }
+
+    // Layouting
+    // --------------------------------------
+
     public void reset()
     {
         _x = null;
         _y = null;
+    }
+
+    public boolean isPlaced()
+    {
+        return _x != null && _y != null;
     }
 
     public void place(double x, double y)
@@ -60,6 +89,23 @@ public class InternalNode
         _x = x;
         _y = y;
     }
+
+//    public void pushLevels(double gapBetweenLevels)
+//    {
+//        double extraShift = gapBetweenLevels + getHeight() / 2;
+//
+//        double newY = _y + extraShift;
+//        for (InternalNode source : getSources())
+//        {
+//            if (!source.isPlaced())
+//                continue;
+//
+//            newY = Double.min(newY, source.getY());
+//        }
+//        newY = newY - extraShift;
+//
+//        _y = newY;
+//    }
 
     public double getX()
     {

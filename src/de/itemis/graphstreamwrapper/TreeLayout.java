@@ -15,12 +15,12 @@ public class TreeLayout extends PipeBase implements Layout
     protected long _lastComputeTime = 0;
 
     protected HashMap<String, InternalNode> _nodeIDToNodeMap = new HashMap<String, InternalNode>();
-    protected HashMap<String, LinkedList<InternalNode>> _nodeIDToParentNodesMap = new HashMap<String, LinkedList<InternalNode>>();
     protected HashMap<String, InternalNode[]> _edgeIDToNodesMap = new HashMap<String, InternalNode[]>();
 
     protected final DefaultConfiguration<InternalNode> _layouterConfiguration;
     protected final InternalNodeExtendProvider _nodeExtentProvider;
 
+    protected double _gapBetweenLevels;
     protected double _gapBetweenNodes;
 
     public TreeLayout()
@@ -30,6 +30,7 @@ public class TreeLayout extends PipeBase implements Layout
 
     public TreeLayout(double gapBetweenLevels, double gapBetweenNodes)
     {
+        _gapBetweenLevels = gapBetweenLevels;
         _gapBetweenNodes = gapBetweenNodes;
         _layouterConfiguration = new DefaultConfiguration<InternalNode>(gapBetweenLevels, gapBetweenNodes);
         _nodeExtentProvider = new InternalNodeExtendProvider();
@@ -38,22 +39,21 @@ public class TreeLayout extends PipeBase implements Layout
     public void nodeAdded(String sourceId, long timeId, String nodeId)
     {
         _isLayouted = false;
-        _nodeIDToNodeMap.put(nodeId, new InternalNode(nodeId));
-        _nodeIDToParentNodesMap.put(nodeId, new LinkedList<InternalNode>());
+        InternalNode newNode = new InternalNode(nodeId);
+        _nodeIDToNodeMap.put(nodeId, newNode);
     }
 
     public void nodeRemoved(String sourceId, long timeId, String nodeId)
     {
         _isLayouted = false;
-        if (_nodeIDToParentNodesMap.get(nodeId) != null)
+        if (_nodeIDToNodeMap.get(nodeId) != null)
         {
-            for(InternalNode n : _nodeIDToParentNodesMap.get(nodeId))
+            for(InternalNode n : _nodeIDToNodeMap.get(nodeId).getSources())
             {
                 n.removeTarget(nodeId);
             }
         }
         _nodeIDToNodeMap.remove(nodeId);
-        _nodeIDToParentNodesMap.remove(nodeId);
     }
 
     public void edgeAdded(String sourceId, long timeId, String edgeId,
@@ -73,15 +73,15 @@ public class TreeLayout extends PipeBase implements Layout
         _edgeIDToNodesMap.put(edgeId, fromToArray);
 
         fromToArray[0].addTarget(fromToArray[1]);
-        _nodeIDToParentNodesMap.get(toId).add(fromToArray[0]);
+        _nodeIDToNodeMap.get(toId).addSource(fromToArray[0]);
     }
 
     public void edgeRemoved(String sourceId, long timeId, String edgeId)
     {
-        InternalNode[] fromToArray = _edgeIDToNodesMap.get(edgeId);
         _isLayouted = false;
+        InternalNode[] fromToArray = _edgeIDToNodesMap.get(edgeId);
         _edgeIDToNodesMap.remove(edgeId);
-        _nodeIDToParentNodesMap.get(fromToArray[1]).remove(fromToArray[0]);
+        _nodeIDToNodeMap.get(fromToArray[1]).removeSource(fromToArray[0]);
     }
 
     public void graphCleared(String sourceId, long timeId)
@@ -93,11 +93,11 @@ public class TreeLayout extends PipeBase implements Layout
     protected LinkedList<InternalNode> getRootNodes()
     {
         LinkedList<InternalNode> rootNodes = new LinkedList<InternalNode>();
-        for (String key : _nodeIDToParentNodesMap.keySet())
+        for (InternalNode n : _nodeIDToNodeMap.values())
         {
-            if (_nodeIDToParentNodesMap.get(key).size() < 1)
+            if (n.getSources().size() < 1)
             {
-                rootNodes.add(_nodeIDToNodeMap.get(key));
+                rootNodes.add(n);
             }
         }
         return rootNodes;
@@ -126,7 +126,7 @@ public class TreeLayout extends PipeBase implements Layout
 
     private void computeAndPublishLayout()
     {
-        double offset = 0;
+        double xOffset = 0;
         for (InternalNode root : getRootNodes())
         {
             DefaultTreeForTreeLayout<InternalNode> tree = new DefaultTreeForTreeLayout<InternalNode>(root);
@@ -135,9 +135,9 @@ public class TreeLayout extends PipeBase implements Layout
             org.abego.treelayout.TreeLayout<InternalNode> treeLayout = new org.abego.treelayout.TreeLayout<InternalNode>(tree, _nodeExtentProvider, _layouterConfiguration);
             for(InternalNode n : treeLayout.getNodeBounds().keySet())
             {
-                n.place(treeLayout.getNodeBounds().get(n).x + offset, treeLayout.getNodeBounds().get(n).y * -1);
+                n.place(treeLayout.getNodeBounds().get(n).x + xOffset, treeLayout.getNodeBounds().get(n).y * -1);
             }
-            offset += treeLayout.getBounds().getWidth() + _gapBetweenNodes;
+            xOffset += treeLayout.getBounds().getWidth() + _gapBetweenNodes;
         }
     }
 
@@ -227,7 +227,6 @@ public class TreeLayout extends PipeBase implements Layout
     {
         _edgeIDToNodesMap.clear();
         _nodeIDToNodeMap.clear();
-        _nodeIDToParentNodesMap.clear();
     }
 
     @Override
@@ -270,22 +269,5 @@ public class TreeLayout extends PipeBase implements Layout
     public void freezeNode(String id, boolean frozen)
     {
         // not supported
-    }
-
-    private void printDummyInfo(InternalNode n, int indent)
-    {
-        String indentStr = "";
-        for(int i = 0; i< indent; i++)
-        {
-            indentStr += "  ";
-        }
-        System.out.println(indentStr + n.getID());
-
-        indent++;
-        for (InternalNode target : n.getTargets())
-        {
-            printDummyInfo(target, indent);
-        }
-        indent--;
     }
 }
