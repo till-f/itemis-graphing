@@ -107,30 +107,38 @@ public class GraphCreator {
         return node;
     }
 
-    public Edge addEdge(String edgeID, String fromID, String toID)
+    public Edge addEdge(String fromID, String toID)
     {
-        return addEdge(edgeID, fromID, toID, null, null, false);
+        return addEdge(fromID, toID, null, null, false, null);
     }
 
-    public Edge addEdge(String edgeID, String fromID, String toID, boolean directed)
+    public Edge addEdge(String fromID, String toID, boolean directed)
     {
-        return addEdge(edgeID, fromID, toID, null, null, directed);
+        return addEdge(fromID, toID, null, null, directed, null);
     }
 
-    public Edge addEdge(String edgeID, String fromID, String toID, String label)
+    public Edge addEdge(String fromID, String toID, String label)
     {
-        return addEdge(edgeID, fromID, toID, label, null, false);
+        return addEdge(fromID, toID, label, null, false, null);
     }
 
-    public Edge addEdge(String edgeID, String fromID, String toID, String label, boolean directed)
+    public Edge addEdge(String fromID, String toID, String label, boolean directed)
     {
-        return addEdge(edgeID, fromID, toID, label, null, directed);
+        return addEdge(fromID, toID, label, null, directed, null);
     }
 
-    public Edge addEdge(String edgeID, String fromID, String toID, String label, String styleClass, boolean directed)
+    public Edge addEdge(String fromID, String toID, String label, String styleClass, boolean directed)
     {
-        if (edgeID == null || edgeID.isEmpty() || fromID == null || fromID.isEmpty() || toID == null || toID.isEmpty())
+        return addEdge(fromID, toID, label, null, directed, null);
+    }
+
+    public Edge addEdge(String fromID, String toID, String label, String styleClass, boolean directed, String edgeID)
+    {
+        if (fromID == null || fromID.isEmpty() || toID == null || toID.isEmpty())
             throw new IllegalArgumentException("edgeID, fromID and toID are mandatory");
+
+        if (edgeID == null || edgeID.isEmpty())
+            edgeID = fromID + "." + toID;
 
         Edge edge = _graph.addEdge(edgeID, fromID, toID, directed);
         
