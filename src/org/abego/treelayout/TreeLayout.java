@@ -53,7 +53,7 @@ import org.abego.treelayout.internal.util.java.lang.string.StringUtil;
  * {@link #getNodeBounds()}.
  * </p>
  * See <a href="package-summary.html">this summary</a> to get an overview how to
- * use TreeLayout.
+ * use TreeLayoutAbego.
  * 
  * 
  * @author Udo Borkowski (ub@abego.org)
@@ -209,7 +209,7 @@ public class TreeLayout<TreeNode> {
 	/**
 	 * Returns the bounds of the tree layout.
 	 * <p>
-	 * The bounds of a TreeLayout is the smallest rectangle containing the
+	 * The bounds of a TreeLayoutAbego is the smallest rectangle containing the
 	 * bounds of all nodes in the layout. It always starts at (0,0).
 	 * 
 	 * @return the bounds of the tree layout
@@ -718,7 +718,7 @@ public class TreeLayout<TreeNode> {
 	// constructor
 
 	/**
-	 * Creates a TreeLayout for a given tree.
+	 * Creates a TreeLayoutAbego for a given tree.
 	 * <p>
 	 * In addition to the tree the {@link NodeExtentProvider} and the
 	 * {@link Configuration} must be given.

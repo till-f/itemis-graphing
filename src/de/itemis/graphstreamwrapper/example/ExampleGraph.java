@@ -1,7 +1,7 @@
 package de.itemis.graphstreamwrapper.example;
 
 import de.itemis.graphstreamwrapper.GraphCreator;
-import de.itemis.graphstreamwrapper.layout.tree.TreeLayout;
+import de.itemis.graphstreamwrapper.layout.hierarchical.HierarchicalLayoutJGraph;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.DefaultView;
 
@@ -100,10 +100,10 @@ public class ExampleGraph {
     {
         // graphstream shipped layouts:
         // Force-based: SpringBox (default), Eades84Layout, LinLog
-        // Hierarchical: HierarchicalLayout (broken?)
+        // Hierarchical: HierarchicalLayoutJGraph (broken?)
 
         GraphCreator creator = getExampleGraphCreator();
-        DefaultView view = creator.createView(new TreeLayout());
+        DefaultView view = creator.createView(new HierarchicalLayoutJGraph());
 
         JFrame jframe = new JFrame("Graph Example");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

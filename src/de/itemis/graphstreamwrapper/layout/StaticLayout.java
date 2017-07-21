@@ -70,6 +70,19 @@ public abstract class StaticLayout extends PipeBase implements Layout
     }
 
     @Override
+    public void compute()
+    {
+        resetLayout();
+
+        computeLayout();
+
+        publishLayout();
+
+        _isLayouted = true;
+        _lastComputeTime = System.currentTimeMillis();
+    }
+
+    @Override
     public int getNodeMovedCount()
     {
         return 0;
@@ -201,4 +214,7 @@ public abstract class StaticLayout extends PipeBase implements Layout
                     new double[] { n.getX(), n.getY(), 0 });
         }
     }
+
+    protected abstract void computeLayout();
+
 }

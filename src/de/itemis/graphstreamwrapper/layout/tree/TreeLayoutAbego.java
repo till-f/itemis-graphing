@@ -5,7 +5,7 @@ import de.itemis.graphstreamwrapper.layout.StaticLayout;
 import org.abego.treelayout.util.DefaultConfiguration;
 import org.abego.treelayout.util.DefaultTreeForTreeLayout;
 
-public class TreeLayout extends StaticLayout
+public class TreeLayoutAbego extends StaticLayout
 {
     protected final DefaultConfiguration<InternalNode> _layouterConfiguration;
     protected final InternalNodeExtendProvider _nodeExtentProvider;
@@ -13,12 +13,12 @@ public class TreeLayout extends StaticLayout
     protected double _gapBetweenLevels;
     protected double _gapBetweenNodes;
 
-    public TreeLayout()
+    public TreeLayoutAbego()
     {
         this(0.5, 0.5);
     }
 
-    public TreeLayout(double gapBetweenLevels, double gapBetweenNodes)
+    public TreeLayoutAbego(double gapBetweenLevels, double gapBetweenNodes)
     {
         _gapBetweenLevels = gapBetweenLevels;
         _gapBetweenNodes = gapBetweenNodes;
@@ -33,19 +33,7 @@ public class TreeLayout extends StaticLayout
     }
 
     @Override
-    public void compute()
-    {
-        resetLayout();
-
-        computeLayout();
-
-        publishLayout();
-
-        _isLayouted = true;
-        _lastComputeTime = System.currentTimeMillis();
-    }
-
-    private void computeLayout()
+    protected void computeLayout()
     {
         double xOffset = 0;
         for (InternalNode root : getRootNodes())

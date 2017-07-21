@@ -34,18 +34,18 @@
 
  <h2>Introduction</h2>
 
- The TreeLayout creates tree layouts for arbitrary trees. It is not restricted 
+ The TreeLayoutAbego creates tree layouts for arbitrary trees. It is not restricted
  to a specific output or format, but can be used for any kind of two dimensional
  diagram. Examples are Swing based components, SVG files, and many more. This is
- possible because TreeLayout separates the layout of a tree from the actual 
+ possible because TreeLayoutAbego separates the layout of a tree from the actual
  rendering.<p>
 
- To use the TreeLayout you mainly need to supply an instance of the  
- {@link org.abego.treelayout.TreeLayout TreeLayout} class with the nodes of the tree (including "children" 
+ To use the TreeLayoutAbego you mainly need to supply an instance of the
+ {@link org.abego.treelayout.TreeLayout TreeLayoutAbego} class with the nodes of the tree (including "children"
  links), together with the "size" of each node. In addition you can configure 
  the layout by specifying parameters like "gap between levels" etc..<p>
 
- Based on this information TreeLayout creates a compact, nice looking layout. 
+ Based on this information TreeLayoutAbego creates a compact, nice looking layout.
  The layout has the following properties [2]:
 
  <ol>
@@ -69,22 +69,22 @@
 
  <h2>Usage</h2>
 
- To use the TreeLayout you will create a {@link org.abego.treelayout.TreeLayout TreeLayout} instance with:
+ To use the TreeLayoutAbego you will create a {@link org.abego.treelayout.TreeLayout TreeLayoutAbego} instance with:
  <ul>
  <li>a tree, accessible through the {@link org.abego.treelayout.TreeForTreeLayout TreeForTreeLayout} interface, </li>
  <li>a {@link org.abego.treelayout.NodeExtentProvider NodeExtentProvider}, and</li>
  <li>a {@link org.abego.treelayout.Configuration Configuration}.</li>
  </ul>
- Using these objects the TreeLayout will then calculate the layout and provide 
+ Using these objects the TreeLayoutAbego will then calculate the layout and provide
  the result through the method {@link org.abego.treelayout.TreeLayout#getNodeBounds() getNodeBounds}.
 
 
  <h3>TreeForTreeLayout</h3>
 
- The TreeLayout works on any kind of tree and uses the {@link org.abego.treelayout.TreeForTreeLayout TreeForTreeLayout} 
+ The TreeLayoutAbego works on any kind of tree and uses the {@link org.abego.treelayout.TreeForTreeLayout TreeForTreeLayout}
  interface to access such a tree.<p>
 
- To use the TreeLayout you therefore need to provide it with a TreeForTreeLayout 
+ To use the TreeLayoutAbego you therefore need to provide it with a TreeForTreeLayout
  implementation. In most situations you will not need to deal with all details 
  of that interface, but create an implementation by extending 
  {@link org.abego.treelayout.util.AbstractTreeForTreeLayout AbstractTreeForTreeLayout}, or even use the class 
@@ -152,7 +152,7 @@
 
  <h3>NodeExtentProvider</h3>
 
- TreeLayout also needs to know the extent (width and height) of each node in the 
+ TreeLayoutAbego also needs to know the extent (width and height) of each node in the
  tree. This information is provided through the {@link org.abego.treelayout.NodeExtentProvider NodeExtentProvider}.<p>
 
  If all nodes have the same size you can use a {@link org.abego.treelayout.util.FixedNodeExtentProvider FixedNodeExtentProvider} 
@@ -185,7 +185,7 @@
  <h3>Configuration</h3>
  
  You can use a {@link org.abego.treelayout.Configuration Configuration} to customize various aspects of the 
- TreeLayout:
+ TreeLayoutAbego:
  <ul>
  <li>the gap between levels,</li>
  <li>the minimal gap between nodes,</li>
@@ -269,10 +269,10 @@
 
 
  <h2>Examples</h2>
- In the "demo" package you will find examples using the TreeLayout.
+ In the "demo" package you will find examples using the TreeLayoutAbego.
  <ul>
- <li>SVGDemo - Demonstrates how to use the TreeLayout to create a tree diagram with SVG (Scalable Vector Graphic)</li>
- <li>SwingDemo - Demonstrates how to use the TreeLayout to render a tree in a Swing application</li>
+ <li>SVGDemo - Demonstrates how to use the TreeLayoutAbego to create a tree diagram with SVG (Scalable Vector Graphic)</li>
+ <li>SwingDemo - Demonstrates how to use the TreeLayoutAbego to render a tree in a Swing application</li>
  </ul>
 
 
@@ -284,11 +284,11 @@
  Reingold–Tilford algorithm [3] one is not limited to binary trees.
 
  <p>
- The following figure show the results running the TreeLayout algorithm on a 
+ The following figure show the results running the TreeLayoutAbego algorithm on a
  MacBook Pro 2.4 GHz Intel Core 2 Duo (2 GB Memory (-Xmx2000m)). The variously 
  sized trees were created randomly. 
  <p>
- <img src="doc-files/performance.png" alt="Chart: Performance of TreeLayout on random trees">
+ <img src="doc-files/performance.png" alt="Chart: Performance of TreeLayoutAbego on random trees">
  <p>
  The picture illustrates the linear time behavior of the algorithm and shows 
  the applicability also for large number of nodes. In this setting it takes 
@@ -300,7 +300,7 @@
 
  <h2>License</h2>
 
- TreeLayout is distributed under a BSD license of 
+ TreeLayoutAbego is distributed under a BSD license of
  <a href="http://www.abego-software.de">abego Software</a>. 
  (<a href="doc-files/LICENSE.TXT">License text</a>)
 
@@ -309,7 +309,7 @@
 
  <h2>Sponsor</h2>
 
- The development of TreeLayout was generously sponsored by Terence Parr 
+ The development of TreeLayoutAbego was generously sponsored by Terence Parr
  "The ANTLR Guy" (parrt at cs dot usfca dot edu).
 
 
