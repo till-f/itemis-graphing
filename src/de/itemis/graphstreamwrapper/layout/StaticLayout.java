@@ -1,5 +1,7 @@
 package de.itemis.graphstreamwrapper.layout;
 
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 import org.graphstream.stream.PipeBase;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
@@ -9,16 +11,24 @@ import java.util.LinkedList;
 
 public abstract class StaticLayout extends PipeBase implements Layout
 {
+    protected final Graph _originalGraph;
+
     protected boolean _isLayouted = false;
     protected long _lastComputeTime = 0;
 
     protected HashMap<String, InternalNode> _nodeIDToNodeMap = new HashMap<String, InternalNode>();
     protected HashMap<String, InternalNode[]> _edgeIDToNodesMap = new HashMap<String, InternalNode[]>();
 
+    public StaticLayout(Graph originalGraph)
+    {
+        _originalGraph = originalGraph;
+    }
+
     public void nodeAdded(String sourceId, long timeId, String nodeId)
     {
         _isLayouted = false;
-        InternalNode newNode = new InternalNode(nodeId);
+        Node n = _originalGraph.getNode(nodeId);
+        InternalNode newNode = new InternalNode(n);
         _nodeIDToNodeMap.put(nodeId, newNode);
     }
 

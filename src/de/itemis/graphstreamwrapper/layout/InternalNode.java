@@ -1,5 +1,7 @@
 package de.itemis.graphstreamwrapper.layout;
 
+import org.graphstream.graph.Node;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,16 +10,20 @@ import java.util.List;
 public class InternalNode
 {
     private String _id;
+    private Double _width = null;
+    private Double _height = null;
+
     private HashMap<String, InternalNode> _targetNodes = new HashMap<String, InternalNode>();
     private LinkedList<InternalNode> _sourceNodes = new LinkedList<InternalNode>();
 
-    private Double _requiredSpace = null;
     private Double _x = null;
     private Double _y = null;
 
-    public InternalNode(String id)
+    public InternalNode(Node node)
     {
-        _id = id;
+        _id = node.getId();
+        _width = node.getAttribute("ui.width");
+        _height = node.getAttribute("ui.height");
     }
 
     public void addTarget(InternalNode n)
@@ -55,7 +61,8 @@ public class InternalNode
         return targets;
     }
 
-    public List<InternalNode> getSources() {
+    public List<InternalNode> getSources()
+    {
         ArrayList<InternalNode> sources = new ArrayList<InternalNode>();
         for (InternalNode n : _sourceNodes)
         {
@@ -73,11 +80,6 @@ public class InternalNode
         _y = null;
     }
 
-    public boolean isPlaced()
-    {
-        return _x != null && _y != null;
-    }
-
     public void place(double x, double y)
     {
         // do not place if already placed
@@ -87,23 +89,6 @@ public class InternalNode
         _x = x;
         _y = y;
     }
-
-//    public void pushLevels(double gapBetweenLevels)
-//    {
-//        double extraShift = gapBetweenLevels + getHeight() / 2;
-//
-//        double newY = _y + extraShift;
-//        for (InternalNode source : getSources())
-//        {
-//            if (!source.isPlaced())
-//                continue;
-//
-//            newY = Double.min(newY, source.getY());
-//        }
-//        newY = newY - extraShift;
-//
-//        _y = newY;
-//    }
 
     public double getX()
     {
@@ -117,11 +102,11 @@ public class InternalNode
 
     public double getWidth()
     {
-        return 0.4;
+        return _width;
     }
 
     public double getHeight()
     {
-        return 0.4;
+        return _height;
     }
 }

@@ -6,12 +6,31 @@ import com.mxgraph.model.mxGeometry;
 import com.mxgraph.view.mxGraph;
 import de.itemis.graphstreamwrapper.layout.InternalNode;
 import de.itemis.graphstreamwrapper.layout.StaticLayout;
+import org.graphstream.graph.Graph;
 
 import javax.swing.*;
 import java.util.HashMap;
 
 public class HierarchicalLayoutJGraphX extends StaticLayout
 {
+    private final double _intraCellSpacing;
+    private final double _interHierarchySpacing;
+    private final double _interRankCellSpacing;
+
+    public HierarchicalLayoutJGraphX(Graph originalGraph)
+    {
+        this(originalGraph, 0.5, 0.5, 0.5);
+    }
+
+    public HierarchicalLayoutJGraphX(Graph originalGraph, double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing)
+    {
+        super(originalGraph);
+
+        _intraCellSpacing = intraCellSpacing;
+        _interHierarchySpacing = interHierarchySpacing;
+        _interRankCellSpacing = interRankCellSpacing;
+    }
+
     @Override
     public String getLayoutAlgorithmName()
     {
@@ -30,7 +49,7 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
         {
             for (InternalNode n : _nodeIDToNodeMap.values())
             {
-                mxCell cell = (mxCell) graph.insertVertex(parent, n.getID(), n, 0, 0, 0.5, 0.5);
+                mxCell cell = (mxCell) graph.insertVertex(parent, n.getID(), n, 0, 0, n.getWidth(), n.getHeight());
                 nodeToCell.put(n, cell);
 
             }
@@ -47,9 +66,9 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
 
             mxHierarchicalLayout layout = new mxHierarchicalLayout(graph, SwingConstants.SOUTH);
             layout.setFineTuning(true);
-            layout.setIntraCellSpacing(0.5);
-            layout.setInterHierarchySpacing(0.5);
-            layout.setInterRankCellSpacing(0.5);
+            layout.setIntraCellSpacing(_intraCellSpacing);
+            layout.setInterHierarchySpacing(_interHierarchySpacing);
+            layout.setInterRankCellSpacing(_interRankCellSpacing);
             layout.execute(parent);
         }
         finally

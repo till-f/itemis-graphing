@@ -85,6 +85,11 @@ public class GraphCreator {
 
     public Node addNode(String nodeID, String label, String styleClass)
     {
+        return addNode(nodeID, label, null, 0.5, 0.5);
+    }
+
+    public Node addNode(String nodeID, String label, String styleClass, double width, double height)
+    {
         if (nodeID == null || nodeID.isEmpty())
             throw new IllegalArgumentException("nodeID is mandatory");
 
@@ -95,7 +100,10 @@ public class GraphCreator {
 
         if (styleClass != null)
             node.setAttribute("ui.class", styleClass);
-        
+
+        node.setAttribute("ui.width", width);
+        node.setAttribute("ui.height", height);
+
         return node;
     }
 

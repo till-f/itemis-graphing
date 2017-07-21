@@ -103,7 +103,7 @@ public class ExampleGraph {
         // Hierarchical: HierarchicalLayoutJGraph (broken?)
 
         GraphCreator creator = getExampleGraphCreator();
-        DefaultView view = creator.createView(new HierarchicalLayoutJGraphX());
+        DefaultView view = creator.createView(new HierarchicalLayoutJGraphX(creator.getGraph()));
 
         JFrame jframe = new JFrame("Graph Example");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
