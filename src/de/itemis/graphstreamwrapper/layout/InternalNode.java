@@ -1,4 +1,4 @@
-package de.itemis.graphstreamwrapper.layout.tree;
+package de.itemis.graphstreamwrapper.layout;
 
 import java.util.ArrayList;
 import java.util.HashMap;

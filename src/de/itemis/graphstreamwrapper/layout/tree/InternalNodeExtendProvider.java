@@ -1,5 +1,6 @@
 package de.itemis.graphstreamwrapper.layout.tree;
 
+import de.itemis.graphstreamwrapper.layout.InternalNode;
 import org.abego.treelayout.NodeExtentProvider;
 
 public class InternalNodeExtendProvider implements  NodeExtentProvider<InternalNode>
