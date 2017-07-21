@@ -9,7 +9,6 @@ import org.jgraph.graph.*;
 
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class HierarchicalLayoutJGraph extends StaticLayout

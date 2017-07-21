@@ -1,7 +1,7 @@
 package de.itemis.graphstreamwrapper.example;
 
 import de.itemis.graphstreamwrapper.GraphCreator;
-import de.itemis.graphstreamwrapper.layout.hierarchical.HierarchicalLayoutJGraph;
+import de.itemis.graphstreamwrapper.layout.hierarchical.HierarchicalLayoutJGraphX;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.DefaultView;
 
@@ -35,7 +35,7 @@ public class ExampleGraph {
                 "}" +
                 "edge {" +
                     "shape: cubic-curve;" +
-                    "fill-color: #303030;" +
+                    "fill-color: #808080;" +
                 "}" +
                 "sprite {" +
                     "size: 0.05gu, 0.05gu;" +
@@ -103,7 +103,7 @@ public class ExampleGraph {
         // Hierarchical: HierarchicalLayoutJGraph (broken?)
 
         GraphCreator creator = getExampleGraphCreator();
-        DefaultView view = creator.createView(new HierarchicalLayoutJGraph());
+        DefaultView view = creator.createView(new HierarchicalLayoutJGraphX());
 
         JFrame jframe = new JFrame("Graph Example");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
