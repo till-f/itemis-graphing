@@ -17,7 +17,7 @@ public class ExampleGraph {
                     "shape: rounded-box;" +
                     "size: 0.4gu,0.4gu;" +
                     "fill-mode: plain;" +
-                    "fill-color: white;" +
+                    "fill-color: #FFFFFF;" +
                     "stroke-mode: plain;" +
                     "stroke-color: black;" +
                     "text-size: 12;" +
@@ -34,7 +34,8 @@ public class ExampleGraph {
                     "fill-color: red;" +
                 "}" +
                 "edge {" +
-                    "fill-color: black;" +
+                    "shape: cubic-curve;" +
+                    "fill-color: #303030;" +
                 "}" +
                 "sprite {" +
                     "size: 0.05gu, 0.05gu;" +
