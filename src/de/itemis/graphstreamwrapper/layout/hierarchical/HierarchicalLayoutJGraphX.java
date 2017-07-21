@@ -51,7 +51,6 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
             {
                 mxCell cell = (mxCell) graph.insertVertex(parent, n.getID(), n, 0, 0, n.getWidth(), n.getHeight());
                 nodeToCell.put(n, cell);
-
             }
 
             for (InternalNode source : _nodeIDToNodeMap.values())

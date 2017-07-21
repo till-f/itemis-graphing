@@ -51,6 +51,26 @@ public class InternalNode
         return _id;
     }
 
+    public double getX()
+    {
+        return _x;
+    }
+
+    public double getY()
+    {
+        return _y;
+    }
+
+    public double getWidth()
+    {
+        return _width;
+    }
+
+    public double getHeight()
+    {
+        return _height;
+    }
+
     public List<InternalNode> getTargets()
     {
         ArrayList<InternalNode> targets = new ArrayList<InternalNode>();
@@ -71,9 +91,6 @@ public class InternalNode
         return sources;
     }
 
-    // Layouting
-    // --------------------------------------
-
     public void reset()
     {
         _x = null;
@@ -88,25 +105,5 @@ public class InternalNode
 
         _x = x;
         _y = y;
-    }
-
-    public double getX()
-    {
-        return _x;
-    }
-
-    public double getY()
-    {
-        return _y;
-    }
-
-    public double getWidth()
-    {
-        return _width;
-    }
-
-    public double getHeight()
-    {
-        return _height;
     }
 }
