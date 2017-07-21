@@ -1,6 +1,4 @@
-package de.itemis.graphstreamwrapper;
-
-import org.graphstream.ui.geom.Point2;
+package de.itemis.graphstreamwrapper.layout.tree;
 
 import java.util.ArrayList;
 import java.util.HashMap;

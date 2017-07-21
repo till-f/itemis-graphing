@@ -1,4 +1,4 @@
-package de.itemis.graphstreamwrapper;
+package de.itemis.graphstreamwrapper.layout.tree;
 
 import org.abego.treelayout.util.DefaultConfiguration;
 import org.abego.treelayout.util.DefaultTreeForTreeLayout;

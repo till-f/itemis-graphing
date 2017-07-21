@@ -1,10 +1,9 @@
-package de.itemis.graphstreamwrapper.de.itemis.graphstreamwrapper.example;
+package de.itemis.graphstreamwrapper.example;
 
 import de.itemis.graphstreamwrapper.GraphCreator;
-import de.itemis.graphstreamwrapper.TreeLayout;
+import de.itemis.graphstreamwrapper.layout.tree.TreeLayout;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.DefaultView;
-import org.graphstream.ui.view.View;
 
 import javax.swing.*;
 
@@ -103,7 +102,7 @@ public class ExampleGraph {
         // Hierarchical: HierarchicalLayout (broken?)
 
         GraphCreator creator = getExampleGraphCreator();
-        DefaultView view = creator.createView(new TreeLayout(), new ExampleSink());
+        DefaultView view = creator.createView(new TreeLayout());
 
         JFrame jframe = new JFrame("Graph Example");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
