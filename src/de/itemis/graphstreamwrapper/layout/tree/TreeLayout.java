@@ -27,6 +27,12 @@ public class TreeLayout extends StaticLayout
     }
 
     @Override
+    public String getLayoutAlgorithmName()
+    {
+        return "Tree Layout";
+    }
+
+    @Override
     public void compute()
     {
         resetLayout();
@@ -37,14 +43,6 @@ public class TreeLayout extends StaticLayout
 
         _isLayouted = true;
         _lastComputeTime = System.currentTimeMillis();
-    }
-
-    private void resetLayout()
-    {
-        for (InternalNode n : _nodeIDToNodeMap.values())
-        {
-            n.reset();
-        }
     }
 
     private void computeLayout()
@@ -74,21 +72,6 @@ public class TreeLayout extends StaticLayout
             tree.addChildren(parent, child);
             fillAbegoTree_recursive(tree, child);
         }
-    }
-
-    private void publishLayout()
-    {
-        for (InternalNode n : _nodeIDToNodeMap.values())
-        {
-            sendNodeAttributeChanged(sourceId, n.getID(), "xyz", null,
-                    new double[] { n.getX(), n.getY(), 0 });
-        }
-    }
-
-    @Override
-    public String getLayoutAlgorithmName()
-    {
-        return "Tree Layout";
     }
 
 }

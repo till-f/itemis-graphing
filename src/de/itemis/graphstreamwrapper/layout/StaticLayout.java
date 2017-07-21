@@ -69,19 +69,6 @@ public abstract class StaticLayout extends PipeBase implements Layout
         clear();
     }
 
-    protected LinkedList<InternalNode> getRootNodes()
-    {
-        LinkedList<InternalNode> rootNodes = new LinkedList<InternalNode>();
-        for (InternalNode n : _nodeIDToNodeMap.values())
-        {
-            if (n.getSources().size() < 1)
-            {
-                rootNodes.add(n);
-            }
-        }
-        return rootNodes;
-    }
-
     @Override
     public int getNodeMovedCount()
     {
@@ -183,5 +170,35 @@ public abstract class StaticLayout extends PipeBase implements Layout
     public void freezeNode(String id, boolean frozen)
     {
         // not supported
+    }
+
+    protected LinkedList<InternalNode> getRootNodes()
+    {
+        LinkedList<InternalNode> rootNodes = new LinkedList<InternalNode>();
+        for (InternalNode n : _nodeIDToNodeMap.values())
+        {
+            if (n.getSources().size() < 1)
+            {
+                rootNodes.add(n);
+            }
+        }
+        return rootNodes;
+    }
+
+    protected void resetLayout()
+    {
+        for (InternalNode n : _nodeIDToNodeMap.values())
+        {
+            n.reset();
+        }
+    }
+
+    protected void publishLayout()
+    {
+        for (InternalNode n : _nodeIDToNodeMap.values())
+        {
+            sendNodeAttributeChanged(sourceId, n.getID(), "xyz", null,
+                    new double[] { n.getX(), n.getY(), 0 });
+        }
     }
 }
