@@ -4,7 +4,6 @@
       <root url="jar://$PROJECT_DIR$/lib/gs-ui-1.3.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/gs-core-1.3.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/gs-algo-1.3.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/jgraph-5.13.0.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jgraphx-3.7.4.jar!/" />
     </CLASSES>
     <JAVADOC />
