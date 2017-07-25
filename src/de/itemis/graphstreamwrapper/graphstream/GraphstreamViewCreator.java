@@ -1,11 +1,9 @@
 package de.itemis.graphstreamwrapper.graphstream;
 
 import de.itemis.graphstreamwrapper.Attachment;
-import de.itemis.graphstreamwrapper.InternalEdge;
-import de.itemis.graphstreamwrapper.InternalGraph;
-import de.itemis.graphstreamwrapper.InternalNode;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
+import de.itemis.graphstreamwrapper.Edge;
+import de.itemis.graphstreamwrapper.Graph;
+import de.itemis.graphstreamwrapper.Vertex;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.Sink;
@@ -39,24 +37,32 @@ public class GraphstreamViewCreator {
         }
     }
 
-    private final Graph _gsGraph;
+    private final org.graphstream.graph.Graph _gsGraph;
     private final SpriteManager _spriteManager;
 
-    public GraphstreamViewCreator(InternalGraph graph)
+    public GraphstreamViewCreator(Graph graph)
     {
         _gsGraph = new SingleGraph("Graph");
         _gsGraph.addAttribute("ui.quality");
         _gsGraph.addAttribute("ui.antialias");
         _spriteManager = new SpriteManager(_gsGraph);
 
-        for(InternalNode n : graph.getNodes())
+        for(Vertex n : graph.getVertexes())
         {
-            addNode(n);
+            addVertex(n);
+            for(Attachment a : n.getAttachments())
+            {
+                addAttachment(a, n, null);
+            }
         }
 
-        for(InternalEdge e : graph.getEdges())
+        for(Edge e : graph.getEdges())
         {
             addEdge(e);
+            for(Attachment a : e.getAttachments())
+            {
+                addAttachment(a, null, e);
+            }
         }
     }
 
@@ -68,20 +74,20 @@ public class GraphstreamViewCreator {
         _gsGraph.addAttribute("ui.stylesheet", styleCode);
     }
 
-    private void addNode(InternalNode node)
+    private void addVertex(Vertex vertex)
     {
-        Node gsNode = _gsGraph.addNode(node.getId());
+        Node gsNode = _gsGraph.addNode(vertex.getId());
 
-        if (node.getLabel() != null)
-            gsNode.setAttribute("ui.label", node.getLabel());
+        if (vertex.getLabel() != null)
+            gsNode.setAttribute("ui.label", vertex.getLabel());
 
-        if (node.getStyleId() != null)
-            gsNode.setAttribute("ui.class", node.getStyleId());
+        if (vertex.getStyleId() != null)
+            gsNode.setAttribute("ui.class", vertex.getStyleId());
     }
 
-    private void addEdge(InternalEdge edge)
+    private void addEdge(Edge edge)
     {
-        Edge gsEdge = _gsGraph.addEdge(edge.getId(), edge.getFrom().getId(), edge.getTo().getId(), true);
+        org.graphstream.graph.Edge gsEdge = _gsGraph.addEdge(edge.getId(), edge.getFrom().getId(), edge.getTo().getId(), true);
 
         if (edge.getLabel() != null)
             gsEdge.setAttribute("ui.label", edge.getLabel());
@@ -90,7 +96,7 @@ public class GraphstreamViewCreator {
             gsEdge.setAttribute("ui.class", edge.getStyleId());
     }
 
-    private void addSprite(Attachment attachment, InternalNode toNode, InternalEdge toEdge)
+    private void addAttachment(Attachment attachment, Vertex toVertex, Edge toEdge)
     {
         Sprite sprite = _spriteManager.addSprite(attachment.getId());
 
@@ -100,8 +106,8 @@ public class GraphstreamViewCreator {
         if (attachment.getStyleId() != null)
             sprite.setAttribute("ui.class", attachment.getStyleId());
 
-        if (toNode != null)
-            sprite.attachToNode(toNode.getId());
+        if (toVertex != null)
+            sprite.attachToNode(toVertex.getId());
         else if (toEdge != null)
             sprite.attachToEdge(toEdge.getId());
 

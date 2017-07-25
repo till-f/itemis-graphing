@@ -3,35 +3,35 @@ package de.itemis.graphstreamwrapper;
 import java.util.LinkedList;
 import java.util.List;
 
-public class InternalEdge extends BaseGraphElement implements IAttachmentContainer
+public class Edge extends BaseGraphElement implements IAttachmentContainer
 {
     private final LinkedList<Attachment> _attachments = new LinkedList<>();
 
-    private InternalNode _from;
-    private InternalNode _to;
+    private Vertex _from;
+    private Vertex _to;
 
     private String _fromId;
     private String _toId;
 
-    public InternalEdge(String id, InternalNode from, InternalNode to)
+    public Edge(String id, Vertex from, Vertex to)
     {
         super(id);
         _from = from;
         _to = to;
     }
 
-    public InternalEdge(String id, String fromId, String toId)
+    public Edge(String id, String fromId, String toId)
     {
         super(id);
         _fromId = fromId;
         _toId = toId;
     }
 
-    public InternalNode getFrom() {
+    public Vertex getFrom() {
         return _from;
     }
 
-    public InternalNode getTo() {
+    public Vertex getTo() {
         return _to;
     }
 
@@ -43,7 +43,7 @@ public class InternalEdge extends BaseGraphElement implements IAttachmentContain
         return _toId;
     }
 
-    public void setFromTo(InternalNode from, InternalNode to)
+    public void setFromTo(Vertex from, Vertex to)
     {
         if (from == null && to == null)
         {

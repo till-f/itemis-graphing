@@ -4,61 +4,61 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class InternalGraph
+public class Graph
 {
-    private final HashMap<String, InternalEdge> _uninsertedEdges = new HashMap<String, InternalEdge>();
+    private final HashMap<String, Edge> _uninsertedEdges = new HashMap<String, Edge>();
 
-    private final HashMap<String, InternalNode> _nodes = new HashMap<String, InternalNode>();
-    private final HashMap<String, InternalEdge> _edges = new HashMap<String, InternalEdge>();
+    private final HashMap<String, Vertex> _vertexes = new HashMap<String, Vertex>();
+    private final HashMap<String, Edge> _edges = new HashMap<String, Edge>();
 
-    public List<InternalNode> getNodes()
+    public List<Vertex> getVertexes()
     {
-        List<InternalNode> nodes = new LinkedList<InternalNode>();
-        nodes.addAll(_nodes.values());
-        return nodes;
+        List<Vertex> vertexes = new LinkedList<Vertex>();
+        vertexes.addAll(_vertexes.values());
+        return vertexes;
     }
 
-    public List<InternalEdge> getEdges()
+    public List<Edge> getEdges()
     {
-        List<InternalEdge> edges = new LinkedList<InternalEdge>();
+        List<Edge> edges = new LinkedList<Edge>();
         edges.addAll(_edges.values());
         return edges;
     }
 
-    public InternalNode addNode(String id, double width, double height)
+    public Vertex addVertex(String id, double width, double height)
     {
-        InternalNode n = new InternalNode(id, width, height);
-        _nodes.put(id, n);
+        Vertex n = new Vertex(id, width, height);
+        _vertexes.put(id, n);
 
         retryAddUninsertedEdges();
 
         return n;
     }
 
-    public void removeNode(String id)
+    public void removeVertex(String id)
     {
-        InternalNode removedNode = _nodes.get(id);
-        if (removedNode != null)
+        Vertex removedVertex = _vertexes.get(id);
+        if (removedVertex != null)
         {
-            for(InternalNode n : removedNode.getSources())
+            for(Vertex n : removedVertex.getSources())
             {
-                for (InternalEdge e : n.removeEdgesTo(removedNode))
+                for (Edge e : n.removeEdgesTo(removedVertex))
                 {
                     _edges.remove(e);
                 }
             }
-            for(InternalNode n : removedNode.getTargets())
+            for(Vertex n : removedVertex.getTargets())
             {
-                for (InternalEdge e : n.removeEdgesFrom(removedNode))
+                for (Edge e : n.removeEdgesFrom(removedVertex))
                 {
                     _edges.remove(e);
                 }
             }
         }
-        _nodes.remove(id);
+        _vertexes.remove(id);
     }
 
-    public InternalEdge addEdge(String fromId, String toId)
+    public Edge addEdge(String fromId, String toId)
     {
         String edgeId = fromId + "." + toId;
         while (_edges.containsKey(edgeId))
@@ -66,18 +66,23 @@ public class InternalGraph
             edgeId = edgeId + "+";
         }
 
-        InternalNode from = _nodes.get(fromId);
-        InternalNode to = _nodes.get(toId);
+        return addEdge(edgeId, fromId, toId);
+    }
+
+    public Edge addEdge(String edgeId, String fromId, String toId)
+    {
+        Vertex from = _vertexes.get(fromId);
+        Vertex to = _vertexes.get(toId);
 
         if (from == null || to == null)
         {
-            InternalEdge ue = new InternalEdge(edgeId, fromId, toId);
+            Edge ue = new Edge(edgeId, fromId, toId);
             _uninsertedEdges.put(edgeId, ue);
             return ue;
         }
         else
         {
-            InternalEdge e = new InternalEdge(edgeId, from, to);
+            Edge e = new Edge(edgeId, from, to);
             doAddEdge(e);
             return e;
         }
@@ -85,7 +90,7 @@ public class InternalGraph
 
     public void removeEdge(String edgeId)
     {
-        InternalEdge e = _edges.get(edgeId);
+        Edge e = _edges.get(edgeId);
 
         if (e != null)
         {
@@ -100,10 +105,10 @@ public class InternalGraph
     private void retryAddUninsertedEdges()
     {
         List<String> insertedEdgeIds = new LinkedList<>();
-        for(InternalEdge ue : _uninsertedEdges.values())
+        for(Edge ue : _uninsertedEdges.values())
         {
-            InternalNode from = _nodes.get(ue.getFromId());
-            InternalNode to = _nodes.get(ue.getToId());
+            Vertex from = _vertexes.get(ue.getFromId());
+            Vertex to = _vertexes.get(ue.getToId());
             if (from != null && to != null)
             {
                 ue.setFromTo(from, to);
@@ -118,7 +123,7 @@ public class InternalGraph
         }
     }
 
-    private void doAddEdge(InternalEdge e)
+    private void doAddEdge(Edge e)
     {
         _edges.put(e.getId(), e);
         e.getFrom().addOutgoingEdge(e);

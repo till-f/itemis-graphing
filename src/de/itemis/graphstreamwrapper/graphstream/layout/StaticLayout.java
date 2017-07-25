@@ -1,21 +1,21 @@
 package de.itemis.graphstreamwrapper.graphstream.layout;
 
-import de.itemis.graphstreamwrapper.InternalGraph;
-import de.itemis.graphstreamwrapper.InternalNode;
+import de.itemis.graphstreamwrapper.Graph;
+import de.itemis.graphstreamwrapper.Vertex;
 import org.graphstream.stream.PipeBase;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
 
 public abstract class StaticLayout extends PipeBase implements Layout
 {
-    protected final InternalGraph _internalGraph;
+    protected final Graph _graph;
 
     protected boolean _isLayouted = false;
     protected long _lastComputeTime = 0;
 
-    public StaticLayout(InternalGraph internalGraph)
+    public StaticLayout(Graph graph)
     {
-        _internalGraph = internalGraph;
+        _graph = graph;
     }
 
     public void nodeAdded(String sourceId, long timeId, String nodeId)
@@ -161,7 +161,7 @@ public abstract class StaticLayout extends PipeBase implements Layout
 
     protected void resetLayout()
     {
-        for (InternalNode n : _internalGraph.getNodes())
+        for (Vertex n : _graph.getVertexes())
         {
             n.reset();
         }
@@ -169,7 +169,7 @@ public abstract class StaticLayout extends PipeBase implements Layout
 
     protected void publishLayout()
     {
-        for (InternalNode n : _internalGraph.getNodes())
+        for (Vertex n : _graph.getVertexes())
         {
             sendNodeAttributeChanged(sourceId, n.getId(), "xyz", null,
                     new double[] { n.getX(), n.getY(), 0 });

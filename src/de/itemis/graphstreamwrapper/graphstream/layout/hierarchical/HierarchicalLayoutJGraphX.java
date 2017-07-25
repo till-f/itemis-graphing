@@ -4,8 +4,8 @@ import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.view.mxGraph;
-import de.itemis.graphstreamwrapper.InternalGraph;
-import de.itemis.graphstreamwrapper.InternalNode;
+import de.itemis.graphstreamwrapper.Graph;
+import de.itemis.graphstreamwrapper.Vertex;
 import de.itemis.graphstreamwrapper.graphstream.layout.StaticLayout;
 
 import javax.swing.*;
@@ -17,14 +17,14 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
     private final double _interHierarchySpacing;
     private final double _interRankCellSpacing;
 
-    public HierarchicalLayoutJGraphX(InternalGraph internalGraph)
+    public HierarchicalLayoutJGraphX(Graph graph)
     {
-        this(internalGraph, 0.5, 0.5, 0.5);
+        this(graph, 0.5, 0.5, 0.5);
     }
 
-    public HierarchicalLayoutJGraphX(InternalGraph internalGraph, double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing)
+    public HierarchicalLayoutJGraphX(Graph graph, double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing)
     {
-        super(internalGraph);
+        super(graph);
 
         _intraCellSpacing = intraCellSpacing;
         _interHierarchySpacing = interHierarchySpacing;
@@ -42,23 +42,23 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
     {
         mxGraph graph = new mxGraph();
         Object parent = graph.getDefaultParent();
-        HashMap<InternalNode, mxCell> nodeToCell = new HashMap<InternalNode, mxCell>();
+        HashMap<Vertex, mxCell> vertexToCell = new HashMap<Vertex, mxCell>();
 
         graph.getModel().beginUpdate();
         try
         {
-            for (InternalNode n : _internalGraph.getNodes())
+            for (Vertex n : _graph.getVertexes())
             {
                 mxCell cell = (mxCell) graph.insertVertex(parent, n.getId(), n, 0, 0, n.getWidth(), n.getHeight());
-                nodeToCell.put(n, cell);
+                vertexToCell.put(n, cell);
             }
 
-            for (InternalNode source : _internalGraph.getNodes())
+            for (Vertex source : _graph.getVertexes())
             {
-                for (InternalNode target : source.getTargets())
+                for (Vertex target : source.getTargets())
                 {
-                    mxCell sourceCell = nodeToCell.get(source);
-                    mxCell targetCell = nodeToCell.get(target);
+                    mxCell sourceCell = vertexToCell.get(source);
+                    mxCell targetCell = vertexToCell.get(target);
                     graph.insertEdge(parent, null, "edge", sourceCell, targetCell);
                 }
             }
@@ -75,10 +75,10 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
             graph.getModel().endUpdate();
         }
 
-        for (mxCell vertex : nodeToCell.values())
+        for (mxCell vertex : vertexToCell.values())
         {
             mxGeometry geometry = vertex.getGeometry();
-            InternalNode n = (InternalNode) vertex.getValue();
+            Vertex n = (Vertex) vertex.getValue();
             n.place(geometry.getX(), geometry.getY(), true);
         }
     }

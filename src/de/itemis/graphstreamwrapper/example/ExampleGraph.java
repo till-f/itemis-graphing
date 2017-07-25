@@ -1,10 +1,9 @@
 package de.itemis.graphstreamwrapper.example;
 
-import de.itemis.graphstreamwrapper.InternalGraph;
-import de.itemis.graphstreamwrapper.InternalNode;
+import de.itemis.graphstreamwrapper.Graph;
+import de.itemis.graphstreamwrapper.Vertex;
 import de.itemis.graphstreamwrapper.graphstream.GraphstreamViewCreator;
 import de.itemis.graphstreamwrapper.graphstream.layout.hierarchical.HierarchicalLayoutJGraphX;
-import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.swingViewer.DefaultView;
 
@@ -12,47 +11,47 @@ import javax.swing.*;
 
 public class ExampleGraph {
 
-    public static InternalGraph getExampleGraph()
+    public static Graph getExampleGraph()
     {
-        InternalGraph graph = new InternalGraph();
+        Graph graph = new Graph();
 
-        InternalNode nodeA = graph.addNode("A", 1.0, 1.0 );
-        nodeA.setLabel("Node A");
-        nodeA.addAttachment("A1", 0.3, -14).setLabel("Sprite 1");
-        nodeA.addAttachment("A2", 0.3, 14).setLabel("Sprite 2");
+        Vertex vertexA = graph.addVertex("A", 1.0, 1.0 );
+        vertexA.setLabel("vertex A");
+        vertexA.addAttachment("A1", 0.3, -14).setLabel("Sprite 1");
+        vertexA.addAttachment("A2", 0.3, 14).setLabel("Sprite 2");
 
-        InternalNode nodeB = graph.addNode("B", 1.0, 1.0 );
-        nodeB.setLabel("Node B");
+        Vertex vertexB = graph.addVertex("B", 1.0, 1.0 );
+        vertexB.setLabel("vertex B");
 
-        InternalNode nodeC = graph.addNode("C", 1.0, 1.0 );
-        nodeC.setLabel("Node C");
+        Vertex vertexC = graph.addVertex("C", 1.0, 1.0 );
+        vertexC.setLabel("vertex C");
 
-        InternalNode nodeD = graph.addNode("D", 1.0, 1.0 );
-        nodeD.setLabel("Node D");
+        Vertex vertexD = graph.addVertex("D", 1.0, 1.0 );
+        vertexD.setLabel("vertex D");
 
-        InternalNode nodeE = graph.addNode("E", 1.0, 1.0 );
-        nodeE.setLabel("Node E");
+        Vertex vertexE = graph.addVertex("E", 1.0, 1.0 );
+        vertexE.setLabel("vertex E");
 
-        InternalNode nodeF = graph.addNode("F", 1.0, 1.0 ); // 2nd root
-        nodeF.setLabel("Node F");
+        Vertex vertexF = graph.addVertex("F", 1.0, 1.0 ); // 2nd root
+        vertexF.setLabel("vertex F");
 
-        InternalNode nodeG = graph.addNode("G", 1.0, 1.0 );
-        nodeG.setLabel("Node G");
+        Vertex vertexG = graph.addVertex("G", 1.0, 1.0 );
+        vertexG.setLabel("vertex G");
 
-        InternalNode nodeH = graph.addNode("H", 1.0, 1.0 );
-        nodeH.setLabel("Node H");
+        Vertex vertexH = graph.addVertex("H", 1.0, 1.0 );
+        vertexH.setLabel("vertex H");
 
-        InternalNode node1 = graph.addNode("&1", 1.0, 1.0 );
-        node1.setLabel("&");
-        node1.setStyleId("operator");
+        Vertex vertex1 = graph.addVertex("&1", 1.0, 1.0 );
+        vertex1.setLabel("&");
+        vertex1.setStyleId("operator");
 
-        InternalNode node2 = graph.addNode("&2", 1.0, 1.0 );
-        node2.setLabel("&");
-        node2.setStyleId("operator");
+        Vertex vertex2 = graph.addVertex("&2", 1.0, 1.0 );
+        vertex2.setLabel("&");
+        vertex2.setStyleId("operator");
 
-        InternalNode node3 = graph.addNode("&3", 1.0, 1.0 );
-        node3.setLabel("&");
-        node3.setStyleId("operator");
+        Vertex vertex3 = graph.addVertex("&3", 1.0, 1.0 );
+        vertex3.setLabel("&");
+        vertex3.setStyleId("operator");
 
         graph.addEdge("A", "&1");
         graph.addEdge("&1", "B");
@@ -75,7 +74,7 @@ public class ExampleGraph {
 
     public static void main(String[] args)
     {
-        InternalGraph graph = getExampleGraph();
+        Graph graph = getExampleGraph();
 
         GraphstreamViewCreator creator = new GraphstreamViewCreator(graph);
         creator.addStyleCode("" +
