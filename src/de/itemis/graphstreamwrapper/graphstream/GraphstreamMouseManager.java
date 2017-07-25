@@ -16,7 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-public class PanZoomMouseManager implements MouseManager, MouseWheelListener {
+public class GraphstreamMouseManager implements MouseManager, MouseWheelListener {
 
     public class MousePan
     {
@@ -73,7 +73,7 @@ public class PanZoomMouseManager implements MouseManager, MouseWheelListener {
     protected float _selectionY;
     protected MousePan _mousePan;
 
-    public PanZoomMouseManager(boolean allowDragNodes, boolean allowDragSprites)
+    public GraphstreamMouseManager(boolean allowDragNodes, boolean allowDragSprites)
     {
         _allowDragNodes = allowDragNodes;
         _allowDragSprites = allowDragSprites;
@@ -85,7 +85,7 @@ public class PanZoomMouseManager implements MouseManager, MouseWheelListener {
         if (view instanceof ViewPanel)
             _view = (ViewPanel)view;
         else
-            throw new IllegalArgumentException("PanZoomMouseManager requires ViewPanel instance for 'view'");
+            throw new IllegalArgumentException("GraphstreamMouseManager requires ViewPanel instance for 'view'");
 
         _graph = graph;
         _mousePan = new MousePan(view.getCamera());

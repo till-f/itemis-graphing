@@ -1,22 +1,30 @@
 package de.itemis.graphstreamwrapper;
 
-public class InternalEdge
-{
-    private final String _id;
-    private final InternalNode _from;
-    private final InternalNode _to;
-    private final Object _userObject;
+import java.util.LinkedList;
+import java.util.List;
 
-    public InternalEdge(String id, InternalNode from, InternalNode to, Object object)
+public class InternalEdge extends BaseGraphElement implements IAttachmentContainer
+{
+    private final LinkedList<Attachment> _attachments = new LinkedList<>();
+
+    private InternalNode _from;
+    private InternalNode _to;
+
+    private String _fromId;
+    private String _toId;
+
+    public InternalEdge(String id, InternalNode from, InternalNode to)
     {
-        _id = id;
+        super(id);
         _from = from;
         _to = to;
-        _userObject = object;
     }
 
-    public String getId() {
-        return _id;
+    public InternalEdge(String id, String fromId, String toId)
+    {
+        super(id);
+        _fromId = fromId;
+        _toId = toId;
     }
 
     public InternalNode getFrom() {
@@ -27,7 +35,35 @@ public class InternalEdge
         return _to;
     }
 
-    public Object getUserObject() {
-        return _userObject;
+    public String getFromId() {
+        return _fromId;
+    }
+
+    public String getToId() {
+        return _toId;
+    }
+
+    public void setFromTo(InternalNode from, InternalNode to)
+    {
+        if (from == null && to == null)
+        {
+            _from = from;
+            _to = to;
+        }
+        else
+        {
+            throw new IllegalArgumentException("source and target of an edge can only be set once");
+        }
+    }
+
+    @Override
+    public Attachment addAttachment(String id, double radius, double degree) {
+        Attachment a = new Attachment(id, radius, degree);
+        _attachments.add(a);
+        return a;
+    }
+
+    public List<Attachment> getAttachments() {
+        return _attachments;
     }
 }

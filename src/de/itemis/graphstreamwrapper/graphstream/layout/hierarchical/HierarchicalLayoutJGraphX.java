@@ -4,9 +4,9 @@ import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.view.mxGraph;
+import de.itemis.graphstreamwrapper.InternalGraph;
 import de.itemis.graphstreamwrapper.InternalNode;
 import de.itemis.graphstreamwrapper.graphstream.layout.StaticLayout;
-import org.graphstream.graph.Graph;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -17,14 +17,14 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
     private final double _interHierarchySpacing;
     private final double _interRankCellSpacing;
 
-    public HierarchicalLayoutJGraphX(Graph originalGraph)
+    public HierarchicalLayoutJGraphX(InternalGraph internalGraph)
     {
-        this(originalGraph, 0.5, 0.5, 0.5);
+        this(internalGraph, 0.5, 0.5, 0.5);
     }
 
-    public HierarchicalLayoutJGraphX(Graph originalGraph, double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing)
+    public HierarchicalLayoutJGraphX(InternalGraph internalGraph, double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing)
     {
-        super(originalGraph);
+        super(internalGraph);
 
         _intraCellSpacing = intraCellSpacing;
         _interHierarchySpacing = interHierarchySpacing;
@@ -34,7 +34,7 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
     @Override
     public String getLayoutAlgorithmName()
     {
-        return "Hierarchical Layout X";
+        return "Hierarchical Layout (JGraphX)";
     }
 
     @Override
@@ -47,13 +47,13 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
         graph.getModel().beginUpdate();
         try
         {
-            for (InternalNode n : _nodeIDToNodeMap.values())
+            for (InternalNode n : _internalGraph.getNodes())
             {
-                mxCell cell = (mxCell) graph.insertVertex(parent, n.getID(), n, 0, 0, n.getWidth(), n.getHeight());
+                mxCell cell = (mxCell) graph.insertVertex(parent, n.getId(), n, 0, 0, n.getWidth(), n.getHeight());
                 nodeToCell.put(n, cell);
             }
 
-            for (InternalNode source : _nodeIDToNodeMap.values())
+            for (InternalNode source : _internalGraph.getNodes())
             {
                 for (InternalNode target : source.getTargets())
                 {
@@ -79,7 +79,7 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
         {
             mxGeometry geometry = vertex.getGeometry();
             InternalNode n = (InternalNode) vertex.getValue();
-            n.place(geometry.getX(), geometry.getY());
+            n.place(geometry.getX(), geometry.getY(), true);
         }
     }
 

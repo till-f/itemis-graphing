@@ -1,15 +1,15 @@
 package de.itemis.graphstreamwrapper;
 
-import org.graphstream.graph.Node;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
-import java.util.*;
-
-public class InternalNode
+public class InternalNode extends BaseGraphElement implements IAttachmentContainer
 {
-    private final String _id;
     private final double _width;
     private final double _height;
-    private final Object _userObject;
+
+    private final LinkedList<Attachment> _attachments = new LinkedList<>();
 
     private HashSet<InternalEdge> _outgoingEdges = new HashSet<InternalEdge>();
     private HashSet<InternalEdge> _incomingEdges = new HashSet<InternalEdge>();
@@ -17,12 +17,11 @@ public class InternalNode
     private Double _x = null;
     private Double _y = null;
 
-    public InternalNode(String id, double width, double height, Object userObject)
+    public InternalNode(String id, double width, double height)
     {
-        _id = id;
+        super(id);
         _width = width;
         _height = height;
-        _userObject = userObject;
     }
 
     public void addOutgoingEdge(InternalEdge e)
@@ -45,11 +44,6 @@ public class InternalNode
         _incomingEdges.remove(e);
     }
 
-    public String getID()
-    {
-        return _id;
-    }
-
     public double getWidth()
     {
         return _width;
@@ -58,11 +52,6 @@ public class InternalNode
     public double getHeight()
     {
         return _height;
-    }
-
-    public Object getUserObject()
-    {
-        return _userObject;
     }
 
     public double getX()
@@ -77,7 +66,7 @@ public class InternalNode
 
     public List<InternalNode> getTargets()
     {
-        ArrayList<InternalNode> targets = new ArrayList<InternalNode>();
+        LinkedList<InternalNode> targets = new LinkedList<InternalNode>();
         for (InternalEdge e : _outgoingEdges)
         {
             targets.add(e.getTo());
@@ -87,7 +76,7 @@ public class InternalNode
 
     public List<InternalNode> getSources()
     {
-        ArrayList<InternalNode> sources = new ArrayList<InternalNode>();
+        LinkedList<InternalNode> sources = new LinkedList<InternalNode>();
         for (InternalEdge e : _incomingEdges)
         {
             sources.add(e.getFrom());
@@ -136,5 +125,16 @@ public class InternalNode
         _incomingEdges.removeAll(toRemove);
 
         return toRemove;
+    }
+
+    @Override
+    public Attachment addAttachment(String id, double radius, double degree) {
+        Attachment a = new Attachment(id, radius, degree);
+        _attachments.add(a);
+        return a;
+    }
+
+    public List<Attachment> getAttachments() {
+        return _attachments;
     }
 }

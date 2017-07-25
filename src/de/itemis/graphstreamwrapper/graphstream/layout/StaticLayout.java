@@ -2,14 +2,9 @@ package de.itemis.graphstreamwrapper.graphstream.layout;
 
 import de.itemis.graphstreamwrapper.InternalGraph;
 import de.itemis.graphstreamwrapper.InternalNode;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
 import org.graphstream.stream.PipeBase;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
-
-import java.util.HashMap;
-import java.util.LinkedList;
 
 public abstract class StaticLayout extends PipeBase implements Layout
 {
@@ -176,7 +171,7 @@ public abstract class StaticLayout extends PipeBase implements Layout
     {
         for (InternalNode n : _internalGraph.getNodes())
         {
-            sendNodeAttributeChanged(sourceId, n.getID(), "xyz", null,
+            sendNodeAttributeChanged(sourceId, n.getId(), "xyz", null,
                     new double[] { n.getX(), n.getY(), 0 });
         }
     }

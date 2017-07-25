@@ -1,6 +1,6 @@
 package de.itemis.graphstreamwrapper.example;
 
-import de.itemis.graphstreamwrapper.GraphCreator;
+import de.itemis.graphstreamwrapper.graphstream.GraphstreamViewCreator;
 import de.itemis.graphstreamwrapper.graphstream.layout.hierarchical.HierarchicalLayoutJGraphX;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.DefaultView;
@@ -9,9 +9,9 @@ import javax.swing.*;
 
 public class ExampleGraph {
 
-    public static GraphCreator getExampleGraphCreator()
+    public static GraphstreamViewCreator getExampleGraphCreator()
     {
-        GraphCreator creator = new GraphCreator();
+        GraphstreamViewCreator creator = new GraphstreamViewCreator();
         creator.addStyleCode("" +
                 "node {" +
                     "shape: rounded-box;" +
@@ -101,7 +101,7 @@ public class ExampleGraph {
         // Force-based: SpringBox (default), Eades84Layout, LinLog
         // Hierarchical: HierarchicalLayoutJGraph (broken?)
 
-        GraphCreator creator = getExampleGraphCreator();
+        GraphstreamViewCreator creator = getExampleGraphCreator();
         DefaultView view = creator.createView(new HierarchicalLayoutJGraphX(creator.getGraph()));
 
         JFrame jframe = new JFrame("Graph Example");

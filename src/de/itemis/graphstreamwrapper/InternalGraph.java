@@ -1,12 +1,12 @@
 package de.itemis.graphstreamwrapper;
 
-import scala.collection.mutable.LinkedListLike;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class InternalGraph
 {
-    private final LinkedList<Object[]> _uninsertedEdges = new LinkedList<Object[]>();
+    private final HashMap<String, InternalEdge> _uninsertedEdges = new HashMap<String, InternalEdge>();
 
     private final HashMap<String, InternalNode> _nodes = new HashMap<String, InternalNode>();
     private final HashMap<String, InternalEdge> _edges = new HashMap<String, InternalEdge>();
@@ -25,10 +25,13 @@ public class InternalGraph
         return edges;
     }
 
-    public InternalNode addNode(String id, double width, double height, Object userObject)
+    public InternalNode addNode(String id, double width, double height)
     {
-        InternalNode n = new InternalNode(id, width, height, userObject);
+        InternalNode n = new InternalNode(id, width, height);
         _nodes.put(id, n);
+
+        retryAddUninsertedEdges();
+
         return n;
     }
 
@@ -55,24 +58,22 @@ public class InternalGraph
         _nodes.remove(id);
     }
 
-    public void addEdge(String edgeId, String fromId, String toId, Object userObject)
+    public InternalEdge addEdge(String edgeId, String fromId, String toId)
     {
-        InternalEdge e = createEdge(edgeId, fromId, toId, userObject);
+        InternalNode from = _nodes.get(fromId);
+        InternalNode to = _nodes.get(toId);
 
-        if (e == null)
+        if (from == null || to == null)
         {
-            Object[] ue = new Object[4];
-            ue[0] = edgeId;
-            ue[1] = fromId;
-            ue[2] = toId;
-            ue[3] = userObject;
-            _uninsertedEdges.add(ue);
+            InternalEdge ue = new InternalEdge(edgeId, fromId, toId);
+            _uninsertedEdges.put(edgeId, ue);
+            return ue;
         }
         else
         {
-            _edges.put(edgeId, e);
-            e.getFrom().addOutgoingEdge(e);
-            e.getTo().addIncomingEdge(e);
+            InternalEdge e = new InternalEdge(edgeId, from, to);
+            doAddEdge(e);
+            return e;
         }
     }
 
@@ -86,16 +87,35 @@ public class InternalGraph
             e.getTo().removeIncomingEdge(e);
             _edges.remove(e);
         }
+
+        _uninsertedEdges.remove(edgeId);
     }
 
-    private InternalEdge createEdge(String edgeId, String fromId, String toId, Object userObject)
+    private void retryAddUninsertedEdges()
     {
-        InternalNode from = _nodes.get(fromId);
-        InternalNode to = _nodes.get(toId);
+        List<String> insertedEdgeIds = new LinkedList<>();
+        for(InternalEdge ue : _uninsertedEdges.values())
+        {
+            InternalNode from = _nodes.get(ue.getFromId());
+            InternalNode to = _nodes.get(ue.getToId());
+            if (from != null && to != null)
+            {
+                ue.setFromTo(from, to);
+                doAddEdge(ue);
+                insertedEdgeIds.add(ue.getId());
+            }
+        }
 
-        if (from == null || to == null)
-            return null;
+        for(String insertedId : insertedEdgeIds)
+        {
+            _uninsertedEdges.remove(insertedId);
+        }
+    }
 
-        return new InternalEdge(edgeId, from, to, userObject);
+    private void doAddEdge(InternalEdge e)
+    {
+        _edges.put(e.getId(), e);
+        e.getFrom().addOutgoingEdge(e);
+        e.getTo().addIncomingEdge(e);
     }
 }
