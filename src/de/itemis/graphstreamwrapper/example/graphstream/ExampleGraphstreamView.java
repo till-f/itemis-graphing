@@ -1,0 +1,87 @@
+package de.itemis.graphstreamwrapper.example.graphstream;
+
+import de.itemis.graphstreamwrapper.Graph;
+import de.itemis.graphstreamwrapper.example.ExampleGraph;
+import de.itemis.graphstreamwrapper.graphstream.GraphstreamViewCreator;
+import de.itemis.graphstreamwrapper.graphstream.layout.hierarchical.HierarchicalLayoutJGraphX;
+import org.graphstream.ui.layout.Layout;
+import org.graphstream.ui.swingViewer.DefaultView;
+
+import javax.swing.*;
+
+public class ExampleGraphstreamView
+{
+    public static String getExampleStyle()
+    {
+        return "" +
+            "node {" +
+                "shape: rounded-box;" +
+                "size: 0.4gu,0.4gu;" +
+                "fill-mode: plain;" +
+                "fill-color: #FFFFFF;" +
+                "stroke-mode: plain;" +
+                "stroke-color: black;" +
+                "text-size: 12;" +
+            "}" +
+            "node.operator {" +
+                "shape: circle;" +
+                "size: 0.2gu,0.2gu;" +
+                "fill-color: gray;" +
+            "}" +
+            "node:selected {" +
+                "fill-color: yellow;" +
+            "}" +
+            "node:clicked {" +
+                "fill-color: red;" +
+            "}" +
+            "edge {" +
+                "shape: cubic-curve;" +
+                "fill-color: #808080;" +
+            "}" +
+            "sprite {" +
+                "size: 0.05gu, 0.05gu;" +
+                "fill-color: gray;" +
+                "text-alignment: at-right;" +
+                "text-padding: 0.01gu;" +
+                "text-offset: 0.05gu,0gu;" +
+                "text-size: 12;" +
+                "text-background-mode: rounded-box;" +
+                "text-background-color: #FFFFFF;" +
+            "}" +
+            "sprite:selected {" +
+                "stroke-mode: plain;" +
+                "stroke-color: black;" +
+            "}" +
+            "sprite:clicked {" +
+                "fill-color: black;" +
+            "}" +
+            "sprite.RAP {" +
+                "fill-color: red;" +
+            "}" +
+            "sprite.RAP:clicked {" +
+                "fill-color: magenta;" +
+            "}" +
+            "";
+    }
+
+    public static void main(String[] args)
+    {
+        Graph graph = ExampleGraph.getExampleGraph();
+
+        GraphstreamViewCreator creator = new GraphstreamViewCreator(graph);
+        creator.addStyleCode(getExampleStyle());
+
+        Layout layout = new HierarchicalLayoutJGraphX(graph);
+        DefaultView view = creator.createView(layout);
+
+        JFrame jframe = new JFrame("Graph Example");
+        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jframe.setSize(600, 600);
+        jframe.add(view);
+
+        // show JFrame
+        jframe.setVisible(true);
+
+        view.getCamera().setViewPercent(1.1);
+    }
+}

@@ -17,7 +17,7 @@ import org.graphstream.ui.view.ViewerListener;
 import org.graphstream.ui.view.ViewerPipe;
 import org.graphstream.ui.view.util.MouseManager;
 
-import java.awt.*;
+import java.awt.Component;
 import java.awt.event.MouseWheelListener;
 
 public class GraphstreamViewCreator {
@@ -64,6 +64,11 @@ public class GraphstreamViewCreator {
                 addAttachment(a, null, e);
             }
         }
+    }
+
+    public org.graphstream.graph.Graph getGraphstreamGraph()
+    {
+        return _gsGraph;
     }
 
     public void addStyleCode(String styleCode)
