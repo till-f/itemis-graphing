@@ -1,4 +1,4 @@
-package de.itemis.graphstreamwrapper;
+package de.itemis.graphstreamwrapper.graphstream;
 
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;

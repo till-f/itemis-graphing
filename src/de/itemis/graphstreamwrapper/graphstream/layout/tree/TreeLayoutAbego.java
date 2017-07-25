@@ -1,7 +1,7 @@
-//package de.itemis.graphstreamwrapper.layout.tree;
+//package de.itemis.graphstreamwrapper.graphstream.layout.tree;
 //
-//import de.itemis.graphstreamwrapper.layout.InternalNode;
-//import de.itemis.graphstreamwrapper.layout.StaticLayout;
+//import de.itemis.graphstreamwrapper.graphstream.layout.InternalNode;
+//import de.itemis.graphstreamwrapper.graphstream.layout.StaticLayout;
 //import org.abego.treelayout.util.DefaultConfiguration;
 //import org.abego.treelayout.util.DefaultTreeForTreeLayout;
 //

@@ -1,7 +1,7 @@
 package de.itemis.graphstreamwrapper.example;
 
 import de.itemis.graphstreamwrapper.GraphCreator;
-import de.itemis.graphstreamwrapper.layout.hierarchical.HierarchicalLayoutJGraphX;
+import de.itemis.graphstreamwrapper.graphstream.layout.hierarchical.HierarchicalLayoutJGraphX;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.DefaultView;
 

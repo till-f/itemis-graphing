@@ -1,5 +1,6 @@
 package de.itemis.graphstreamwrapper;
 
+import de.itemis.graphstreamwrapper.graphstream.layout.PanZoomMouseManager;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -10,14 +11,12 @@ import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
 import org.graphstream.ui.swingViewer.DefaultView;
-import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerListener;
 import org.graphstream.ui.view.ViewerPipe;
 import org.graphstream.ui.view.util.MouseManager;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseWheelListener;
 

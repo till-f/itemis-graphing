@@ -1,9 +1,9 @@
-//package de.itemis.graphstreamwrapper.layout.hierarchical;
+//package de.itemis.graphstreamwrapper.graphstream.layout.hierarchical;
 //
 //import com.jgraph.layout.JGraphFacade;
 //import com.jgraph.layout.hierarchical.JGraphHierarchicalLayout;
-//import de.itemis.graphstreamwrapper.layout.InternalNode;
-//import de.itemis.graphstreamwrapper.layout.StaticLayout;
+//import de.itemis.graphstreamwrapper.graphstream.layout.InternalNode;
+//import de.itemis.graphstreamwrapper.graphstream.layout.StaticLayout;
 //import org.jgraph.JGraph;
 //import org.jgraph.graph.*;
 //

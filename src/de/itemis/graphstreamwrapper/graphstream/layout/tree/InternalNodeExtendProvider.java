@@ -1,6 +1,6 @@
-//package de.itemis.graphstreamwrapper.layout.tree;
+//package de.itemis.graphstreamwrapper.graphstream.layout.tree;
 //
-//import de.itemis.graphstreamwrapper.layout.InternalNode;
+//import de.itemis.graphstreamwrapper.graphstream.layout.InternalNode;
 //import org.abego.treelayout.NodeExtentProvider;
 //
 //public class InternalNodeExtendProvider implements  NodeExtentProvider<InternalNode>
