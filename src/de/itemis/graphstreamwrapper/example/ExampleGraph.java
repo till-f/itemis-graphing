@@ -1,17 +1,83 @@
 package de.itemis.graphstreamwrapper.example;
 
+import de.itemis.graphstreamwrapper.InternalGraph;
+import de.itemis.graphstreamwrapper.InternalNode;
 import de.itemis.graphstreamwrapper.graphstream.GraphstreamViewCreator;
 import de.itemis.graphstreamwrapper.graphstream.layout.hierarchical.HierarchicalLayoutJGraphX;
 import org.graphstream.ui.geom.Point3;
+import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.swingViewer.DefaultView;
 
 import javax.swing.*;
 
 public class ExampleGraph {
 
-    public static GraphstreamViewCreator getExampleGraphCreator()
+    public static InternalGraph getExampleGraph()
     {
-        GraphstreamViewCreator creator = new GraphstreamViewCreator();
+        InternalGraph graph = new InternalGraph();
+
+        InternalNode nodeA = graph.addNode("A", 1.0, 1.0 );
+        nodeA.setLabel("Node A");
+        nodeA.addAttachment("A1", 0.3, -14).setLabel("Sprite 1");
+        nodeA.addAttachment("A2", 0.3, 14).setLabel("Sprite 2");
+
+        InternalNode nodeB = graph.addNode("B", 1.0, 1.0 );
+        nodeB.setLabel("Node B");
+
+        InternalNode nodeC = graph.addNode("C", 1.0, 1.0 );
+        nodeC.setLabel("Node C");
+
+        InternalNode nodeD = graph.addNode("D", 1.0, 1.0 );
+        nodeD.setLabel("Node D");
+
+        InternalNode nodeE = graph.addNode("E", 1.0, 1.0 );
+        nodeE.setLabel("Node E");
+
+        InternalNode nodeF = graph.addNode("F", 1.0, 1.0 ); // 2nd root
+        nodeF.setLabel("Node F");
+
+        InternalNode nodeG = graph.addNode("G", 1.0, 1.0 );
+        nodeG.setLabel("Node G");
+
+        InternalNode nodeH = graph.addNode("H", 1.0, 1.0 );
+        nodeH.setLabel("Node H");
+
+        InternalNode node1 = graph.addNode("&1", 1.0, 1.0 );
+        node1.setLabel("&");
+        node1.setStyleId("operator");
+
+        InternalNode node2 = graph.addNode("&2", 1.0, 1.0 );
+        node2.setLabel("&");
+        node2.setStyleId("operator");
+
+        InternalNode node3 = graph.addNode("&3", 1.0, 1.0 );
+        node3.setLabel("&");
+        node3.setStyleId("operator");
+
+        graph.addEdge("A", "&1");
+        graph.addEdge("&1", "B");
+        graph.addEdge("&1", "C");
+        graph.addEdge("C", "&2");
+        graph.addEdge("&2", "D");
+        graph.addEdge("&2", "E");
+        graph.addEdge("A", "&3");
+        graph.addEdge("&3", "G");
+        graph.addEdge("&3", "H");
+
+        // cross edge
+        graph.addEdge("E", "B");
+
+        // from 2nd root
+        graph.addEdge("F", "E");
+
+        return graph;
+    }
+
+    public static void main(String[] args)
+    {
+        InternalGraph graph = getExampleGraph();
+
+        GraphstreamViewCreator creator = new GraphstreamViewCreator(graph);
         creator.addStyleCode("" +
                 "node {" +
                     "shape: rounded-box;" +
@@ -47,9 +113,6 @@ public class ExampleGraph {
                     "text-background-mode: rounded-box;" +
                     "text-background-color: #FFFFFF;" +
                 "}" +
-                "sprite.RAP {" +
-                    "fill-color: red;" +
-                "}" +
                 "sprite:selected {" +
                     "stroke-mode: plain;" +
                     "stroke-color: black;" +
@@ -57,52 +120,16 @@ public class ExampleGraph {
                 "sprite:clicked {" +
                     "fill-color: black;" +
                 "}" +
+                "sprite.RAP {" +
+                    "fill-color: red;" +
+                "}" +
                 "sprite.RAP:clicked {" +
                     "fill-color: magenta;" +
                 "}" +
                 "");
 
-        creator.addNode("A", "Node A" );
-        creator.addNode("B", "Node B" );
-        creator.addNode("C", "Node C" );
-        creator.addNode("D", "Node D" );
-        creator.addNode("E", "Node E" );
-        creator.addNode("F", "Node F" ); // 2nd root
-        creator.addNode("G", "Node G" );
-        creator.addNode("H", "Node H" );
-        creator.addNode("&1", "&", "operator" );
-        creator.addNode("&2", "&", "operator" );
-        creator.addNode("&3", "&", "operator" );
-        creator.addEdge("A", "&1", true);
-        creator.addEdge("&1", "B", true);
-        creator.addEdge("&1", "C", true);
-        creator.addEdge("C", "&2", true);
-        creator.addEdge("&2", "D", true);
-        creator.addEdge("&2", "E", true);
-        creator.addEdge("A", "&3", true);
-        creator.addEdge("&3", "G", true);
-        creator.addEdge("&3", "H", true);
-
-        // cross edge
-        creator.addEdge("E", "B", true);
-
-        // from 2nd root
-        creator.addEdge("F", "E", true);
-
-        creator.addSpriteToNode("A1", "A", new Point3(0.3, 0, -14),"Sprite A1", null);
-        creator.addSpriteToNode("A2", "A", new Point3(0.3, 0, 14),"Sprite A2", "RAP");
-
-        return creator;
-    }
-
-    public static void main(String[] args)
-    {
-        // graphstream shipped layouts:
-        // Force-based: SpringBox (default), Eades84Layout, LinLog
-        // Hierarchical: HierarchicalLayoutJGraph (broken?)
-
-        GraphstreamViewCreator creator = getExampleGraphCreator();
-        DefaultView view = creator.createView(new HierarchicalLayoutJGraphX(creator.getGraph()));
+        Layout layout = new HierarchicalLayoutJGraphX(graph);
+        DefaultView view = creator.createView(layout);
 
         JFrame jframe = new JFrame("Graph Example");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -58,8 +58,14 @@ public class InternalGraph
         _nodes.remove(id);
     }
 
-    public InternalEdge addEdge(String edgeId, String fromId, String toId)
+    public InternalEdge addEdge(String fromId, String toId)
     {
+        String edgeId = fromId + "." + toId;
+        while (_edges.containsKey(edgeId))
+        {
+            edgeId = edgeId + "+";
+        }
+
         InternalNode from = _nodes.get(fromId);
         InternalNode to = _nodes.get(toId);
 
