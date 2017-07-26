@@ -16,41 +16,41 @@ public class ExampleGraph {
         operatorStyle.setFillColor("CCCCCC");
         operatorStyle.setShape(BlockStyle.EShape.Circle);
 
-        Vertex vertexA = graph.addVertex("A", 1.0, 1.0 );
+        Vertex vertexA = graph.addVertex("A", 1.0, 0.5);
         vertexA.setLabel("vertex A");
         vertexA.addAttachment("A1", 0.5, 0.2).setLabel("Sprite 1");
         vertexA.addAttachment("A2", 0.5, 0.2).setLabel("Sprite 2");
 
-        Vertex vertexB = graph.addVertex("B", 1.0, 1.0 );
+        Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
         vertexB.setLabel("vertex B");
 
-        Vertex vertexC = graph.addVertex("C", 1.0, 1.0 );
+        Vertex vertexC = graph.addVertex("C", 1.0, 0.5);
         vertexC.setLabel("vertex C");
 
-        Vertex vertexD = graph.addVertex("D", 1.0, 1.0 );
+        Vertex vertexD = graph.addVertex("D", 1.0, 0.5);
         vertexD.setLabel("vertex D");
 
-        Vertex vertexE = graph.addVertex("E", 1.0, 1.0 );
+        Vertex vertexE = graph.addVertex("E", 1.0, 0.5);
         vertexE.setLabel("vertex E");
 
-        Vertex vertexF = graph.addVertex("F", 1.0, 1.0 ); // 2nd root
+        Vertex vertexF = graph.addVertex("F", 1.0, 0.5); // 2nd root
         vertexF.setLabel("vertex F");
 
-        Vertex vertexG = graph.addVertex("G", 1.0, 1.0 );
+        Vertex vertexG = graph.addVertex("G", 1.0, 0.5);
         vertexG.setLabel("vertex G");
 
-        Vertex vertexH = graph.addVertex("H", 1.0, 1.0 );
+        Vertex vertexH = graph.addVertex("H", 1.0, 0.5);
         vertexH.setLabel("vertex H");
 
-        Vertex vertex1 = graph.addVertex("&1", 0.5, 0.5 );
+        Vertex vertex1 = graph.addVertex("&1", 0.5, 0.5);
         vertex1.setLabel("&");
         vertex1.setStyle(operatorStyle);
 
-        Vertex vertex2 = graph.addVertex("&2", 0.5, 0.5 );
+        Vertex vertex2 = graph.addVertex("&2", 0.5, 0.5);
         vertex2.setLabel("&");
         vertex2.setStyle(operatorStyle);
 
-        Vertex vertex3 = graph.addVertex("&3", 0.5, 0.5 );
+        Vertex vertex3 = graph.addVertex("&3", 0.5, 0.5);
         vertex3.setLabel("&");
         vertex3.setStyle(operatorStyle);
 

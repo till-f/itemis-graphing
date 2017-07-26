@@ -12,6 +12,8 @@ import java.util.HashMap;
 
 public class HierarchicalLayoutJGraphX implements Layout
 {
+    private static final int SCALE_FACTOR = 100;
+
     private final double _intraCellSpacing;
     private final double _interHierarchySpacing;
     private final double _interRankCellSpacing;
@@ -23,9 +25,9 @@ public class HierarchicalLayoutJGraphX implements Layout
 
     public HierarchicalLayoutJGraphX(double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing)
     {
-        _intraCellSpacing = intraCellSpacing;
-        _interHierarchySpacing = interHierarchySpacing;
-        _interRankCellSpacing = interRankCellSpacing;
+        _intraCellSpacing = intraCellSpacing * SCALE_FACTOR;
+        _interHierarchySpacing = interHierarchySpacing * SCALE_FACTOR;
+        _interRankCellSpacing = interRankCellSpacing * SCALE_FACTOR;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class HierarchicalLayoutJGraphX implements Layout
         {
             for (Vertex n : graph.getVertexes())
             {
-                mxCell cell = (mxCell) mxGraph.insertVertex(parent, n.getId(), n, 0, 0, n.getWidth(), n.getHeight());
+                mxCell cell = (mxCell) mxGraph.insertVertex(parent, n.getId(), n, 0, 0, n.getWidth()*SCALE_FACTOR, n.getHeight()*SCALE_FACTOR);
                 vertexToCell.put(n, cell);
             }
 
@@ -70,7 +72,7 @@ public class HierarchicalLayoutJGraphX implements Layout
         {
             mxGeometry geometry = vertex.getGeometry();
             Vertex n = (Vertex) vertex.getValue();
-            n.place(geometry.getX(), geometry.getY(), true);
+            n.place(geometry.getX() / SCALE_FACTOR, geometry.getY() / SCALE_FACTOR, true);
         }
     }
 }

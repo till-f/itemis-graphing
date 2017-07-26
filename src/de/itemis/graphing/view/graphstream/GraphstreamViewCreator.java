@@ -18,7 +18,6 @@ import org.graphstream.ui.view.util.MouseManager;
 
 import java.awt.Component;
 import java.awt.event.MouseWheelListener;
-import java.util.HashMap;
 
 public class GraphstreamViewCreator {
 
@@ -123,7 +122,7 @@ public class GraphstreamViewCreator {
         }
 
         Style style = attachment.retrieveStyle();
-        double pos1 = attachment.getWidth() / 2;
+        double pos1 = ((toVertex != null) ? toVertex.getWidth()/2 : 0) + attachment.getWidth()/2;
         double pos2 = 0.0;
         if (style instanceof AttachmentStyle)
         {
