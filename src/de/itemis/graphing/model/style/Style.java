@@ -1,8 +1,13 @@
 package de.itemis.graphing.model.style;
 
-public abstract class Style implements Cloneable
+import de.itemis.graphing.model.BaseGraphElement;
+import de.itemis.graphing.model.Edge;
+
+public abstract class Style
 {
     public enum ELineMode { None, Solid, Dotted }
+
+    private BaseGraphElement _parent = null;
 
     protected String lineColor = "000000";
     protected String fillColor = "FFFFFF";
@@ -11,13 +16,9 @@ public abstract class Style implements Cloneable
     protected ELineMode lineMode = ELineMode.Solid;
     protected Double fontSize = 12.0;
 
-    public Style getCopy()
+    public void setParent(BaseGraphElement parent)
     {
-        try {
-            return (Style)this.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
+        _parent = parent;
     }
 
     public String getLineColor()
@@ -52,30 +53,42 @@ public abstract class Style implements Cloneable
     public void setLineColor(String lineColor)
     {
         this.lineColor = lineColor;
+        updated();
     }
 
     public void setFillColor(String fillColor)
     {
         this.fillColor = fillColor;
+        updated();
     }
 
     public void setTextColor(String textColor)
     {
         this.textColor = textColor;
+        updated();
     }
 
     public void setLineThickness(Double lineThickness)
     {
         this.lineThickness = lineThickness;
+        updated();
     }
 
     public void setLineMode(ELineMode lineMode)
     {
         this.lineMode = lineMode;
+        updated();
     }
 
     public void setFontSize(Double fontSize)
     {
         this.fontSize = fontSize;
+        updated();
+    }
+
+    protected void updated()
+    {
+        if (_parent != null)
+            _parent.styleChanged();
     }
 }

@@ -70,6 +70,8 @@ public class Edge extends BaseGraphElement
     public void setStyle(EdgeStyle style)
     {
         _style = style;
+        style.setParent(this);
+        styleChanged();
     }
 
 }

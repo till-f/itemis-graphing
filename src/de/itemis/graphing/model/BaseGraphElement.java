@@ -39,4 +39,8 @@ public abstract class BaseGraphElement implements IStyled
         _label = label;
     }
 
+    public void styleChanged()
+    {
+        System.out.println("INFO: style changed");
+    }
 }

@@ -33,21 +33,25 @@ public class BlockStyle extends Style
     public void setShape(EShape shape)
     {
         this.shape = shape;
+        updated();
     }
 
     public void setWidth(Double width)
     {
         this.width = width;
+        updated();
     }
 
     public void setHeight(Double height)
     {
         this.height = height;
+        updated();
     }
 
     public void setSizeMode(ESizeMode sizeMode)
     {
         this.sizeMode = sizeMode;
+        updated();
     }
 
 

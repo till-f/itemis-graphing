@@ -58,6 +58,8 @@ public class Attachment extends BaseGraphElement implements ISized
     public void setStyle(BlockStyle style)
     {
         _style = style;
+        style.setParent(this);
+        styleChanged();
     }
 
 }

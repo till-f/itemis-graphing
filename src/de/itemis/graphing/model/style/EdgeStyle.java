@@ -2,7 +2,7 @@ package de.itemis.graphing.model.style;
 
 public class EdgeStyle extends Style
 {
-    public enum EShape {None, Arrow, Circle, Diamond }
+    public enum EShape { None, Arrow, Circle, Diamond }
 
     protected EShape shape = EShape.Arrow;
 
@@ -14,6 +14,7 @@ public class EdgeStyle extends Style
     public void setShape(EShape shape)
     {
         this.shape = shape;
+        updated();
     }
 
 }
