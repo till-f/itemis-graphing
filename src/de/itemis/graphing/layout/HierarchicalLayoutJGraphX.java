@@ -1,4 +1,4 @@
-package de.itemis.graphing.view.graphstream.layout.hierarchical;
+package de.itemis.graphing.layout;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.model.mxCell;
@@ -6,64 +6,55 @@ import com.mxgraph.model.mxGeometry;
 import com.mxgraph.view.mxGraph;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.Vertex;
-import de.itemis.graphing.view.graphstream.layout.StaticLayout;
 
 import javax.swing.*;
 import java.util.HashMap;
 
-public class HierarchicalLayoutJGraphX extends StaticLayout
+public class HierarchicalLayoutJGraphX implements Layout
 {
     private final double _intraCellSpacing;
     private final double _interHierarchySpacing;
     private final double _interRankCellSpacing;
 
-    public HierarchicalLayoutJGraphX(Graph graph)
+    public HierarchicalLayoutJGraphX()
     {
-        this(graph, 0.5, 0.5, 0.5);
+        this(0.5, 0.5, 0.5);
     }
 
-    public HierarchicalLayoutJGraphX(Graph graph, double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing)
+    public HierarchicalLayoutJGraphX(double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing)
     {
-        super(graph);
-
         _intraCellSpacing = intraCellSpacing;
         _interHierarchySpacing = interHierarchySpacing;
         _interRankCellSpacing = interRankCellSpacing;
     }
 
     @Override
-    public String getLayoutAlgorithmName()
+    public void apply(Graph graph)
     {
-        return "Hierarchical Layout (JGraphX)";
-    }
-
-    @Override
-    protected void computeLayout()
-    {
-        mxGraph graph = new mxGraph();
-        Object parent = graph.getDefaultParent();
+        mxGraph mxGraph = new mxGraph();
+        Object parent = mxGraph.getDefaultParent();
         HashMap<Vertex, mxCell> vertexToCell = new HashMap<Vertex, mxCell>();
 
-        graph.getModel().beginUpdate();
+        mxGraph.getModel().beginUpdate();
         try
         {
-            for (Vertex n : _graph.getVertexes())
+            for (Vertex n : graph.getVertexes())
             {
-                mxCell cell = (mxCell) graph.insertVertex(parent, n.getId(), n, 0, 0, n.getWidth(), n.getHeight());
+                mxCell cell = (mxCell) mxGraph.insertVertex(parent, n.getId(), n, 0, 0, n.getWidth(), n.getHeight());
                 vertexToCell.put(n, cell);
             }
 
-            for (Vertex source : _graph.getVertexes())
+            for (Vertex source : graph.getVertexes())
             {
                 for (Vertex target : source.getTargets())
                 {
                     mxCell sourceCell = vertexToCell.get(source);
                     mxCell targetCell = vertexToCell.get(target);
-                    graph.insertEdge(parent, null, "edge", sourceCell, targetCell);
+                    mxGraph.insertEdge(parent, null, "edge", sourceCell, targetCell);
                 }
             }
 
-            mxHierarchicalLayout layout = new mxHierarchicalLayout(graph, SwingConstants.SOUTH);
+            mxHierarchicalLayout layout = new mxHierarchicalLayout(mxGraph, SwingConstants.SOUTH);
             layout.setFineTuning(true);
             layout.setIntraCellSpacing(_intraCellSpacing);
             layout.setInterHierarchySpacing(_interHierarchySpacing);
@@ -72,7 +63,7 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
         }
         finally
         {
-            graph.getModel().endUpdate();
+            mxGraph.getModel().endUpdate();
         }
 
         for (mxCell vertex : vertexToCell.values())
@@ -82,5 +73,4 @@ public class HierarchicalLayoutJGraphX extends StaticLayout
             n.place(geometry.getX(), geometry.getY(), true);
         }
     }
-
 }

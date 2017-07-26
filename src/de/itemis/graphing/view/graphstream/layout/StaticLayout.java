@@ -6,16 +6,18 @@ import org.graphstream.stream.PipeBase;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
 
-public abstract class StaticLayout extends PipeBase implements Layout
+public class StaticLayout extends PipeBase implements Layout
 {
     protected final Graph _graph;
+    protected final de.itemis.graphing.layout.Layout _layout;
 
     protected boolean _isLayouted = false;
     protected long _lastComputeTime = 0;
 
-    public StaticLayout(Graph graph)
+    public StaticLayout(Graph graph, de.itemis.graphing.layout.Layout layout)
     {
         _graph = graph;
+        _layout = layout;
     }
 
     public void nodeAdded(String sourceId, long timeId, String nodeId)
@@ -55,6 +57,12 @@ public abstract class StaticLayout extends PipeBase implements Layout
 
         _isLayouted = true;
         _lastComputeTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public String getLayoutAlgorithmName()
+    {
+        return "Static Layout using Layouter " + _layout.getClass();
     }
 
     @Override
@@ -176,6 +184,9 @@ public abstract class StaticLayout extends PipeBase implements Layout
         }
     }
 
-    protected abstract void computeLayout();
+    protected void computeLayout()
+    {
+        _layout.apply(_graph);
+    }
 
 }

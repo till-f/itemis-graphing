@@ -1,9 +1,10 @@
 package de.itemis.graphing.example.graphstream;
 
+import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.example.ExampleGraph;
 import de.itemis.graphing.view.graphstream.GraphstreamViewCreator;
-import de.itemis.graphing.view.graphstream.layout.hierarchical.HierarchicalLayoutJGraphX;
+import de.itemis.graphing.view.graphstream.layout.StaticLayout;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.swingViewer.DefaultView;
 
@@ -71,7 +72,7 @@ public class ExampleGraphstreamView
         GraphstreamViewCreator creator = new GraphstreamViewCreator(graph);
         creator.addStyleCode(getExampleStyle());
 
-        Layout layout = new HierarchicalLayoutJGraphX(graph);
+        Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
         DefaultView view = creator.createView(layout);
 
         JFrame jframe = new JFrame("Graph Example");
