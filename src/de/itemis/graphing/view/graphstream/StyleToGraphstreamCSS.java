@@ -37,26 +37,11 @@ public class StyleToGraphstreamCSS
                 sb.append("padding: 2;");
             }
 
-            if (style.getFillColor() != null)
-            {
-                sb.append("fill-mode: plain;");
-                sb.append("fill-color: #" + style.getFillColor() + ";");
-            }
-
-            if (style.getLineColor() != null)
-            {
-                sb.append("stroke-color: #" + style.getLineColor() + ";");
-            }
-
-            if (style.getLineThickness() != null)
-            {
-                sb.append("stroke-width: " + style.getLineThickness() + ";");
-            }
-
-            if (style.getLineMode() != null)
-            {
-                sb.append("stroke-mode: " + getGraphstreamStrokeMode(style.getLineMode()) + ";");
-            }
+            sb.append("fill-mode: plain;");
+            sb.append("fill-color: #" + style.getFillColor() + ";");
+            sb.append("stroke-color: #" + style.getLineColor() + ";");
+            sb.append("stroke-width: " + style.getLineThickness() + ";");
+            sb.append("stroke-mode: " + getGraphstreamStrokeMode(style.getLineMode()) + ";");
         }
         else if (style instanceof EdgeStyle)
         {
@@ -64,47 +49,33 @@ public class StyleToGraphstreamCSS
 
             sb.append("shape: cubic-curve;");
             sb.append("arrow-shape: " + getGraphstreamArrowShape(edgeStyle.getShape()) + ";");
+            sb.append("fill-color: #" + style.getLineColor() + ";");
 
-            if (style.getLineColor() != null)
-            {
-                sb.append("fill-color: #" + style.getLineColor() + ";");
-            }
-
-            if (style.getLineMode() != null && style.getLineMode() == Style.ELineMode.None)
+            if (style.getLineMode() == Style.ELineMode.None)
             {
                 sb.append("stroke-mode: none;");
                 sb.append("fill-mode: none;");
                 sb.append("size: 0px;");
             }
-            else if (style.getLineMode() != null && style.getLineMode() == Style.ELineMode.Dotted)
+            else if (style.getLineMode() == Style.ELineMode.Dotted)
             {
                 sb.append("stroke-mode: dots;");
                 sb.append("fill-mode: none;");
                 sb.append("size: 0px;");
                 sb.append("stroke-width: " + style.getLineThickness() + ";");
             }
-            else if (style.getLineThickness() != null && style.getLineThickness() >= 2.0)
+            else if (style.getLineThickness() >= 2.0)
             {
                 sb.append("stroke-mode: plain;");
                 sb.append("stroke-width: " + (int)(style.getLineThickness()/2) + ";");
             }
 
-            if (style.getLineColor() != null)
-            {
-                sb.append("stroke-color: #" + style.getLineColor() + ";");
-                sb.append("fill-color: #" + style.getLineColor() + ";");
-            }
+            sb.append("stroke-color: #" + style.getLineColor() + ";");
+            sb.append("fill-color: #" + style.getLineColor() + ";");
         }
 
-        if (style.getTextColor() != null)
-        {
-            sb.append("text-color: #" + style.getTextColor() + ";");
-        }
-
-        if (style.getFontSize() != null)
-        {
-            sb.append("text-size: " + style.getFontSize() + ";");
-        }
+        sb.append("text-color: #" + style.getTextColor() + ";");
+        sb.append("text-size: " + style.getFontSize() + ";");
 
         return sb.toString();
     }
