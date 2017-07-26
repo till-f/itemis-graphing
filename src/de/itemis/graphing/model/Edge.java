@@ -5,7 +5,7 @@ import de.itemis.graphing.model.style.Style;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Edge extends BaseGraphElement implements IAttachmentContainer
+public class Edge extends BaseGraphElement
 {
     private final LinkedList<Attachment> _attachments = new LinkedList<>();
 
@@ -67,16 +67,5 @@ public class Edge extends BaseGraphElement implements IAttachmentContainer
             mergedStyle.mergeWith(_style);
 
         return mergedStyle;
-    }
-
-    @Override
-    public Attachment addAttachment(String id, double width, double height) {
-        Attachment a = new Attachment(_graph, id, width, height);
-        _attachments.add(a);
-        return a;
-    }
-
-    public List<Attachment> getAttachments() {
-        return _attachments;
     }
 }

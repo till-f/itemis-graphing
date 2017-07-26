@@ -1,5 +1,7 @@
 package de.itemis.graphing.example;
 
+import de.itemis.graphing.model.Attachment;
+import de.itemis.graphing.model.Edge;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.BlockStyle;
@@ -18,8 +20,10 @@ public class ExampleGraph {
 
         Vertex vertexA = graph.addVertex("A", 1.0, 0.5);
         vertexA.setLabel("vertex A");
-        vertexA.addAttachment("A1", 0.5, 0.2).setLabel("Sprite 1");
-        vertexA.addAttachment("A2", 0.5, 0.2).setLabel("Sprite 2");
+        vertexA.addAttachment("North", 0.5, 0.2, Attachment.ELocation.East).setLabel("North");
+        vertexA.addAttachment("East", 0.5, 0.2, Attachment.ELocation.East).setLabel("East");
+        vertexA.addAttachment("South", 0.5, 0.2, Attachment.ELocation.West).setLabel("South");
+        vertexA.addAttachment("West", 0.5, 0.2, Attachment.ELocation.West).setLabel("West");
 
         Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
         vertexB.setLabel("vertex B");
@@ -54,7 +58,9 @@ public class ExampleGraph {
         vertex3.setLabel("&");
         vertex3.setStyle(operatorStyle);
 
-        graph.addEdge("A", "&1");
+        Edge e = graph.addEdge("A", "&1");
+        e.setLabel("refers");
+
         graph.addEdge("&1", "B");
         graph.addEdge("&1", "C");
         graph.addEdge("C", "&2");

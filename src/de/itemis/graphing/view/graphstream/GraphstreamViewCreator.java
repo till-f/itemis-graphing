@@ -17,6 +17,7 @@ import org.graphstream.ui.view.util.MouseManager;
 
 import java.awt.Component;
 import java.awt.event.MouseWheelListener;
+import java.io.InvalidObjectException;
 
 public class GraphstreamViewCreator {
 
@@ -47,22 +48,20 @@ public class GraphstreamViewCreator {
         _spriteManager = new SpriteManager(_gsGraph);
         _styleConverter = new StyleToGraphstreamCSS();
 
-        for(Vertex n : graph.getVertexes())
+        for(Vertex vertex : graph.getVertexes())
         {
-            addVertex(n);
-            for(Attachment a : n.getAttachments())
+            addVertex(vertex);
+
+            double[] spaceConsumedNESW = new double[4];
+            for(Attachment attachment : vertex.getAttachments())
             {
-                addAttachment(a, n, null);
+                spaceConsumedNESW[attachment.getLocation().ordinal()] += addAttachment(vertex, attachment, spaceConsumedNESW[attachment.getLocation().ordinal()]);
             }
         }
 
-        for(Edge e : graph.getEdges())
+        for(Edge edge : graph.getEdges())
         {
-            addEdge(e);
-            for(Attachment a : e.getAttachments())
-            {
-                addAttachment(a, null, e);
-            }
+            addEdge(edge);
         }
     }
 
@@ -101,7 +100,7 @@ public class GraphstreamViewCreator {
         gsEdge.setAttribute("ui.style", styleCSS);
     }
 
-    private void addAttachment(Attachment attachment, Vertex toVertex, Edge toEdge)
+    private double addAttachment(Vertex vertex, Attachment attachment, double alreadyConsumedSpace)
     {
         Sprite sprite = _spriteManager.addSprite(attachment.getId());
 
@@ -111,19 +110,58 @@ public class GraphstreamViewCreator {
         String styleCSS = _styleConverter.getStyleString(attachment);
         sprite.setAttribute("ui.style", styleCSS);
 
-        if (toVertex != null)
+        sprite.attachToNode(vertex.getId());
+
+        // calculate rendering position for the attachment
+        double availableSpace = vertex.getAttachmentsSpace(attachment.getLocation());
+        double neededSpace;
+        if (attachment.getLocation() == Attachment.ELocation.South || attachment.getLocation() == Attachment.ELocation.North)
+            neededSpace = attachment.getShapeWidth();
+        else
+            neededSpace = attachment.getShapeHeight();
+
+        double x;
+        double y;
+        switch (attachment.getLocation())
         {
-            sprite.attachToNode(toVertex.getId());
-        }
-        else if (toEdge != null)
-        {
-            sprite.attachToEdge(toEdge.getId());
+            case North:
+                x = alreadyConsumedSpace - availableSpace / 2;
+                y = -0.5 * (vertex.getShapeWidth() + attachment.getShapeWidth());
+                break;
+            case East:
+                x = 0.5 * (vertex.getShapeWidth() + attachment.getShapeWidth());
+                y = alreadyConsumedSpace - availableSpace / 2;
+                break;
+            case South:
+                x = alreadyConsumedSpace - availableSpace / 2;
+                y = 0.5 * (vertex.getShapeWidth() + attachment.getShapeWidth());
+                break;
+            case West:
+                x = -0.5 * (vertex.getShapeWidth() + attachment.getShapeWidth());
+                y = alreadyConsumedSpace - availableSpace / 2;
+                break;
+            default:
+                throw new IllegalArgumentException("invalid location: " + attachment.getLocation());
         }
 
-        Style style = attachment.retrieveStyle();
-        double pos1 = ((toVertex != null) ? toVertex.getWidth()/2 : 0) + attachment.getWidth()/2;
-        double pos2 = 0.0;
-        sprite.setPosition(pos1, 0.0, pos2);
+        double distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        double radian = Math.atan2(y, x);
+        double degree = 360 / (2 * Math.PI) * radian;
+
+        System.out.println("---------------------");
+        System.out.println("DEBUG: " + attachment.getLabel());
+        System.out.println("DEBUG: available = " + availableSpace);
+        System.out.println("DEBUG: consumed = " + alreadyConsumedSpace);
+        System.out.println("DEBUG: needed = " + neededSpace);
+        System.out.println("DEBUG: x = " + x);
+        System.out.println("DEBUG: y = " + y);
+        System.out.println("DEBUG: d = " + distance);
+        System.out.println("DEBUG: r = " + radian);
+        System.out.println("DEBUG: ° = " + degree);
+
+        sprite.setPosition(distance, 0.0, degree);
+
+        return neededSpace;
     }
 
     public DefaultView createView(Layout layout)

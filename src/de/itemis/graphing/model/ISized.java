@@ -2,6 +2,8 @@ package de.itemis.graphing.model;
 
 public interface ISized
 {
-    double getWidth();
-    double getHeight();
+    double getShapeWidth();
+    double getShapeHeight();
+    double getLayoutWidth();
+    double getLayoutHeight();
 }

@@ -42,7 +42,7 @@ public class HierarchicalLayoutJGraphX implements Layout
         {
             for (Vertex n : graph.getVertexes())
             {
-                mxCell cell = (mxCell) mxGraph.insertVertex(parent, n.getId(), n, 0, 0, n.getWidth()*SCALE_FACTOR, n.getHeight()*SCALE_FACTOR);
+                mxCell cell = (mxCell) mxGraph.insertVertex(parent, n.getId(), n, 0, 0, n.getLayoutWidth()*SCALE_FACTOR, n.getLayoutHeight()*SCALE_FACTOR);
                 vertexToCell.put(n, cell);
             }
 
