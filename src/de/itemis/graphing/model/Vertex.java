@@ -1,10 +1,12 @@
 package de.itemis.graphing.model;
 
+import de.itemis.graphing.model.style.Style;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Vertex extends BaseGraphElement implements IAttachmentContainer
+public class Vertex extends BaseGraphElement implements IAttachmentContainer, ISized
 {
     private final double _width;
     private final double _height;
@@ -44,11 +46,13 @@ public class Vertex extends BaseGraphElement implements IAttachmentContainer
         _incomingEdges.remove(e);
     }
 
+    @Override
     public double getWidth()
     {
         return _width;
     }
 
+    @Override
     public double getHeight()
     {
         return _height;
@@ -128,8 +132,19 @@ public class Vertex extends BaseGraphElement implements IAttachmentContainer
     }
 
     @Override
-    public Attachment addAttachment(String id, double radius, double degree) {
-        Attachment a = new Attachment(_graph, id, radius, degree);
+    public Style retrieveStyle()
+    {
+        Style mergedStyle = _graph.getVertexBaseStyle().getCopy();
+
+        if (_style != null)
+            mergedStyle.mergeWith(_style);
+
+        return mergedStyle;
+    }
+
+    @Override
+    public Attachment addAttachment(String id, double width, double height) {
+        Attachment a = new Attachment(_graph, id, width, height);
         _attachments.add(a);
         return a;
     }

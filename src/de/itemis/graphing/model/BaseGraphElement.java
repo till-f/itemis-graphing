@@ -1,13 +1,16 @@
 package de.itemis.graphing.model;
 
-public abstract class BaseGraphElement
+import de.itemis.graphing.model.style.Style;
+
+public abstract class BaseGraphElement implements IStyled
 {
     protected final Graph _graph;
     protected final String _id;
 
+    protected Style _style = null;
+
     private Object _userObject = null;
     private String _label = null;
-    private String _styleId = null;
 
     public BaseGraphElement(Graph g, String id)
     {
@@ -38,14 +41,10 @@ public abstract class BaseGraphElement
         _label = label;
     }
 
-    public String getStyleId()
+    @Override
+    public void setStyle(Style newStyle)
     {
-        return _styleId;
-    }
-
-    public void setStyleId(String styleId)
-    {
-        _styleId = styleId;
+        _style = newStyle;
     }
 
 }

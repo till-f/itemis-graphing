@@ -1,5 +1,7 @@
 package de.itemis.graphing.model;
 
+import de.itemis.graphing.model.style.*;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +12,10 @@ public class Graph
 
     private final HashMap<String, Vertex> _vertexes = new HashMap<String, Vertex>();
     private final HashMap<String, Edge> _edges = new HashMap<String, Edge>();
+
+    private BlockStyle _vertexBaseStyle = new DefaultVertexStyle();
+    private EdgeStyle _edgeBaseStyle = new DefaultEdgeStyle();
+    private BlockStyle _attachmentBaseStyle = new DefaultVertexStyle();
 
     public List<Vertex> getVertexes()
     {
@@ -142,4 +148,37 @@ public class Graph
         e.getFrom().addOutgoingEdge(e);
         e.getTo().addIncomingEdge(e);
     }
+
+    public Style getVertexBaseStyle()
+    {
+        return _vertexBaseStyle;
+    }
+
+    public Style getEdgeBaseStyle()
+    {
+        return _edgeBaseStyle;
+    }
+
+    public Style getAttachmentBaseStyle()
+    {
+        return _attachmentBaseStyle;
+    }
+
+    public void setVertexBaseStyle(BlockStyle newStyle)
+    {
+        _vertexBaseStyle = newStyle;
+    }
+
+    public void setEdgeBaseStyle(EdgeStyle newStyle)
+    {
+        _edgeBaseStyle = newStyle;
+    }
+
+    public void setAttachmentBaseStyle(BlockStyle newStyle)
+    {
+        _attachmentBaseStyle = newStyle;
+    }
+
+
+
 }

@@ -1,24 +1,39 @@
 package de.itemis.graphing.model;
 
-public class Attachment extends BaseGraphElement
-{
-    private final double _radius;
-    private final double _degree;
+import de.itemis.graphing.model.style.Style;
 
-    public Attachment(Graph g, String id, double radius, double degree)
+public class Attachment extends BaseGraphElement implements ISized
+{
+    private final double _width;
+    private final double _height;
+
+    public Attachment(Graph g, String id, double width, double height)
     {
         super(g, id);
-        _radius = radius;
-        _degree = degree;
+        _width = width;
+        _height = height;
     }
 
-    public double getRadius()
+    @Override
+    public Style retrieveStyle()
     {
-        return _radius;
+        Style mergedStyle = _graph.getAttachmentBaseStyle().getCopy();
+
+        if (_style != null)
+            mergedStyle.mergeWith(_style);
+
+        return mergedStyle;
     }
 
-    public double getDegree()
+    @Override
+    public double getWidth()
     {
-        return _degree;
+        return _width;
+    }
+
+    @Override
+    public double getHeight()
+    {
+        return _height;
     }
 }

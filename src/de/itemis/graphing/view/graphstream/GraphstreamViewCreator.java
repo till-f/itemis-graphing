@@ -1,9 +1,8 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.model.Attachment;
-import de.itemis.graphing.model.Edge;
-import de.itemis.graphing.model.Graph;
-import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.style.AttachmentStyle;
+import de.itemis.graphing.model.style.Style;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.Sink;
@@ -19,6 +18,7 @@ import org.graphstream.ui.view.util.MouseManager;
 
 import java.awt.Component;
 import java.awt.event.MouseWheelListener;
+import java.util.HashMap;
 
 public class GraphstreamViewCreator {
 
@@ -39,6 +39,7 @@ public class GraphstreamViewCreator {
 
     private final org.graphstream.graph.Graph _gsGraph;
     private final SpriteManager _spriteManager;
+    private final StyleToGraphstreamCSS _styleConverter;
 
     public GraphstreamViewCreator(Graph graph)
     {
@@ -46,6 +47,7 @@ public class GraphstreamViewCreator {
         _gsGraph.addAttribute("ui.quality");
         _gsGraph.addAttribute("ui.antialias");
         _spriteManager = new SpriteManager(_gsGraph);
+        _styleConverter = new StyleToGraphstreamCSS();
 
         for(Vertex n : graph.getVertexes())
         {
@@ -86,8 +88,8 @@ public class GraphstreamViewCreator {
         if (vertex.getLabel() != null)
             gsNode.setAttribute("ui.label", vertex.getLabel());
 
-        if (vertex.getStyleId() != null)
-            gsNode.setAttribute("ui.class", vertex.getStyleId());
+        String styleCSS = _styleConverter.getStyleString(vertex);
+        gsNode.setAttribute("ui.style", styleCSS);
     }
 
     private void addEdge(Edge edge)
@@ -97,8 +99,8 @@ public class GraphstreamViewCreator {
         if (edge.getLabel() != null)
             gsEdge.setAttribute("ui.label", edge.getLabel());
 
-        if (edge.getStyleId() != null)
-            gsEdge.setAttribute("ui.class", edge.getStyleId());
+        String styleCSS = _styleConverter.getStyleString(edge);
+        gsEdge.setAttribute("ui.style", styleCSS);
     }
 
     private void addAttachment(Attachment attachment, Vertex toVertex, Edge toEdge)
@@ -108,15 +110,28 @@ public class GraphstreamViewCreator {
         if (attachment.getLabel() != null)
             sprite.setAttribute("ui.label", attachment.getLabel());
 
-        if (attachment.getStyleId() != null)
-            sprite.setAttribute("ui.class", attachment.getStyleId());
+        String styleCSS = _styleConverter.getStyleString(attachment);
+        sprite.setAttribute("ui.style", styleCSS);
 
         if (toVertex != null)
+        {
             sprite.attachToNode(toVertex.getId());
+        }
         else if (toEdge != null)
+        {
             sprite.attachToEdge(toEdge.getId());
+        }
 
-        sprite.setPosition(attachment.getRadius(), 0.0, attachment.getDegree());
+        Style style = attachment.retrieveStyle();
+        double pos1 = attachment.getWidth() / 2;
+        double pos2 = 0.0;
+        if (style instanceof AttachmentStyle)
+        {
+            AttachmentStyle attachmentStyle = (AttachmentStyle) style;
+            pos1 = attachmentStyle.getPos1() == null ? pos1 : attachmentStyle.getPos1();
+            pos2 = attachmentStyle.getPos1() == null ? pos2 : attachmentStyle.getPos1();
+        }
+        sprite.setPosition(pos1, 0.0, pos2);
     }
 
     public DefaultView createView(Layout layout)

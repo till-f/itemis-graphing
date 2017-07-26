@@ -2,6 +2,9 @@ package de.itemis.graphing.example;
 
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.model.style.BlockStyle;
+import de.itemis.graphing.model.style.DefaultVertexStyle;
+import de.itemis.graphing.model.style.Style;
 
 public class ExampleGraph {
 
@@ -9,10 +12,14 @@ public class ExampleGraph {
     {
         Graph graph = new Graph();
 
+        BlockStyle operatorStyle = new DefaultVertexStyle();
+        operatorStyle.setFillColor("CCCCCC");
+        operatorStyle.setShape(BlockStyle.EShape.Circle);
+
         Vertex vertexA = graph.addVertex("A", 1.0, 1.0 );
         vertexA.setLabel("vertex A");
-        vertexA.addAttachment("A1", 0.3, -14).setLabel("Sprite 1");
-        vertexA.addAttachment("A2", 0.3, 14).setLabel("Sprite 2");
+        vertexA.addAttachment("A1", 0.5, 0.2).setLabel("Sprite 1");
+        vertexA.addAttachment("A2", 0.5, 0.2).setLabel("Sprite 2");
 
         Vertex vertexB = graph.addVertex("B", 1.0, 1.0 );
         vertexB.setLabel("vertex B");
@@ -35,17 +42,17 @@ public class ExampleGraph {
         Vertex vertexH = graph.addVertex("H", 1.0, 1.0 );
         vertexH.setLabel("vertex H");
 
-        Vertex vertex1 = graph.addVertex("&1", 1.0, 1.0 );
+        Vertex vertex1 = graph.addVertex("&1", 0.5, 0.5 );
         vertex1.setLabel("&");
-        vertex1.setStyleId("operator");
+        vertex1.setStyle(operatorStyle);
 
-        Vertex vertex2 = graph.addVertex("&2", 1.0, 1.0 );
+        Vertex vertex2 = graph.addVertex("&2", 0.5, 0.5 );
         vertex2.setLabel("&");
-        vertex2.setStyleId("operator");
+        vertex2.setStyle(operatorStyle);
 
-        Vertex vertex3 = graph.addVertex("&3", 1.0, 1.0 );
+        Vertex vertex3 = graph.addVertex("&3", 0.5, 0.5 );
         vertex3.setLabel("&");
-        vertex3.setStyleId("operator");
+        vertex3.setStyle(operatorStyle);
 
         graph.addEdge("A", "&1");
         graph.addEdge("&1", "B");
