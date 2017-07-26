@@ -1,7 +1,6 @@
 package de.itemis.graphing.view.graphstream;
 
 import de.itemis.graphing.model.*;
-import de.itemis.graphing.model.style.AttachmentStyle;
 import de.itemis.graphing.model.style.Style;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -124,12 +123,6 @@ public class GraphstreamViewCreator {
         Style style = attachment.retrieveStyle();
         double pos1 = ((toVertex != null) ? toVertex.getWidth()/2 : 0) + attachment.getWidth()/2;
         double pos2 = 0.0;
-        if (style instanceof AttachmentStyle)
-        {
-            AttachmentStyle attachmentStyle = (AttachmentStyle) style;
-            pos1 = attachmentStyle.getPos1() == null ? pos1 : attachmentStyle.getPos1();
-            pos2 = attachmentStyle.getPos1() == null ? pos2 : attachmentStyle.getPos1();
-        }
         sprite.setPosition(pos1, 0.0, pos2);
     }
 
