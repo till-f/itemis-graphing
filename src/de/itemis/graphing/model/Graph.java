@@ -102,6 +102,19 @@ public class Graph
         _uninsertedEdges.remove(edgeId);
     }
 
+    public List<Vertex> getRootVertexes()
+    {
+        LinkedList<Vertex> rootVertexes = new LinkedList<Vertex>();
+        for (Vertex vertex : _vertexes.values())
+        {
+            if (vertex.getSources().size() < 1)
+            {
+                rootVertexes.add(vertex);
+            }
+        }
+        return rootVertexes;
+    }
+
     private void retryAddUninsertedEdges()
     {
         List<String> insertedEdgeIds = new LinkedList<>();
