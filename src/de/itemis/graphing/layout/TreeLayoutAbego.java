@@ -13,13 +13,13 @@ public class TreeLayoutAbego implements Layout
         @Override
         public double getWidth(Vertex treeNode)
         {
-            return treeNode.getLayoutWidth();
+            return treeNode.getFinalWidth();
         }
 
         @Override
         public double getHeight(Vertex treeNode)
         {
-            return treeNode.getLayoutHeight();
+            return treeNode.getFinalHeight();
         }
     }
 

@@ -23,8 +23,8 @@ public class StyleToGraphstreamCSS
             Double height = blockStyle.getHeight();
             if (blockStyle.getTakeElementSize() && element instanceof ISized)
             {
-                width = ((ISized) element).getShapeWidth();
-                height = ((ISized) element).getShapeHeight();
+                width = ((ISized) element).getFinalWidth();
+                height = ((ISized) element).getFinalHeight();
             }
 
             if (width != null && height != null)

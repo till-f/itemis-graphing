@@ -68,44 +68,44 @@ public class Vertex extends BaseGraphElement implements ISized
     }
 
     @Override
-    public double getShapeWidth()
+    public double getBaseWidth()
     {
         return _width;
     }
 
     @Override
-    public double getShapeHeight()
+    public double getBaseHeight()
     {
         return _height;
     }
 
     @Override
-    public double getLayoutWidth()
+    public double getFinalWidth()
     {
         double maxWidthEast = 0;
         double maxWidthWest = 0;
         for(Attachment a : _attachments)
         {
             if (a.getLocation() == Attachment.ELocation.East)
-                maxWidthEast = Math.max(maxWidthEast, a.getLayoutWidth());
+                maxWidthEast = Math.max(maxWidthEast, a.getFinalWidth());
             if (a.getLocation() == Attachment.ELocation.West)
-                maxWidthWest = Math.max(maxWidthWest, a.getLayoutWidth());
+                maxWidthWest = Math.max(maxWidthWest, a.getFinalWidth());
         }
         double maxWidthNorthSouth = Math.max(getAttachmentsSpace(Attachment.ELocation.North), getAttachmentsSpace(Attachment.ELocation.South));
         return Math.max(maxWidthNorthSouth, _width + maxWidthEast + maxWidthWest);
     }
 
     @Override
-    public double getLayoutHeight()
+    public double getFinalHeight()
     {
         double maxHeightNorth = 0;
         double maxHeightSouth = 0;
         for(Attachment a : _attachments)
         {
             if (a.getLocation() == Attachment.ELocation.North)
-                maxHeightNorth = Math.max(maxHeightNorth, a.getLayoutHeight());
+                maxHeightNorth = Math.max(maxHeightNorth, a.getFinalHeight());
             if (a.getLocation() == Attachment.ELocation.South)
-                maxHeightSouth = Math.max(maxHeightSouth, a.getLayoutHeight());
+                maxHeightSouth = Math.max(maxHeightSouth, a.getFinalHeight());
         }
         double maxHeightEastWest = Math.max(getAttachmentsSpace(Attachment.ELocation.East), getAttachmentsSpace(Attachment.ELocation.West));
         return Math.max(maxHeightEastWest, _height + maxHeightNorth + maxHeightSouth);
@@ -121,11 +121,11 @@ public class Vertex extends BaseGraphElement implements ISized
 
             if (location == Attachment.ELocation.North || location == Attachment.ELocation.South)
             {
-                space += a.getLayoutWidth();
+                space += a.getFinalWidth();
             }
             else
             {
-                space += a.getLayoutHeight();
+                space += a.getFinalHeight();
             }
         }
         return space;

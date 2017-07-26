@@ -1,7 +1,6 @@
 package de.itemis.graphing.view.graphstream;
 
 import de.itemis.graphing.model.*;
-import de.itemis.graphing.model.style.Style;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.Sink;
@@ -17,7 +16,6 @@ import org.graphstream.ui.view.util.MouseManager;
 
 import java.awt.Component;
 import java.awt.event.MouseWheelListener;
-import java.io.InvalidObjectException;
 
 public class GraphstreamViewCreator {
 
@@ -117,9 +115,9 @@ public class GraphstreamViewCreator {
         double availableSpace = vertex.getAttachmentsSpace(attachment.getLocation());
         double neededSpace;
         if (attachment.getLocation() == Attachment.ELocation.South || attachment.getLocation() == Attachment.ELocation.North)
-            neededSpace = attachment.getShapeWidth();
+            neededSpace = attachment.getBaseWidth();
         else
-            neededSpace = attachment.getShapeHeight();
+            neededSpace = attachment.getBaseHeight();
 
         final double spaceOffset = alreadyConsumedSpace - availableSpace/2 + neededSpace/2;
         final double x;
@@ -128,18 +126,18 @@ public class GraphstreamViewCreator {
         {
             case North:
                 x = spaceOffset;
-                y = 0.5 * (vertex.getShapeHeight() + attachment.getShapeHeight());
+                y = 0.5 * (vertex.getBaseHeight() + attachment.getBaseHeight());
                 break;
             case East:
-                x = 0.5 * (vertex.getShapeWidth() + attachment.getShapeWidth());
+                x = 0.5 * (vertex.getBaseWidth() + attachment.getBaseWidth());
                 y = spaceOffset;
                 break;
             case South:
                 x = spaceOffset;
-                y = -0.5 * (vertex.getShapeHeight() + attachment.getShapeHeight());
+                y = -0.5 * (vertex.getBaseHeight() + attachment.getBaseHeight());
                 break;
             case West:
-                x = -0.5 * (vertex.getShapeWidth() + attachment.getShapeWidth());
+                x = -0.5 * (vertex.getBaseWidth() + attachment.getBaseWidth());
                 y = spaceOffset;
                 break;
             default:
@@ -149,18 +147,6 @@ public class GraphstreamViewCreator {
         double distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         double radian = Math.atan2(y, x);
         double degree = 360 / (2 * Math.PI) * radian;
-
-        System.out.println("---------------------");
-        System.out.println("DEBUG: " + attachment.getLabel());
-        System.out.println("DEBUG: available = " + availableSpace);
-        System.out.println("DEBUG: consumed = " + alreadyConsumedSpace);
-        System.out.println("DEBUG: needed = " + neededSpace);
-        System.out.println("Debug: offset = " + spaceOffset);
-        System.out.println("DEBUG: x = " + x);
-        System.out.println("DEBUG: y = " + y);
-        System.out.println("DEBUG: d = " + distance);
-        System.out.println("DEBUG: r = " + radian);
-        System.out.println("DEBUG: ° = " + degree);
 
         sprite.setPosition(distance, 0.0, degree);
 

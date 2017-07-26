@@ -30,25 +30,25 @@ public class Attachment extends BaseGraphElement implements ISized
     }
 
     @Override
-    public double getShapeWidth()
+    public double getBaseWidth()
     {
         return _width;
     }
 
     @Override
-    public double getShapeHeight()
+    public double getBaseHeight()
     {
         return _height;
     }
 
     @Override
-    public double getLayoutWidth()
+    public double getFinalWidth()
     {
         return _width;
     }
 
     @Override
-    public double getLayoutHeight()
+    public double getFinalHeight()
     {
         return _height;
     }
