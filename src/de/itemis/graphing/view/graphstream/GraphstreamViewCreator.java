@@ -52,10 +52,11 @@ public class GraphstreamViewCreator {
         {
             addVertex(vertex);
 
-            double[] spaceConsumedNESW = new double[4];
+            double[] consumed = new double[4];
             for(Attachment attachment : vertex.getAttachments())
             {
-                spaceConsumedNESW[attachment.getLocation().ordinal()] += addAttachment(vertex, attachment, spaceConsumedNESW[attachment.getLocation().ordinal()]);
+                int ordinal = attachment.getLocation().ordinal();
+                consumed[ordinal] += addAttachment(vertex, attachment, consumed[ordinal]);
             }
         }
 
@@ -100,7 +101,7 @@ public class GraphstreamViewCreator {
         gsEdge.setAttribute("ui.style", styleCSS);
     }
 
-    private double addAttachment(Vertex vertex, Attachment attachment, double alreadyConsumedSpace)
+    private double addAttachment(Vertex vertex, Attachment attachment, final double alreadyConsumedSpace)
     {
         Sprite sprite = _spriteManager.addSprite(attachment.getId());
 
@@ -120,25 +121,26 @@ public class GraphstreamViewCreator {
         else
             neededSpace = attachment.getShapeHeight();
 
-        double x;
-        double y;
+        final double spaceOffset = alreadyConsumedSpace - availableSpace/2 + neededSpace/2;
+        final double x;
+        final double y;
         switch (attachment.getLocation())
         {
             case North:
-                x = alreadyConsumedSpace - availableSpace / 2;
-                y = -0.5 * (vertex.getShapeWidth() + attachment.getShapeWidth());
+                x = spaceOffset;
+                y = 0.5 * (vertex.getShapeHeight() + attachment.getShapeHeight());
                 break;
             case East:
                 x = 0.5 * (vertex.getShapeWidth() + attachment.getShapeWidth());
-                y = alreadyConsumedSpace - availableSpace / 2;
+                y = spaceOffset;
                 break;
             case South:
-                x = alreadyConsumedSpace - availableSpace / 2;
-                y = 0.5 * (vertex.getShapeWidth() + attachment.getShapeWidth());
+                x = spaceOffset;
+                y = -0.5 * (vertex.getShapeHeight() + attachment.getShapeHeight());
                 break;
             case West:
                 x = -0.5 * (vertex.getShapeWidth() + attachment.getShapeWidth());
-                y = alreadyConsumedSpace - availableSpace / 2;
+                y = spaceOffset;
                 break;
             default:
                 throw new IllegalArgumentException("invalid location: " + attachment.getLocation());
@@ -153,6 +155,7 @@ public class GraphstreamViewCreator {
         System.out.println("DEBUG: available = " + availableSpace);
         System.out.println("DEBUG: consumed = " + alreadyConsumedSpace);
         System.out.println("DEBUG: needed = " + neededSpace);
+        System.out.println("Debug: offset = " + spaceOffset);
         System.out.println("DEBUG: x = " + x);
         System.out.println("DEBUG: y = " + y);
         System.out.println("DEBUG: d = " + distance);

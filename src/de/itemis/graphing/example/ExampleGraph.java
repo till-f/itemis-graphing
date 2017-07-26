@@ -20,10 +20,14 @@ public class ExampleGraph {
 
         Vertex vertexA = graph.addVertex("A", 1.0, 0.5);
         vertexA.setLabel("vertex A");
-        vertexA.addAttachment("North", 0.5, 0.2, Attachment.ELocation.East).setLabel("North");
-        vertexA.addAttachment("East", 0.5, 0.2, Attachment.ELocation.East).setLabel("East");
-        vertexA.addAttachment("South", 0.5, 0.2, Attachment.ELocation.West).setLabel("South");
-        vertexA.addAttachment("West", 0.5, 0.2, Attachment.ELocation.West).setLabel("West");
+        vertexA.addAttachment("N1", 0.3, 0.2, Attachment.ELocation.North).setLabel("N1");
+        vertexA.addAttachment("E1", 0.3, 0.2, Attachment.ELocation.East).setLabel("E1");
+        vertexA.addAttachment("S1", 0.3, 0.2, Attachment.ELocation.South).setLabel("S1");
+        vertexA.addAttachment("W1", 0.3, 0.2, Attachment.ELocation.West).setLabel("W1");
+        vertexA.addAttachment("N2", 0.3, 0.2, Attachment.ELocation.North).setLabel("N2");
+        vertexA.addAttachment("E2", 0.3, 0.2, Attachment.ELocation.East).setLabel("E2");
+        vertexA.addAttachment("S2", 0.3, 0.2, Attachment.ELocation.South).setLabel("S2");
+        vertexA.addAttachment("W2", 0.3, 0.2, Attachment.ELocation.West).setLabel("W2");
 
         Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
         vertexB.setLabel("vertex B");
