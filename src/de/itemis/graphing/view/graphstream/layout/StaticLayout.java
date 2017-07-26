@@ -1,7 +1,7 @@
-package de.itemis.graphstreamwrapper.graphstream.layout;
+package de.itemis.graphing.view.graphstream.layout;
 
-import de.itemis.graphstreamwrapper.Graph;
-import de.itemis.graphstreamwrapper.Vertex;
+import de.itemis.graphing.model.Graph;
+import de.itemis.graphing.model.Vertex;
 import org.graphstream.stream.PipeBase;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;

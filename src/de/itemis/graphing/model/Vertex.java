@@ -1,4 +1,4 @@
-package de.itemis.graphstreamwrapper;
+package de.itemis.graphing.model;
 
 import java.util.HashSet;
 import java.util.LinkedList;

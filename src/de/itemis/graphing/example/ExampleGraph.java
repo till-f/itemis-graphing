@@ -1,13 +1,7 @@
-package de.itemis.graphstreamwrapper.example;
+package de.itemis.graphing.example;
 
-import de.itemis.graphstreamwrapper.Graph;
-import de.itemis.graphstreamwrapper.Vertex;
-import de.itemis.graphstreamwrapper.graphstream.GraphstreamViewCreator;
-import de.itemis.graphstreamwrapper.graphstream.layout.hierarchical.HierarchicalLayoutJGraphX;
-import org.graphstream.ui.layout.Layout;
-import org.graphstream.ui.swingViewer.DefaultView;
-
-import javax.swing.*;
+import de.itemis.graphing.model.Graph;
+import de.itemis.graphing.model.Vertex;
 
 public class ExampleGraph {
 

@@ -1,4 +1,4 @@
-package de.itemis.graphstreamwrapper;
+package de.itemis.graphing.model;
 
 public class Attachment extends BaseGraphElement
 {

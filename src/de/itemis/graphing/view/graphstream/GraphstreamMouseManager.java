@@ -1,4 +1,4 @@
-package de.itemis.graphstreamwrapper.graphstream;
+package de.itemis.graphing.view.graphstream;
 
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
@@ -6,7 +6,6 @@ import org.graphstream.ui.graphicGraph.GraphicElement;
 import org.graphstream.ui.graphicGraph.GraphicGraph;
 import org.graphstream.ui.graphicGraph.GraphicNode;
 import org.graphstream.ui.graphicGraph.GraphicSprite;
-import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Camera;
 import org.graphstream.ui.view.View;

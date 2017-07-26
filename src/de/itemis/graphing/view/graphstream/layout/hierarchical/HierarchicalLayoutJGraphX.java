@@ -1,12 +1,12 @@
-package de.itemis.graphstreamwrapper.graphstream.layout.hierarchical;
+package de.itemis.graphing.view.graphstream.layout.hierarchical;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.view.mxGraph;
-import de.itemis.graphstreamwrapper.Graph;
-import de.itemis.graphstreamwrapper.Vertex;
-import de.itemis.graphstreamwrapper.graphstream.layout.StaticLayout;
+import de.itemis.graphing.model.Graph;
+import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.view.graphstream.layout.StaticLayout;
 
 import javax.swing.*;
 import java.util.HashMap;

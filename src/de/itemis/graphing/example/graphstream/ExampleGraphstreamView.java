@@ -1,9 +1,9 @@
-package de.itemis.graphstreamwrapper.example.graphstream;
+package de.itemis.graphing.example.graphstream;
 
-import de.itemis.graphstreamwrapper.Graph;
-import de.itemis.graphstreamwrapper.example.ExampleGraph;
-import de.itemis.graphstreamwrapper.graphstream.GraphstreamViewCreator;
-import de.itemis.graphstreamwrapper.graphstream.layout.hierarchical.HierarchicalLayoutJGraphX;
+import de.itemis.graphing.model.Graph;
+import de.itemis.graphing.example.ExampleGraph;
+import de.itemis.graphing.view.graphstream.GraphstreamViewCreator;
+import de.itemis.graphing.view.graphstream.layout.hierarchical.HierarchicalLayoutJGraphX;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.swingViewer.DefaultView;
 

@@ -1,9 +1,9 @@
-package de.itemis.graphstreamwrapper.graphstream;
+package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphstreamwrapper.Attachment;
-import de.itemis.graphstreamwrapper.Edge;
-import de.itemis.graphstreamwrapper.Graph;
-import de.itemis.graphstreamwrapper.Vertex;
+import de.itemis.graphing.model.Attachment;
+import de.itemis.graphing.model.Edge;
+import de.itemis.graphing.model.Graph;
+import de.itemis.graphing.model.Vertex;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.Sink;

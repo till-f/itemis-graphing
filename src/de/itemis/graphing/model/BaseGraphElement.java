@@ -1,4 +1,4 @@
-package de.itemis.graphstreamwrapper;
+package de.itemis.graphing.model;
 
 public abstract class BaseGraphElement
 {
