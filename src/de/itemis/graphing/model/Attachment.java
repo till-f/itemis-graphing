@@ -5,9 +5,9 @@ public class Attachment extends BaseGraphElement
     private final double _radius;
     private final double _degree;
 
-    public Attachment(String id, double radius, double degree)
+    public Attachment(Graph g, String id, double radius, double degree)
     {
-        super(id);
+        super(g, id);
         _radius = radius;
         _degree = degree;
     }

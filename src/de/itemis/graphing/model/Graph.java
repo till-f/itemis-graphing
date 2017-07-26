@@ -27,7 +27,7 @@ public class Graph
 
     public Vertex addVertex(String id, double width, double height)
     {
-        Vertex n = new Vertex(id, width, height);
+        Vertex n = new Vertex(this, id, width, height);
         _vertexes.put(id, n);
 
         retryAddUninsertedEdges();
@@ -76,13 +76,13 @@ public class Graph
 
         if (from == null || to == null)
         {
-            Edge ue = new Edge(edgeId, fromId, toId);
+            Edge ue = new Edge(this, edgeId, fromId, toId);
             _uninsertedEdges.put(edgeId, ue);
             return ue;
         }
         else
         {
-            Edge e = new Edge(edgeId, from, to);
+            Edge e = new Edge(this, edgeId, from, to);
             doAddEdge(e);
             return e;
         }

@@ -2,14 +2,16 @@ package de.itemis.graphing.model;
 
 public abstract class BaseGraphElement
 {
-    private final String _id;
+    protected final Graph _graph;
+    protected final String _id;
 
     private Object _userObject = null;
     private String _label = null;
     private String _styleId = null;
 
-    public BaseGraphElement(String id)
+    public BaseGraphElement(Graph g, String id)
     {
+        _graph = g;
         _id = id;
     }
 

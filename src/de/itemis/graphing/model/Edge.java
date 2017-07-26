@@ -13,16 +13,16 @@ public class Edge extends BaseGraphElement implements IAttachmentContainer
     private String _fromId;
     private String _toId;
 
-    public Edge(String id, Vertex from, Vertex to)
+    public Edge(Graph g, String id, Vertex from, Vertex to)
     {
-        super(id);
+        super(g, id);
         _from = from;
         _to = to;
     }
 
-    public Edge(String id, String fromId, String toId)
+    public Edge(Graph g, String id, String fromId, String toId)
     {
-        super(id);
+        super(g, id);
         _fromId = fromId;
         _toId = toId;
     }
@@ -58,7 +58,7 @@ public class Edge extends BaseGraphElement implements IAttachmentContainer
 
     @Override
     public Attachment addAttachment(String id, double radius, double degree) {
-        Attachment a = new Attachment(id, radius, degree);
+        Attachment a = new Attachment(_graph, id, radius, degree);
         _attachments.add(a);
         return a;
     }

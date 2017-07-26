@@ -17,9 +17,9 @@ public class Vertex extends BaseGraphElement implements IAttachmentContainer
     private Double _x = null;
     private Double _y = null;
 
-    public Vertex(String id, double width, double height)
+    public Vertex(Graph g, String id, double width, double height)
     {
-        super(id);
+        super(g, id);
         _width = width;
         _height = height;
     }
@@ -129,7 +129,7 @@ public class Vertex extends BaseGraphElement implements IAttachmentContainer
 
     @Override
     public Attachment addAttachment(String id, double radius, double degree) {
-        Attachment a = new Attachment(id, radius, degree);
+        Attachment a = new Attachment(_graph, id, radius, degree);
         _attachments.add(a);
         return a;
     }
