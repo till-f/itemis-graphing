@@ -19,22 +19,36 @@ public class StyleToGraphstreamCSS
 
             sb.append("shape: " + getGraphstreamShape(blockStyle.getShape()) + ";");
 
-            Double width = blockStyle.getWidth();
-            Double height = blockStyle.getHeight();
-            if (blockStyle.getTakeElementSize() && element instanceof ISized)
-            {
-                width = ((ISized) element).getFinalWidth();
-                height = ((ISized) element).getFinalHeight();
-            }
 
-            if (width != null && height != null)
-            {
-                sb.append("size: " + width + "gu," + height + "gu" + ";");
-            }
-            else
+            if (blockStyle.getSizeMode() == BlockStyle.ESizeMode.None)
             {
                 sb.append("size-mode: fit;");
                 sb.append("padding: 2;");
+            }
+            else
+            {
+                double width;
+                double height;
+                if (blockStyle.getSizeMode() == BlockStyle.ESizeMode.Explicit)
+                {
+                    width = blockStyle.getWidth();
+                    height = blockStyle.getHeight();
+                }
+                else if (blockStyle.getSizeMode() == BlockStyle.ESizeMode.BaseSize)
+                {
+                    width = ((ISized) element).getBaseWidth();
+                    height = ((ISized) element).getBaseHeight();
+                }
+                else if (blockStyle.getSizeMode() == BlockStyle.ESizeMode.FinalSize)
+                {
+                    width = ((ISized) element).getFinalWidth();
+                    height = ((ISized) element).getFinalHeight();
+                }
+                else
+                {
+                    throw new IllegalArgumentException("invalid size mode: " + blockStyle.getSizeMode());
+                }
+                sb.append("size: " + width + "gu," + height + "gu" + ";");
             }
 
             sb.append("fill-mode: plain;");

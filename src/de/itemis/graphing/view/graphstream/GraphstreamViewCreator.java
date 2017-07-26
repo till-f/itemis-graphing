@@ -130,7 +130,7 @@ public class GraphstreamViewCreator {
                 break;
             case East:
                 x = 0.5 * (vertex.getBaseWidth() + attachment.getBaseWidth());
-                y = spaceOffset;
+                y = -spaceOffset;
                 break;
             case South:
                 x = spaceOffset;
@@ -138,7 +138,7 @@ public class GraphstreamViewCreator {
                 break;
             case West:
                 x = -0.5 * (vertex.getBaseWidth() + attachment.getBaseWidth());
-                y = spaceOffset;
+                y = -spaceOffset;
                 break;
             default:
                 throw new IllegalArgumentException("invalid location: " + attachment.getLocation());

@@ -3,11 +3,12 @@ package de.itemis.graphing.model.style;
 public abstract class BlockStyle extends Style
 {
     public enum EShape { Box, RoundedBox, Circle }
+    public enum ESizeMode { None, Explicit, BaseSize, FinalSize }
 
     protected EShape shape = EShape.RoundedBox;
+    protected ESizeMode sizeMode = ESizeMode.BaseSize;
     protected Double width = null;
     protected Double height = null;
-    protected Boolean takeElementSize = true;
 
     @Override
     public void mergeWith(Style newStyle)
@@ -18,9 +19,9 @@ public abstract class BlockStyle extends Style
         {
             BlockStyle newBlockStyle = (BlockStyle) newStyle;
             shape = (newBlockStyle.shape == null) ? shape : newBlockStyle.shape;
+            sizeMode = (newBlockStyle.sizeMode == null) ? sizeMode : newBlockStyle.sizeMode;
             width = (newBlockStyle.width == null) ? width : newBlockStyle.width;
             height = (newBlockStyle.height == null) ? height : newBlockStyle.height;
-            takeElementSize = (newBlockStyle.takeElementSize == null) ? takeElementSize : newBlockStyle.takeElementSize;
         }
     }
 
@@ -39,9 +40,9 @@ public abstract class BlockStyle extends Style
         return height;
     }
 
-    public Boolean getTakeElementSize()
+    public ESizeMode getSizeMode()
     {
-        return takeElementSize;
+        return sizeMode;
     }
 
     public void setShape(EShape shape)
@@ -59,9 +60,9 @@ public abstract class BlockStyle extends Style
         this.height = height;
     }
 
-    public void setTakeElementSize(Boolean takeElementSize)
+    public void setSizeMode(ESizeMode sizeMode)
     {
-        this.takeElementSize = takeElementSize;
+        this.sizeMode = sizeMode;
     }
 
 
