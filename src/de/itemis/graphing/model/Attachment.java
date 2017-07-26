@@ -17,7 +17,7 @@ public class Attachment extends BaseGraphElement implements ISized
         _width = width;
         _height = height;
         _location = location;
-        _style = g.getDefaultAttachmentStyle();
+        setStyle((BlockStyle) g.getDefaultAttachmentStyle().getCopy());
     }
 
     @Override

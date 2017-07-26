@@ -21,7 +21,7 @@ public class Edge extends BaseGraphElement
         super(g, id);
         _from = from;
         _to = to;
-        _style = g.getDefaultEdgeStyle();
+        setStyle((EdgeStyle) g.getDefaultEdgeStyle().getCopy());
     }
 
     public Edge(Graph g, String id, String fromId, String toId)
@@ -29,7 +29,7 @@ public class Edge extends BaseGraphElement
         super(g, id);
         _fromId = fromId;
         _toId = toId;
-        _style = g.getDefaultEdgeStyle();
+        setStyle((EdgeStyle) g.getDefaultEdgeStyle().getCopy());
     }
 
     public Vertex getFrom() {

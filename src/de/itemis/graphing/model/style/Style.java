@@ -3,7 +3,7 @@ package de.itemis.graphing.model.style;
 import de.itemis.graphing.model.BaseGraphElement;
 import de.itemis.graphing.model.Edge;
 
-public abstract class Style
+public abstract class Style implements Cloneable
 {
     public enum ELineMode { None, Solid, Dotted }
 
@@ -15,6 +15,15 @@ public abstract class Style
     protected Double lineThickness = 1.0;
     protected ELineMode lineMode = ELineMode.Solid;
     protected Double fontSize = 12.0;
+
+    public Style getCopy()
+    {
+        try {
+            return (Style)this.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void setParent(BaseGraphElement parent)
     {

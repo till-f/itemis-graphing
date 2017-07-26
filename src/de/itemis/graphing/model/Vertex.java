@@ -25,7 +25,7 @@ public class Vertex extends BaseGraphElement implements ISized
         super(g, id);
         _width = width;
         _height = height;
-        _style = g.getDefaultVertexStyle();
+        setStyle((BlockStyle) g.getDefaultVertexStyle().getCopy());
     }
 
     public void addOutgoingEdge(Edge e)
