@@ -1,6 +1,6 @@
 package de.itemis.graphing.model.style;
 
-public abstract class BlockStyle extends Style
+public class BlockStyle extends Style
 {
     public enum EShape { Box, RoundedBox, Circle }
     public enum ESizeMode { None, Explicit, BaseSize, FinalSize }
@@ -9,21 +9,6 @@ public abstract class BlockStyle extends Style
     protected ESizeMode sizeMode = ESizeMode.BaseSize;
     protected Double width = null;
     protected Double height = null;
-
-    @Override
-    public void mergeWith(Style newStyle)
-    {
-        super.mergeWith(newStyle);
-
-        if (newStyle instanceof BlockStyle)
-        {
-            BlockStyle newBlockStyle = (BlockStyle) newStyle;
-            shape = (newBlockStyle.shape == null) ? shape : newBlockStyle.shape;
-            sizeMode = (newBlockStyle.sizeMode == null) ? sizeMode : newBlockStyle.sizeMode;
-            width = (newBlockStyle.width == null) ? width : newBlockStyle.width;
-            height = (newBlockStyle.height == null) ? height : newBlockStyle.height;
-        }
-    }
 
     public EShape getShape()
     {

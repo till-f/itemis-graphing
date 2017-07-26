@@ -5,8 +5,6 @@ import de.itemis.graphing.model.Edge;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.BlockStyle;
-import de.itemis.graphing.model.style.DefaultVertexStyle;
-import de.itemis.graphing.model.style.Style;
 
 public class ExampleGraph {
 
@@ -14,7 +12,7 @@ public class ExampleGraph {
     {
         Graph graph = new Graph();
 
-        BlockStyle operatorStyle = new DefaultVertexStyle();
+        BlockStyle operatorStyle = new BlockStyle();
         operatorStyle.setFillColor("CCCCCC");
         operatorStyle.setShape(BlockStyle.EShape.Circle);
 

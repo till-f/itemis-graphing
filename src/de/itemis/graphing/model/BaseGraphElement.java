@@ -7,8 +7,6 @@ public abstract class BaseGraphElement implements IStyled
     protected final Graph _graph;
     protected final String _id;
 
-    protected Style _style = null;
-
     private Object _userObject = null;
     private String _label = null;
 
@@ -39,12 +37,6 @@ public abstract class BaseGraphElement implements IStyled
     public void setLabel(String label)
     {
         _label = label;
-    }
-
-    @Override
-    public void setStyle(Style newStyle)
-    {
-        _style = newStyle;
     }
 
 }

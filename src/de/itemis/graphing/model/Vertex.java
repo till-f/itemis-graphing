@@ -1,6 +1,6 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.model.style.Style;
+import de.itemis.graphing.model.style.BlockStyle;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,12 +18,14 @@ public class Vertex extends BaseGraphElement implements ISized
 
     private Double _x = null;
     private Double _y = null;
+    private BlockStyle _style = null;
 
     public Vertex(Graph g, String id, double width, double height)
     {
         super(g, id);
         _width = width;
         _height = height;
+        _style = g.getDefaultVertexStyle();
     }
 
     public void addOutgoingEdge(Edge e)
@@ -195,13 +197,13 @@ public class Vertex extends BaseGraphElement implements ISized
     }
 
     @Override
-    public Style retrieveStyle()
+    public BlockStyle getStyle()
     {
-        Style mergedStyle = _graph.getVertexBaseStyle().getCopy();
+        return _style;
+    }
 
-        if (_style != null)
-            mergedStyle.mergeWith(_style);
-
-        return mergedStyle;
+    public void setStyle(BlockStyle style)
+    {
+        _style = style;
     }
 }

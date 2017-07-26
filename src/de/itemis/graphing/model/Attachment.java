@@ -1,6 +1,6 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.model.style.Style;
+import de.itemis.graphing.model.style.BlockStyle;
 
 public class Attachment extends BaseGraphElement implements ISized
 {
@@ -9,6 +9,7 @@ public class Attachment extends BaseGraphElement implements ISized
     private final double _width;
     private final double _height;
     private final ELocation _location;
+    private BlockStyle _style = null;
 
     public Attachment(Graph g, String id, double width, double height, ELocation location)
     {
@@ -16,17 +17,7 @@ public class Attachment extends BaseGraphElement implements ISized
         _width = width;
         _height = height;
         _location = location;
-    }
-
-    @Override
-    public Style retrieveStyle()
-    {
-        Style mergedStyle = _graph.getAttachmentBaseStyle().getCopy();
-
-        if (_style != null)
-            mergedStyle.mergeWith(_style);
-
-        return mergedStyle;
+        _style = g.getDefaultAttachmentStyle();
     }
 
     @Override
@@ -57,4 +48,16 @@ public class Attachment extends BaseGraphElement implements ISized
     {
         return _location;
     }
+
+    @Override
+    public BlockStyle getStyle()
+    {
+        return _style;
+    }
+
+    public void setStyle(BlockStyle style)
+    {
+        _style = style;
+    }
+
 }

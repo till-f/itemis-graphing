@@ -13,9 +13,9 @@ public class Graph
     private final HashMap<String, Vertex> _vertexes = new HashMap<String, Vertex>();
     private final HashMap<String, Edge> _edges = new HashMap<String, Edge>();
 
-    private BlockStyle _vertexBaseStyle = new DefaultVertexStyle();
-    private EdgeStyle _edgeBaseStyle = new DefaultEdgeStyle();
-    private BlockStyle _attachmentBaseStyle = new DefaultVertexStyle();
+    private BlockStyle _defaultVertexStyle = new BlockStyle();
+    private EdgeStyle _defaultEdgeStyle = new EdgeStyle();
+    private BlockStyle _defaultAttachmentStyle = new BlockStyle();
 
     public List<Vertex> getVertexes()
     {
@@ -149,34 +149,34 @@ public class Graph
         e.getTo().addIncomingEdge(e);
     }
 
-    public Style getVertexBaseStyle()
+    public BlockStyle getDefaultVertexStyle()
     {
-        return _vertexBaseStyle;
+        return _defaultVertexStyle;
     }
 
-    public Style getEdgeBaseStyle()
+    public EdgeStyle getDefaultEdgeStyle()
     {
-        return _edgeBaseStyle;
+        return _defaultEdgeStyle;
     }
 
-    public Style getAttachmentBaseStyle()
+    public BlockStyle getDefaultAttachmentStyle()
     {
-        return _attachmentBaseStyle;
+        return _defaultAttachmentStyle;
     }
 
-    public void setVertexBaseStyle(BlockStyle newStyle)
+    public void setDefaultVertexStyle(BlockStyle newStyle)
     {
-        _vertexBaseStyle = newStyle;
+        _defaultVertexStyle = newStyle;
     }
 
-    public void setEdgeBaseStyle(EdgeStyle newStyle)
+    public void setDefaultEdgeStyle(EdgeStyle newStyle)
     {
-        _edgeBaseStyle = newStyle;
+        _defaultEdgeStyle = newStyle;
     }
 
-    public void setAttachmentBaseStyle(BlockStyle newStyle)
+    public void setDefaultAttachmentStyle(BlockStyle newStyle)
     {
-        _attachmentBaseStyle = newStyle;
+        _defaultAttachmentStyle = newStyle;
     }
 
 

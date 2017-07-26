@@ -11,16 +11,6 @@ public abstract class Style implements Cloneable
     protected ELineMode lineMode = ELineMode.Solid;
     protected Double fontSize = 12.0;
 
-    public void mergeWith(Style newStyle)
-    {
-        lineColor = (newStyle.lineColor == null) ? lineColor : newStyle.lineColor;
-        fillColor = (newStyle.fillColor == null) ? fillColor : newStyle.fillColor;
-        textColor = (newStyle.textColor == null) ? textColor : newStyle.textColor;
-        lineThickness = (newStyle.lineThickness == null) ? lineThickness : newStyle.lineThickness;
-        lineMode = (newStyle.lineMode == null) ? lineMode : newStyle.lineMode;
-        fontSize = (newStyle.fontSize == null) ? fontSize : newStyle.fontSize;
-    }
-
     public Style getCopy()
     {
         try {

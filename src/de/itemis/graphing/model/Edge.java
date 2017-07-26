@@ -1,9 +1,8 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.model.style.Style;
+import de.itemis.graphing.model.style.EdgeStyle;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class Edge extends BaseGraphElement
 {
@@ -15,11 +14,14 @@ public class Edge extends BaseGraphElement
     private String _fromId;
     private String _toId;
 
+    private EdgeStyle _style;
+
     public Edge(Graph g, String id, Vertex from, Vertex to)
     {
         super(g, id);
         _from = from;
         _to = to;
+        _style = g.getDefaultEdgeStyle();
     }
 
     public Edge(Graph g, String id, String fromId, String toId)
@@ -27,6 +29,7 @@ public class Edge extends BaseGraphElement
         super(g, id);
         _fromId = fromId;
         _toId = toId;
+        _style = g.getDefaultEdgeStyle();
     }
 
     public Vertex getFrom() {
@@ -59,13 +62,14 @@ public class Edge extends BaseGraphElement
     }
 
     @Override
-    public Style retrieveStyle()
+    public EdgeStyle getStyle()
     {
-        Style mergedStyle = _graph.getEdgeBaseStyle().getCopy();
-
-        if (_style != null)
-            mergedStyle.mergeWith(_style);
-
-        return mergedStyle;
+        return _style;
     }
+
+    public void setStyle(EdgeStyle style)
+    {
+        _style = style;
+    }
+
 }

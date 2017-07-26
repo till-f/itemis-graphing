@@ -12,7 +12,7 @@ public class StyleToGraphstreamCSS
     {
         StringBuilder sb = new StringBuilder();
 
-        Style style = element.retrieveStyle();
+        Style style = element.getStyle();
         if (style instanceof BlockStyle)
         {
             BlockStyle blockStyle = (BlockStyle) style;
@@ -86,6 +86,9 @@ public class StyleToGraphstreamCSS
 
             sb.append("stroke-color: #" + style.getLineColor() + ";");
             sb.append("fill-color: #" + style.getLineColor() + ";");
+            sb.append("text-background-mode: rounded-box;");
+            sb.append("text-background-color: white;");
+            sb.append("text-padding: 2;");
         }
 
         sb.append("text-color: #" + style.getTextColor() + ";");
