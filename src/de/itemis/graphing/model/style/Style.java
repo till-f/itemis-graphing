@@ -15,6 +15,7 @@ public abstract class Style implements Cloneable
     protected Double lineThickness = 1.0;
     protected ELineMode lineMode = ELineMode.Solid;
     protected Double fontSize = 12.0;
+    protected Integer zIndex = 1;
 
     public Style getCopy()
     {
@@ -50,6 +51,11 @@ public abstract class Style implements Cloneable
     public Double getLineThickness()
     {
         return lineThickness;
+    }
+
+    public Integer getzIndex()
+    {
+        return zIndex;
     }
 
     public ELineMode getLineMode() {
@@ -94,6 +100,12 @@ public abstract class Style implements Cloneable
     public void setFontSize(Double fontSize)
     {
         this.fontSize = fontSize;
+        updated();
+    }
+
+    public void setzIndex(Integer zIndex)
+    {
+        this.zIndex = zIndex;
         updated();
     }
 

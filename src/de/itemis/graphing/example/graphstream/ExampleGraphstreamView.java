@@ -5,7 +5,7 @@ import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.example.ExampleGraph;
 import de.itemis.graphing.model.IViewListener;
-import de.itemis.graphing.util.AutomarkConnectedNodesListener;
+import de.itemis.graphing.util.AutomarkViewListener;
 import de.itemis.graphing.view.graphstream.GraphstreamViewManager;
 import de.itemis.graphing.view.graphstream.layout.StaticLayout;
 import org.graphstream.ui.layout.Layout;
@@ -24,8 +24,7 @@ public class ExampleGraphstreamView
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
 
         LinkedList<IViewListener> listeners = new LinkedList<>();
-        listeners.add(new ExampleViewListener());
-        listeners.add(new AutomarkConnectedNodesListener());
+        listeners.add(new AutomarkViewListener());
         DefaultView view = viewManager.createView(layout, listeners);
 
         JFrame jframe = new JFrame("Graph Example");

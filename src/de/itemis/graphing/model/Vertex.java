@@ -1,11 +1,6 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.model.style.BlockStyle;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Vertex extends BaseGraphElement implements ISized
 {
@@ -173,6 +168,16 @@ public class Vertex extends BaseGraphElement implements ISized
             sources.add(e.getFrom());
         }
         return sources;
+    }
+
+    public Set<Edge> getOutgoingEdges()
+    {
+        return _outgoingEdges;
+    }
+
+    public Set<Edge> getIncomingEdges()
+    {
+        return _incomingEdges;
     }
 
     public void reset()

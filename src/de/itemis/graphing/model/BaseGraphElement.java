@@ -1,6 +1,5 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.model.style.BlockStyle;
 import de.itemis.graphing.model.style.Style;
 
 public abstract class BaseGraphElement implements IStyled
@@ -65,6 +64,12 @@ public abstract class BaseGraphElement implements IStyled
     }
 
     @Override
+    public Style getStyle()
+    {
+        return _styles[EStyle.Regular.ordinal()];
+    }
+
+    @Override
     public Style getActiveStyle()
     {
         return _styles[_activeStyle.ordinal()];
@@ -73,7 +78,7 @@ public abstract class BaseGraphElement implements IStyled
     @Override
     public Style getStyle(EStyle styleSelecgtor)
     {
-        return _styles[_activeStyle.ordinal()];
+        return _styles[styleSelecgtor.ordinal()];
     }
 
     @Override
@@ -92,12 +97,12 @@ public abstract class BaseGraphElement implements IStyled
         if (styleSelector == EStyle.Regular)
         {
             Style clicked = newStyle.getCopy();
-            clicked.setFillColor(Graph.DEFAULT_CLICK_COLOR);
+            clicked.setFillColor(Graph.DEFAULT_CLICK_FILL_COLOR);
             setStyle(EStyle.Clicked, clicked);
 
             Style selected = newStyle.getCopy();
-            selected.setLineThickness(3.0);
-            selected.setLineColor(Graph.DEFAULT_SELECTION_COLOR);
+            selected.setLineThickness(Graph.DEFAULT_SELECTION_LINE_THICKNESS);
+            selected.setLineColor(Graph.DEFAULT_SELECTION_LINE_COLOR);
             setStyle(EStyle.Selected, selected);
         }
 

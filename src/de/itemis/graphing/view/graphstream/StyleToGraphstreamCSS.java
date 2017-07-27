@@ -78,7 +78,7 @@ public class StyleToGraphstreamCSS
                 sb.append("size: 0px;");
                 sb.append("stroke-width: " + style.getLineThickness() + ";");
             }
-            else if (style.getLineThickness() >= 2.0)
+            else if (style.getLineThickness() >= 1.0)
             {
                 sb.append("stroke-mode: plain;");
                 sb.append("stroke-width: " + (int)(style.getLineThickness()/2) + ";");
@@ -93,6 +93,7 @@ public class StyleToGraphstreamCSS
 
         sb.append("text-color: #" + style.getTextColor() + ";");
         sb.append("text-size: " + style.getFontSize() + ";");
+        sb.append("z-index: " + style.getzIndex() + ";");
 
         return sb.toString();
     }

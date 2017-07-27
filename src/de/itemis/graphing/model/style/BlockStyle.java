@@ -1,6 +1,6 @@
 package de.itemis.graphing.model.style;
 
-public class BlockStyle extends Style
+public abstract class BlockStyle extends Style
 {
     public enum EShape { Box, RoundedBox, Circle }
     public enum ESizeMode { None, Explicit, BaseSize, FinalSize }

@@ -2,6 +2,7 @@ package de.itemis.graphing.example;
 
 import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.style.BlockStyle;
+import de.itemis.graphing.model.style.VertexStyle;
 
 public class ExampleGraph {
 
@@ -9,7 +10,7 @@ public class ExampleGraph {
     {
         Graph graph = new Graph();
 
-        BlockStyle operatorStyle = new BlockStyle();
+        BlockStyle operatorStyle = new VertexStyle();
         operatorStyle.setShape(BlockStyle.EShape.Circle);
         operatorStyle.setFillColor("CCCCCC");
 
@@ -48,14 +49,17 @@ public class ExampleGraph {
         Vertex vertex1 = graph.addVertex("&1", 0.5, 0.5);
         vertex1.setLabel("&");
         vertex1.setStyle(IStyled.EStyle.Regular, operatorStyle);
+        vertex1.setSelectable(false);
 
         Vertex vertex2 = graph.addVertex("&2", 0.5, 0.5);
         vertex2.setLabel("&");
         vertex2.setStyle(IStyled.EStyle.Regular, operatorStyle);
+        vertex2.setSelectable(false);
 
         Vertex vertex3 = graph.addVertex("&3", 0.5, 0.5);
         vertex3.setLabel("&");
         vertex3.setStyle(IStyled.EStyle.Regular, operatorStyle);
+        vertex3.setSelectable(false);
 
         Edge e = graph.addEdge("A", "&1");
         e.setLabel("refers");
