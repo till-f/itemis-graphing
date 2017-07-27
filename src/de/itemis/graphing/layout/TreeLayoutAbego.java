@@ -6,7 +6,7 @@ import org.abego.treelayout.NodeExtentProvider;
 import org.abego.treelayout.util.DefaultConfiguration;
 import org.abego.treelayout.util.DefaultTreeForTreeLayout;
 
-public class TreeLayoutAbego implements Layout
+public class TreeLayoutAbego implements ILayout
 {
     public class VertexExtendProvider implements NodeExtentProvider<Vertex>
     {

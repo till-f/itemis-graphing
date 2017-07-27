@@ -16,6 +16,11 @@ public abstract class BaseGraphElement implements IStyled
         _id = id;
     }
 
+    public Graph getGraph()
+    {
+        return _graph;
+    }
+
     public String getId() {
         return _id;
     }
@@ -41,6 +46,6 @@ public abstract class BaseGraphElement implements IStyled
 
     public void styleChanged()
     {
-        System.out.println("INFO: style changed");
+        _graph.styleChanged(this);
     }
 }

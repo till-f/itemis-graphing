@@ -1,5 +1,6 @@
 package de.itemis.graphing.view.graphstream.layout;
 
+import de.itemis.graphing.layout.ILayout;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.Vertex;
 import org.graphstream.stream.PipeBase;
@@ -9,12 +10,12 @@ import org.graphstream.ui.layout.Layout;
 public class StaticLayout extends PipeBase implements Layout
 {
     protected final Graph _graph;
-    protected final de.itemis.graphing.layout.Layout _layout;
+    protected final ILayout _layout;
 
     protected boolean _isLayouted = false;
     protected long _lastComputeTime = 0;
 
-    public StaticLayout(Graph graph, de.itemis.graphing.layout.Layout layout)
+    public StaticLayout(Graph graph, ILayout layout)
     {
         _graph = graph;
         _layout = layout;
@@ -62,7 +63,7 @@ public class StaticLayout extends PipeBase implements Layout
     @Override
     public String getLayoutAlgorithmName()
     {
-        return "Static Layout using Layouter " + _layout.getClass();
+        return "Static ILayout using Layouter " + _layout.getClass();
     }
 
     @Override

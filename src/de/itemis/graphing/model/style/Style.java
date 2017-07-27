@@ -19,7 +19,9 @@ public abstract class Style implements Cloneable
     public Style getCopy()
     {
         try {
-            return (Style)this.clone();
+            Style clone = (Style)this.clone();
+            clone.setParent(null);
+            return clone;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }

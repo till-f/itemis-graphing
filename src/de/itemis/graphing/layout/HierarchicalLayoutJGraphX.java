@@ -10,7 +10,7 @@ import de.itemis.graphing.model.Vertex;
 import javax.swing.*;
 import java.util.HashMap;
 
-public class HierarchicalLayoutJGraphX implements Layout
+public class HierarchicalLayoutJGraphX implements ILayout
 {
     private static final int SCALE_FACTOR = 100;
 

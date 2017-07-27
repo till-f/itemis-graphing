@@ -3,6 +3,7 @@ package de.itemis.graphing.model;
 import de.itemis.graphing.model.style.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,6 +17,11 @@ public class Graph
     private BlockStyle _defaultVertexStyle = new BlockStyle();
     private EdgeStyle _defaultEdgeStyle = new EdgeStyle();
     private BlockStyle _defaultAttachmentStyle = new BlockStyle();
+
+    private final HashSet<IGraphListener> _graphListeners = new HashSet<IGraphListener>();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // vertexes and edges
 
     public List<Vertex> getVertexes()
     {
@@ -33,12 +39,17 @@ public class Graph
 
     public Vertex addVertex(String id, double width, double height)
     {
-        Vertex n = new Vertex(this, id, width, height);
-        _vertexes.put(id, n);
+        Vertex vertex = new Vertex(this, id, width, height);
+        _vertexes.put(id, vertex);
+
+        for(IGraphListener listener : _graphListeners)
+        {
+            listener.vertexAdded(vertex);
+        }
 
         retryAddUninsertedEdges();
 
-        return n;
+        return vertex;
     }
 
     public void removeVertex(String id)
@@ -46,22 +57,28 @@ public class Graph
         Vertex removedVertex = _vertexes.get(id);
         if (removedVertex != null)
         {
-            for(Vertex n : removedVertex.getSources())
+            for(Vertex vertex : removedVertex.getSources())
             {
-                for (Edge e : n.removeEdgesTo(removedVertex))
+                for (Edge edge : vertex.removeEdgesTo(removedVertex))
                 {
-                    _edges.remove(e);
+                    _edges.remove(edge);
                 }
             }
-            for(Vertex n : removedVertex.getTargets())
+            for(Vertex vertex : removedVertex.getTargets())
             {
-                for (Edge e : n.removeEdgesFrom(removedVertex))
+                for (Edge edge : vertex.removeEdgesFrom(removedVertex))
                 {
-                    _edges.remove(e);
+                    _edges.remove(edge);
                 }
+            }
+
+            _vertexes.remove(id);
+
+            for(IGraphListener listener : _graphListeners)
+            {
+                listener.vertexRemoved(removedVertex);
             }
         }
-        _vertexes.remove(id);
     }
 
     public Edge addEdge(String fromId, String toId)
@@ -103,6 +120,11 @@ public class Graph
             e.getFrom().removeOutgoingEdge(e);
             e.getTo().removeIncomingEdge(e);
             _edges.remove(e);
+
+            for(IGraphListener listener : _graphListeners)
+            {
+                listener.edgeRemoved(e);
+            }
         }
 
         _uninsertedEdges.remove(edgeId);
@@ -121,33 +143,21 @@ public class Graph
         return rootVertexes;
     }
 
-    private void retryAddUninsertedEdges()
-    {
-        List<String> insertedEdgeIds = new LinkedList<>();
-        for(Edge ue : _uninsertedEdges.values())
-        {
-            Vertex from = _vertexes.get(ue.getFromId());
-            Vertex to = _vertexes.get(ue.getToId());
-            if (from != null && to != null)
-            {
-                ue.setFromTo(from, to);
-                doAddEdge(ue);
-                insertedEdgeIds.add(ue.getId());
-            }
-        }
+    // -----------------------------------------------------------------------------------------------------------------
+    // listener registration
 
-        for(String insertedId : insertedEdgeIds)
-        {
-            _uninsertedEdges.remove(insertedId);
-        }
+    public void registerGraphListener(IGraphListener listener)
+    {
+        _graphListeners.add(listener);
     }
 
-    private void doAddEdge(Edge e)
+    public void removeGraphListener(IGraphListener listener)
     {
-        _edges.put(e.getId(), e);
-        e.getFrom().addOutgoingEdge(e);
-        e.getTo().addIncomingEdge(e);
+        _graphListeners.remove(listener);
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // default styles
 
     public BlockStyle getDefaultVertexStyle()
     {
@@ -179,6 +189,63 @@ public class Graph
         _defaultAttachmentStyle = newStyle;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // internal methods
 
+    public void styleChanged(BaseGraphElement element)
+    {
+        for(IGraphListener listener : _graphListeners)
+        {
+            listener.styleChanged(element);
+        }
+    }
 
+    public void attachmentAdded(Attachment attachment)
+    {
+        for(IGraphListener listener : _graphListeners)
+        {
+            listener.attachmentAdded(attachment);
+        }
+    }
+
+    public void attachmentRemoved(Attachment attachment)
+    {
+        for(IGraphListener listener : _graphListeners)
+        {
+            listener.attachmentRemoved(attachment);
+        }
+    }
+
+    private void retryAddUninsertedEdges()
+    {
+        List<String> insertedEdgeIds = new LinkedList<>();
+        for(Edge ue : _uninsertedEdges.values())
+        {
+            Vertex from = _vertexes.get(ue.getFromId());
+            Vertex to = _vertexes.get(ue.getToId());
+            if (from != null && to != null)
+            {
+                ue.setFromTo(from, to);
+                doAddEdge(ue);
+                insertedEdgeIds.add(ue.getId());
+            }
+        }
+
+        for(String insertedId : insertedEdgeIds)
+        {
+            _uninsertedEdges.remove(insertedId);
+        }
+    }
+
+    private void doAddEdge(Edge e)
+    {
+        _edges.put(e.getId(), e);
+        e.getFrom().addOutgoingEdge(e);
+        e.getTo().addIncomingEdge(e);
+
+        for(IGraphListener listener : _graphListeners)
+        {
+            listener.edgeAdded(e);
+        }
+    }
 }

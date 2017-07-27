@@ -21,7 +21,7 @@ public class ExampleGraphstreamView
         creator.addStyleCode("node:selected { fill-color: yellow; } node:clicked { fill-color: red; } sprite:selected { fill-color: yellow; } sprite:clicked { fill-color: red; }");
 
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
-        //Layout layout = new StaticLayout(graph, new TreeLayoutAbego());
+        //ILayout layout = new StaticLayout(graph, new TreeLayoutAbego());
         DefaultView view = creator.createView(layout);
 
         JFrame jframe = new JFrame("Graph Example");

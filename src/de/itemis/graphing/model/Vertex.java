@@ -2,6 +2,7 @@ package de.itemis.graphing.model;
 
 import de.itemis.graphing.model.style.BlockStyle;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +12,7 @@ public class Vertex extends BaseGraphElement implements ISized
     private final double _width;
     private final double _height;
 
-    private final LinkedList<Attachment> _attachments = new LinkedList<>();
+    private final HashMap<String, Attachment> _attachments = new HashMap<String, Attachment>();
 
     private HashSet<Edge> _outgoingEdges = new HashSet<Edge>();
     private HashSet<Edge> _incomingEdges = new HashSet<Edge>();
@@ -50,9 +51,23 @@ public class Vertex extends BaseGraphElement implements ISized
 
     public Attachment addAttachment(String id, double width, double height, Attachment.ELocation location)
     {
-        Attachment a = new Attachment(_graph, id, width, height, location);
-        _attachments.add(a);
+        Attachment a = new Attachment(this, id, width, height, location);
+        _attachments.put(id, a);
+
+        _graph.attachmentAdded(a);
+
         return a;
+    }
+
+    public void removeAttachment(String id)
+    {
+        Attachment a = _attachments.get(id);
+
+        if (a != null)
+        {
+            _attachments.remove(id);
+            _graph.attachmentRemoved(a);
+        }
     }
 
     public double getX()
@@ -65,8 +80,14 @@ public class Vertex extends BaseGraphElement implements ISized
         return _y;
     }
 
-    public List<Attachment> getAttachments() {
-        return _attachments;
+    public List<Attachment> getAttachments()
+    {
+        LinkedList<Attachment> attachments = new LinkedList<>();
+        for (Attachment a : _attachments.values())
+        {
+            attachments.add(a);
+        }
+        return attachments;
     }
 
     @Override
@@ -86,7 +107,7 @@ public class Vertex extends BaseGraphElement implements ISized
     {
         double maxWidthEast = 0;
         double maxWidthWest = 0;
-        for(Attachment a : _attachments)
+        for(Attachment a : _attachments.values())
         {
             if (a.getLocation() == Attachment.ELocation.East)
                 maxWidthEast = Math.max(maxWidthEast, a.getFinalWidth());
@@ -102,7 +123,7 @@ public class Vertex extends BaseGraphElement implements ISized
     {
         double maxHeightNorth = 0;
         double maxHeightSouth = 0;
-        for(Attachment a : _attachments)
+        for(Attachment a : _attachments.values())
         {
             if (a.getLocation() == Attachment.ELocation.North)
                 maxHeightNorth = Math.max(maxHeightNorth, a.getFinalHeight());
@@ -116,7 +137,7 @@ public class Vertex extends BaseGraphElement implements ISized
     public double getAttachmentsSpace(Attachment.ELocation location)
     {
         double space = 0;
-        for(Attachment a : _attachments)
+        for(Attachment a : _attachments.values())
         {
             if (a.getLocation() != location)
                 continue;

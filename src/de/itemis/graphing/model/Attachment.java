@@ -6,18 +6,20 @@ public class Attachment extends BaseGraphElement implements ISized
 {
     public enum ELocation { North, East, South, West }
 
+    private final Vertex _parent;
     private final double _width;
     private final double _height;
     private final ELocation _location;
     private BlockStyle _style = null;
 
-    public Attachment(Graph g, String id, double width, double height, ELocation location)
+    public Attachment(Vertex vertex, String id, double width, double height, ELocation location)
     {
-        super(g, id);
+        super(vertex.getGraph(), id);
+        _parent = vertex;
         _width = width;
         _height = height;
         _location = location;
-        setStyle((BlockStyle) g.getDefaultAttachmentStyle().getCopy());
+        setStyle((BlockStyle) _graph.getDefaultAttachmentStyle().getCopy());
     }
 
     @Override
