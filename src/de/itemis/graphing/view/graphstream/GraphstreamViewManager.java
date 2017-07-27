@@ -17,7 +17,7 @@ import org.graphstream.ui.view.util.MouseManager;
 import java.awt.Component;
 import java.awt.event.MouseWheelListener;
 
-public class GraphstreamViewCreator {
+public class GraphstreamViewManager {
 
     public class Flag {
 
@@ -38,7 +38,7 @@ public class GraphstreamViewCreator {
     private final SpriteManager _spriteManager;
     private final StyleToGraphstreamCSS _styleConverter;
 
-    public GraphstreamViewCreator(Graph graph)
+    public GraphstreamViewManager(Graph graph)
     {
         _gsGraph = new SingleGraph("Graph");
         _gsGraph.addAttribute("ui.quality");

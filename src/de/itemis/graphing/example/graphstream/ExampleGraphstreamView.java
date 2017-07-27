@@ -1,10 +1,9 @@
 package de.itemis.graphing.example.graphstream;
 
 import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
-import de.itemis.graphing.layout.TreeLayoutAbego;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.example.ExampleGraph;
-import de.itemis.graphing.view.graphstream.GraphstreamViewCreator;
+import de.itemis.graphing.view.graphstream.GraphstreamViewManager;
 import de.itemis.graphing.view.graphstream.layout.StaticLayout;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.swingViewer.DefaultView;
@@ -17,7 +16,7 @@ public class ExampleGraphstreamView
     {
         Graph graph = ExampleGraph.getExampleGraph();
 
-        GraphstreamViewCreator creator = new GraphstreamViewCreator(graph);
+        GraphstreamViewManager creator = new GraphstreamViewManager(graph);
         creator.addStyleCode("node:selected { fill-color: yellow; } node:clicked { fill-color: red; } sprite:selected { fill-color: yellow; } sprite:clicked { fill-color: red; }");
 
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());

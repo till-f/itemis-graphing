@@ -15,8 +15,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-public class GraphstreamMouseManager implements MouseManager, MouseWheelListener {
-
+public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
+{
     public class MousePan
     {
         private Camera _camera;
@@ -128,10 +128,14 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
         _dragElement = null;
     }
 
-    protected void selectElementsInArea(Iterable<GraphicElement> elementsInArea) {
-        for (GraphicElement element : elementsInArea) {
-            if (!element.hasAttribute("ui.selected"))
+    protected void selectElementsInArea(Iterable<GraphicElement> elementsInArea)
+    {
+        for (GraphicElement element : elementsInArea)
+        {
+            if (element instanceof GraphicNode && !element.hasAttribute("ui.selected"))
+            {
                 element.addAttribute("ui.selected");
+            }
         }
     }
 
@@ -146,21 +150,7 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() == 1)
         {
-            if (event.isShiftDown())
-            {
-                if (element.hasAttribute("ui.selected"))
-                {
-                    element.removeAttribute("ui.selected");
-                }
-                else
-                {
-                    element.addAttribute("ui.selected");
-                }
-            }
-            else
-            {
-                element.addAttribute("ui.clicked");
-            }
+            element.addAttribute("ui.clicked");
         }
     }
 
@@ -171,6 +161,30 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
         if (event.getButton() == 1)
         {
             element.removeAttribute("ui.clicked");
+
+            if (element instanceof GraphicNode)
+            {
+                if (event.isShiftDown())
+                {
+                    toggleSelection(element);
+                }
+                else
+                {
+                    element.addAttribute("ui.selected");
+                }
+            }
+        }
+    }
+
+    private void toggleSelection(GraphicElement element)
+    {
+        if (element.hasAttribute("ui.selected"))
+        {
+            element.removeAttribute("ui.selected");
+        }
+        else
+        {
+            element.addAttribute("ui.selected");
         }
     }
 
