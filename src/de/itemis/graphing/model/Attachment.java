@@ -22,6 +22,11 @@ public class Attachment extends BaseGraphElement implements ISized
         setStyle((BlockStyle) _graph.getDefaultAttachmentStyle().getCopy());
     }
 
+    public Vertex getParent()
+    {
+        return _parent;
+    }
+
     @Override
     public double getBaseWidth()
     {

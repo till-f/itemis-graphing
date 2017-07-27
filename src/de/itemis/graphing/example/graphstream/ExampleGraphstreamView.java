@@ -1,5 +1,6 @@
 package de.itemis.graphing.example.graphstream;
 
+import de.itemis.graphing.example.ExampleViewListener;
 import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.example.ExampleGraph;
@@ -12,25 +13,25 @@ import javax.swing.*;
 
 public class ExampleGraphstreamView
 {
+
+
     public static void main(String[] args)
     {
         Graph graph = ExampleGraph.getExampleGraph();
 
-        GraphstreamViewManager creator = new GraphstreamViewManager(graph);
-        creator.addStyleCode("node:selected { fill-color: yellow; } node:clicked { fill-color: red; } sprite:selected { fill-color: yellow; } sprite:clicked { fill-color: red; }");
+        GraphstreamViewManager viewManager = new GraphstreamViewManager(graph);
+        viewManager.addStyleCode("node:selected { fill-color: yellow; } node:clicked { fill-color: red; } sprite:selected { fill-color: yellow; } sprite:clicked { fill-color: red; }");
 
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
-        //ILayout layout = new StaticLayout(graph, new TreeLayoutAbego());
-        DefaultView view = creator.createView(layout);
+        DefaultView view = viewManager.createView(layout);
 
         JFrame jframe = new JFrame("Graph Example");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setSize(600, 600);
         jframe.add(view);
 
-        // show JFrame
         jframe.setVisible(true);
 
-        view.getCamera().setViewPercent(1.1);
+        //view.getCamera().setViewPercent(1.1);
     }
 }
