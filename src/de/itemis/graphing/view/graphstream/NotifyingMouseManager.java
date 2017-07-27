@@ -150,7 +150,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     {
         for (GraphicElement element : elementsInArea)
         {
-            if (element instanceof GraphicNode && !element.hasAttribute("ui.selected"))
+            if (!element.hasAttribute("ui.selected"))
             {
                 element.addAttribute("ui.selected");
             }
@@ -365,8 +365,22 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
             {
                 BaseGraphElement element = _viewManager.getBaseGraphElement(node.getId());
 
-                if (element != null)
+                if (element != null && element.isSelectable())
+                {
                     newSelection.add(element);
+                }
+            }
+        }
+        for (GraphicSprite sprite : _graph.spriteSet())
+        {
+            if (sprite.hasAttribute("ui.selected"))
+            {
+                BaseGraphElement element = _viewManager.getBaseGraphElement(sprite.getId());
+
+                if (element != null && element.isSelectable())
+                {
+                    newSelection.add(element);
+                }
             }
         }
 

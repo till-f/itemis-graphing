@@ -19,14 +19,15 @@ public class Vertex extends BaseGraphElement implements ISized
 
     private Double _x = null;
     private Double _y = null;
-    private BlockStyle _style = null;
 
     public Vertex(Graph g, String id, double width, double height)
     {
         super(g, id);
         _width = width;
         _height = height;
-        setStyle((BlockStyle) g.getDefaultVertexStyle().getCopy());
+        setStyle(EStyle.Regular, g.getDefaultVertexStyle(EStyle.Regular));
+        setStyle(EStyle.Clicked, g.getDefaultVertexStyle(EStyle.Clicked));
+        setStyle(EStyle.Selected, g.getDefaultVertexStyle(EStyle.Selected));
     }
 
     public void addOutgoingEdge(Edge e)
@@ -215,18 +216,5 @@ public class Vertex extends BaseGraphElement implements ISized
         _incomingEdges.removeAll(toRemove);
 
         return toRemove;
-    }
-
-    @Override
-    public BlockStyle getStyle()
-    {
-        return _style;
-    }
-
-    public void setStyle(BlockStyle style)
-    {
-        _style = (BlockStyle)style.getCopy();
-        _style.setParent(this);
-        styleChanged();
     }
 }

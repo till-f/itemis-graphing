@@ -14,14 +14,15 @@ public class Edge extends BaseGraphElement
     private String _fromId;
     private String _toId;
 
-    private EdgeStyle _style;
-
     public Edge(Graph g, String id, Vertex from, Vertex to)
     {
         super(g, id);
         _from = from;
         _to = to;
-        setStyle((EdgeStyle) g.getDefaultEdgeStyle().getCopy());
+        setSelectable(false);
+        setStyle(EStyle.Regular, g.getDefaultEdgeStyle(EStyle.Regular));
+        setStyle(EStyle.Clicked, g.getDefaultEdgeStyle(EStyle.Clicked));
+        setStyle(EStyle.Selected, g.getDefaultEdgeStyle(EStyle.Selected));
     }
 
     public Edge(Graph g, String id, String fromId, String toId)
@@ -29,7 +30,10 @@ public class Edge extends BaseGraphElement
         super(g, id);
         _fromId = fromId;
         _toId = toId;
-        setStyle((EdgeStyle) g.getDefaultEdgeStyle().getCopy());
+        setSelectable(false);
+        setStyle(EStyle.Regular, g.getDefaultEdgeStyle(EStyle.Regular));
+        setStyle(EStyle.Clicked, g.getDefaultEdgeStyle(EStyle.Clicked));
+        setStyle(EStyle.Selected, g.getDefaultEdgeStyle(EStyle.Selected));
     }
 
     public Vertex getFrom() {
@@ -60,18 +64,4 @@ public class Edge extends BaseGraphElement
             throw new IllegalArgumentException("source and target of an edge can only be set once");
         }
     }
-
-    @Override
-    public EdgeStyle getStyle()
-    {
-        return _style;
-    }
-
-    public void setStyle(EdgeStyle style)
-    {
-        _style = (EdgeStyle)style.getCopy();
-        _style.setParent(this);
-        styleChanged();
-    }
-
 }

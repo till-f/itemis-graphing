@@ -8,11 +8,11 @@ import de.itemis.graphing.model.style.Style;
 
 public class StyleToGraphstreamCSS
 {
-    public String getStyleString(BaseGraphElement element)
+    public String getAtciveStyleCSS(BaseGraphElement element)
     {
         StringBuilder sb = new StringBuilder();
 
-        Style style = element.getStyle();
+        Style style = element.getActiveStyle();
         if (style instanceof BlockStyle)
         {
             BlockStyle blockStyle = (BlockStyle) style;

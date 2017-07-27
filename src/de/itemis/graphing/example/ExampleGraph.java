@@ -1,9 +1,6 @@
 package de.itemis.graphing.example;
 
-import de.itemis.graphing.model.Attachment;
-import de.itemis.graphing.model.Edge;
-import de.itemis.graphing.model.Graph;
-import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.style.BlockStyle;
 
 public class ExampleGraph {
@@ -13,8 +10,8 @@ public class ExampleGraph {
         Graph graph = new Graph();
 
         BlockStyle operatorStyle = new BlockStyle();
-        operatorStyle.setFillColor("CCCCCC");
         operatorStyle.setShape(BlockStyle.EShape.Circle);
+        operatorStyle.setFillColor("CCCCCC");
 
         Vertex vertexA = graph.addVertex("A", 1.0, 0.5);
         vertexA.setLabel("vertex A");
@@ -50,15 +47,15 @@ public class ExampleGraph {
 
         Vertex vertex1 = graph.addVertex("&1", 0.5, 0.5);
         vertex1.setLabel("&");
-        vertex1.setStyle(operatorStyle);
+        vertex1.setStyle(IStyled.EStyle.Regular, operatorStyle);
 
         Vertex vertex2 = graph.addVertex("&2", 0.5, 0.5);
         vertex2.setLabel("&");
-        vertex2.setStyle(operatorStyle);
+        vertex2.setStyle(IStyled.EStyle.Regular, operatorStyle);
 
         Vertex vertex3 = graph.addVertex("&3", 0.5, 0.5);
         vertex3.setLabel("&");
-        vertex3.setStyle(operatorStyle);
+        vertex3.setStyle(IStyled.EStyle.Regular, operatorStyle);
 
         Edge e = graph.addEdge("A", "&1");
         e.setLabel("refers");

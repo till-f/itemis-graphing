@@ -15,6 +15,7 @@ import org.graphstream.ui.view.Viewer;
 
 import java.awt.Component;
 import java.awt.event.MouseWheelListener;
+import java.util.List;
 
 public class GraphstreamViewManager implements IGraphListener
 {
@@ -53,18 +54,23 @@ public class GraphstreamViewManager implements IGraphListener
         return (DefaultView) createView(layout, null, null, null);
     }
 
-    public DefaultView createView(Layout layout, IViewListener viewListener)
+    public DefaultView createView(Layout layout, List<IViewListener> viewListeners)
     {
-        return (DefaultView) createView(layout, viewListener, null, null);
+        return (DefaultView) createView(layout, viewListeners, null, null);
     }
 
-    public View createView(Layout layout, IViewListener viewListener, Viewer viewer, String viewID)
+    public View createView(Layout layout, List<IViewListener> viewListeners, Viewer viewer, String viewID)
     {
         NotifyingMouseManager mouseManager = new NotifyingMouseManager(this);
         mouseManager.registerViewListener(new StylingViewListener());
 
-        if (viewListener != null)
-            mouseManager.registerViewListener(viewListener);
+        if (viewListeners != null)
+        {
+            for(IViewListener viewListener : viewListeners)
+            {
+                mouseManager.registerViewListener(viewListener);
+            }
+        }
 
         if (viewer == null)
         {
@@ -83,9 +89,9 @@ public class GraphstreamViewManager implements IGraphListener
         }
 
         view.setMouseManager(mouseManager);
-        if (mouseManager instanceof MouseWheelListener && view instanceof Component)
+        if (view instanceof Component)
         {
-            ((Component)view).addMouseWheelListener((MouseWheelListener) mouseManager);
+            ((Component)view).addMouseWheelListener(mouseManager);
         }
 
         if (layout != null)
@@ -110,7 +116,7 @@ public class GraphstreamViewManager implements IGraphListener
         if (vertex.getLabel() != null)
             gsNode.setAttribute("ui.label", vertex.getLabel());
 
-        String styleCSS = _styleConverter.getStyleString(vertex);
+        String styleCSS = _styleConverter.getAtciveStyleCSS(vertex);
         gsNode.setAttribute("ui.style", styleCSS);
 
         addAttachments(vertex);
@@ -128,7 +134,7 @@ public class GraphstreamViewManager implements IGraphListener
         if (edge.getLabel() != null)
             gsEdge.setAttribute("ui.label", edge.getLabel());
 
-        String styleCSS = _styleConverter.getStyleString(edge);
+        String styleCSS = _styleConverter.getAtciveStyleCSS(edge);
         gsEdge.setAttribute("ui.style", styleCSS);
     }
 
@@ -156,7 +162,7 @@ public class GraphstreamViewManager implements IGraphListener
         if (attachment.getLabel() != null)
             sprite.setAttribute("ui.label", attachment.getLabel());
 
-        String styleCSS = _styleConverter.getStyleString(attachment);
+        String styleCSS = _styleConverter.getAtciveStyleCSS(attachment);
         sprite.setAttribute("ui.style", styleCSS);
 
         sprite.attachToNode(vertex.getId());
@@ -248,7 +254,7 @@ public class GraphstreamViewManager implements IGraphListener
     public void styleChanged(BaseGraphElement element)
     {
         Element gsElement = getGraphstreamElement(element);
-        String styleCSS = _styleConverter.getStyleString(element);
+        String styleCSS = _styleConverter.getAtciveStyleCSS(element);
         gsElement.setAttribute("ui.style", styleCSS);
     }
 

@@ -9,17 +9,44 @@ import java.util.List;
 
 public class Graph
 {
+    public static final String DEFAULT_SELECTION_COLOR = "0431B4";
+    public static final String DEFAULT_CLICK_COLOR = "A0A0FF";
+
     private final HashMap<String, Edge> _uninsertedEdges = new HashMap<String, Edge>();
 
     private final HashMap<String, Vertex> _vertexes = new HashMap<String, Vertex>();
     private final HashMap<String, Edge> _edges = new HashMap<String, Edge>();
     private final HashMap<String, Attachment> _attachments = new HashMap<String, Attachment>();
 
-    private BlockStyle _defaultVertexStyle = new BlockStyle();
-    private EdgeStyle _defaultEdgeStyle = new EdgeStyle();
-    private BlockStyle _defaultAttachmentStyle = new BlockStyle();
+    private BlockStyle[] _defaultVertexStyle = new BlockStyle[3];
+    private EdgeStyle[] _defaultEdgeStyle = new EdgeStyle[3];
+    private BlockStyle[] _defaultAttachmentStyle = new BlockStyle[3];
 
     private final HashSet<IGraphListener> _graphListeners = new HashSet<IGraphListener>();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // constructor
+
+    public Graph()
+    {
+        _defaultVertexStyle[IStyled.EStyle.Regular.ordinal()] = new BlockStyle();
+        _defaultEdgeStyle[IStyled.EStyle.Regular.ordinal()] = new EdgeStyle();
+        _defaultAttachmentStyle[IStyled.EStyle.Regular.ordinal()] = new BlockStyle();
+
+        _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()] = new BlockStyle();
+        _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()].setFillColor(DEFAULT_CLICK_COLOR);
+        _defaultEdgeStyle[IStyled.EStyle.Clicked.ordinal()] = new EdgeStyle();
+        _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()] = new BlockStyle();
+        _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()].setFillColor(DEFAULT_CLICK_COLOR);
+
+        _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()] = new BlockStyle();
+        _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(3.0);
+        _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_SELECTION_COLOR);
+        _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()] = new EdgeStyle();
+        _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()] = new BlockStyle();
+        _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(3.0);
+        _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_SELECTION_COLOR);
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // base graph elements
@@ -172,34 +199,34 @@ public class Graph
     // -----------------------------------------------------------------------------------------------------------------
     // default styles
 
-    public BlockStyle getDefaultVertexStyle()
+    public BlockStyle getDefaultVertexStyle(IStyled.EStyle styleSelector)
     {
-        return _defaultVertexStyle;
+        return _defaultVertexStyle[styleSelector.ordinal()];
     }
 
-    public EdgeStyle getDefaultEdgeStyle()
+    public EdgeStyle getDefaultEdgeStyle(IStyled.EStyle styleSelector)
     {
-        return _defaultEdgeStyle;
+        return _defaultEdgeStyle[styleSelector.ordinal()];
     }
 
-    public BlockStyle getDefaultAttachmentStyle()
+    public BlockStyle getDefaultAttachmentStyle(IStyled.EStyle styleSelector)
     {
-        return _defaultAttachmentStyle;
+        return _defaultAttachmentStyle[styleSelector.ordinal()];
     }
 
-    public void setDefaultVertexStyle(BlockStyle newStyle)
+    public void setDefaultVertexStyle(IStyled.EStyle styleSelector, BlockStyle newStyle)
     {
-        _defaultVertexStyle = newStyle;
+        _defaultVertexStyle[styleSelector.ordinal()] = newStyle;
     }
 
-    public void setDefaultEdgeStyle(EdgeStyle newStyle)
+    public void setDefaultEdgeStyle(IStyled.EStyle styleSelector, EdgeStyle newStyle)
     {
-        _defaultEdgeStyle = newStyle;
+        _defaultEdgeStyle[styleSelector.ordinal()] = newStyle;
     }
 
-    public void setDefaultAttachmentStyle(BlockStyle newStyle)
+    public void setDefaultAttachmentStyle(IStyled.EStyle styleSelector, BlockStyle newStyle)
     {
-        _defaultAttachmentStyle = newStyle;
+        _defaultAttachmentStyle[styleSelector.ordinal()] = newStyle;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

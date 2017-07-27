@@ -1,5 +1,6 @@
 package de.itemis.graphing.model;
 
+import de.itemis.graphing.model.style.BlockStyle;
 import de.itemis.graphing.model.style.Style;
 
 public abstract class BaseGraphElement implements IStyled
@@ -9,6 +10,10 @@ public abstract class BaseGraphElement implements IStyled
 
     private Object _userObject = null;
     private String _label = null;
+
+    private Style[] _styles = new Style[3];
+    private EStyle _activeStyle = EStyle.Regular;
+    private boolean _isSelectable = true;
 
     public BaseGraphElement(Graph g, String id)
     {
@@ -48,4 +53,56 @@ public abstract class BaseGraphElement implements IStyled
     {
         _graph.styleChanged(this);
     }
+
+    public boolean isSelectable()
+    {
+        return _isSelectable;
+    }
+
+    public void setSelectable(boolean selectable)
+    {
+        _isSelectable = selectable;
+    }
+
+    @Override
+    public Style getActiveStyle()
+    {
+        return _styles[_activeStyle.ordinal()];
+    }
+
+    @Override
+    public Style getStyle(EStyle styleSelecgtor)
+    {
+        return _styles[_activeStyle.ordinal()];
+    }
+
+    @Override
+    public void selectActiveStyle(EStyle styleSelector)
+    {
+        _activeStyle = styleSelector;
+        styleChanged();
+    }
+
+    @Override
+    public void setStyle(EStyle styleSelector, Style newStyle)
+    {
+        _styles[styleSelector.ordinal()] = newStyle.getCopy();
+        _styles[styleSelector.ordinal()].setParent(this);
+
+        if (styleSelector == EStyle.Regular)
+        {
+            Style clicked = newStyle.getCopy();
+            clicked.setFillColor(Graph.DEFAULT_CLICK_COLOR);
+            setStyle(EStyle.Clicked, clicked);
+
+            Style selected = newStyle.getCopy();
+            selected.setLineThickness(3.0);
+            selected.setLineColor(Graph.DEFAULT_SELECTION_COLOR);
+            setStyle(EStyle.Selected, selected);
+        }
+
+        if (styleSelector == _activeStyle)
+            styleChanged();
+    }
+
 }

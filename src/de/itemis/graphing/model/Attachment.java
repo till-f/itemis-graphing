@@ -10,7 +10,6 @@ public class Attachment extends BaseGraphElement implements ISized
     private final double _width;
     private final double _height;
     private final ELocation _location;
-    private BlockStyle _style = null;
 
     public Attachment(Vertex vertex, String id, double width, double height, ELocation location)
     {
@@ -19,7 +18,10 @@ public class Attachment extends BaseGraphElement implements ISized
         _width = width;
         _height = height;
         _location = location;
-        setStyle((BlockStyle) _graph.getDefaultAttachmentStyle().getCopy());
+        setSelectable(false);
+        setStyle(EStyle.Regular, _graph.getDefaultAttachmentStyle(EStyle.Regular));
+        setStyle(EStyle.Clicked, _graph.getDefaultAttachmentStyle(EStyle.Clicked));
+        setStyle(EStyle.Selected, _graph.getDefaultAttachmentStyle(EStyle.Selected));
     }
 
     public Vertex getParent()
@@ -55,18 +57,4 @@ public class Attachment extends BaseGraphElement implements ISized
     {
         return _location;
     }
-
-    @Override
-    public BlockStyle getStyle()
-    {
-        return _style;
-    }
-
-    public void setStyle(BlockStyle style)
-    {
-        _style = (BlockStyle)style.getCopy();
-        _style.setParent(this);
-        styleChanged();
-    }
-
 }
