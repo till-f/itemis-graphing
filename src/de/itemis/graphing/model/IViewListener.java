@@ -1,9 +1,9 @@
 package de.itemis.graphing.model;
 
-import java.util.List;
+import java.util.Set;
 
 public interface IViewListener
 {
-    void slectionChanged(List<Vertex> vertexes);
-    void attachmentClicked(Attachment attachment);
+    void elementClicked(BaseGraphElement element);
+    void selectionChanged(Set<BaseGraphElement> selected, Set<BaseGraphElement> unselected);
 }

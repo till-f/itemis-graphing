@@ -13,6 +13,7 @@ public class Graph
 
     private final HashMap<String, Vertex> _vertexes = new HashMap<String, Vertex>();
     private final HashMap<String, Edge> _edges = new HashMap<String, Edge>();
+    private final HashMap<String, Attachment> _attachments = new HashMap<String, Attachment>();
 
     private BlockStyle _defaultVertexStyle = new BlockStyle();
     private EdgeStyle _defaultEdgeStyle = new EdgeStyle();
@@ -21,7 +22,7 @@ public class Graph
     private final HashSet<IGraphListener> _graphListeners = new HashSet<IGraphListener>();
 
     // -----------------------------------------------------------------------------------------------------------------
-    // vertexes and edges
+    // base graph elements
 
     public List<Vertex> getVertexes()
     {
@@ -143,6 +144,18 @@ public class Graph
         return rootVertexes;
     }
 
+    public BaseGraphElement getElement(String id)
+    {
+        if (_vertexes.containsKey(id))
+            return _vertexes.get(id);
+        if (_edges.containsKey(id))
+            return _edges.get(id);
+        if (_attachments.containsKey(id))
+            return _attachments.get(id);
+
+        return null;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // listener registration
 
@@ -202,6 +215,8 @@ public class Graph
 
     public void attachmentAdded(Attachment attachment)
     {
+        _attachments.put(attachment.getId(), attachment);
+
         for(IGraphListener listener : _graphListeners)
         {
             listener.attachmentAdded(attachment);
@@ -210,6 +225,8 @@ public class Graph
 
     public void attachmentRemoved(Attachment attachment)
     {
+        _attachments.remove(attachment.getId());
+
         for(IGraphListener listener : _graphListeners)
         {
             listener.attachmentRemoved(attachment);
@@ -248,4 +265,5 @@ public class Graph
             listener.edgeAdded(e);
         }
     }
+
 }

@@ -1,18 +1,16 @@
 package de.itemis.graphing.view.graphstream;
 
 import de.itemis.graphing.model.*;
-import org.graphstream.graph.Element;
-import org.graphstream.graph.Node;
+import de.itemis.graphing.model.Edge;
+import de.itemis.graphing.model.Graph;
+import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.stream.AttributeSink;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
 import org.graphstream.ui.swingViewer.DefaultView;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
-import org.graphstream.ui.view.ViewerListener;
-import org.graphstream.ui.view.ViewerPipe;
 import org.graphstream.ui.view.util.MouseManager;
 
 import java.awt.Component;
@@ -20,27 +18,14 @@ import java.awt.event.MouseWheelListener;
 
 public class GraphstreamViewManager implements IGraphListener
 {
-    public class Flag {
-
-        private boolean _isSet = false;
-
-        public void set()
-        {
-            _isSet = true;
-        }
-
-        public boolean isSet()
-        {
-            return _isSet;
-        }
-    }
-
     private final org.graphstream.graph.Graph _gsGraph;
     private final SpriteManager _spriteManager;
     private final StyleToGraphstreamCSS _styleConverter;
+    private final Graph _graph;
 
     public GraphstreamViewManager(Graph graph)
     {
+        _graph = graph;
         _gsGraph = new SingleGraph("Graph");
         _gsGraph.addAttribute("ui.quality");
         _gsGraph.addAttribute("ui.antialias");
@@ -78,71 +63,21 @@ public class GraphstreamViewManager implements IGraphListener
 
     public DefaultView createView(Layout layout)
     {
-        return (DefaultView) createView(layout, null, null, null, null);
+        return (DefaultView) createView(layout, null, null, null);
     }
 
     public DefaultView createView(Layout layout, IViewListener viewListener)
     {
-        return (DefaultView) createView(layout, viewListener, null, null, null);
+        return (DefaultView) createView(layout, viewListener, null, null);
     }
 
-    public DefaultView createView(Layout layout, IViewListener viewListener, MouseManager mouseManager)
+    public View createView(Layout layout, IViewListener viewListener, Viewer viewer, String viewID)
     {
-        return (DefaultView) createView(layout, viewListener, mouseManager, null, null);
-    }
+        MouseManager mouseManager = new NotifyingMouseManager(this, viewListener);
 
-    public View createView(Layout layout, IViewListener viewListener, MouseManager mouseManager, Viewer viewer, String viewID)
-    {
         if (viewer == null)
         {
             viewer = new Viewer(_gsGraph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
-        }
-
-        if (viewListener != null)
-        {
-            final AttributeSink sink = new ViewListenerSink(_gsGraph, viewListener);
-
-            final Flag flag = new Flag();
-            final ViewerPipe pipeFromViewer = viewer.newViewerPipe();
-
-            pipeFromViewer.addAttributeSink(sink);
-
-            Runnable runnable = new Runnable()
-            {
-                @Override
-                public void run() {
-                    try {
-                        while (true)
-                        {
-                            if (flag.isSet())
-                                return;
-
-                            pipeFromViewer.blockingPump();
-                        }
-                    } catch (InterruptedException e) {
-                        System.out.println("NOTE: graphstream event handler INTERRUPTED");
-                    }
-                    System.out.println("NOTE: graphstream event handler EXIT");
-                }
-            };
-            final Thread eventListener = new Thread(null, runnable,"graphstream event handler");
-            eventListener.start();
-
-            pipeFromViewer.addViewerListener(new ViewerListener()
-            {
-                @Override
-                public void viewClosed(String viewName)
-                {
-                    flag.set();
-                    eventListener.interrupt();
-                }
-
-                @Override
-                public void buttonPushed(String id) { }
-
-                @Override
-                public void buttonReleased(String id) { }
-            });
         }
 
         View view;
@@ -156,10 +91,6 @@ public class GraphstreamViewManager implements IGraphListener
             view = viewer.getView(viewID);
         }
 
-        if (mouseManager == null)
-        {
-            mouseManager = new GraphstreamMouseManager(false, false);
-        }
         view.setMouseManager(mouseManager);
         if (mouseManager instanceof MouseWheelListener && view instanceof Component)
         {
@@ -191,8 +122,6 @@ public class GraphstreamViewManager implements IGraphListener
         String styleCSS = _styleConverter.getStyleString(vertex);
         gsNode.setAttribute("ui.style", styleCSS);
 
-        gsNode.setAttribute("itemis.element", vertex);
-
         addAttachments(vertex);
     }
 
@@ -210,8 +139,6 @@ public class GraphstreamViewManager implements IGraphListener
 
         String styleCSS = _styleConverter.getStyleString(edge);
         gsEdge.setAttribute("ui.style", styleCSS);
-
-        gsEdge.setAttribute("itemis.element", edge);
     }
 
     private void removeEdge(Edge edge)
@@ -240,8 +167,6 @@ public class GraphstreamViewManager implements IGraphListener
 
         String styleCSS = _styleConverter.getStyleString(attachment);
         sprite.setAttribute("ui.style", styleCSS);
-
-        sprite.setAttribute("itemis.element", attachment);
 
         sprite.attachToNode(vertex.getId());
 
@@ -331,7 +256,15 @@ public class GraphstreamViewManager implements IGraphListener
     @Override
     public void styleChanged(BaseGraphElement element)
     {
+        Element gsElement = getGraphstreamElement(element);
+        String styleCSS = _styleConverter.getStyleString(element);
+        gsElement.setAttribute("ui.style", styleCSS);
+    }
+
+    public Element getGraphstreamElement(BaseGraphElement element)
+    {
         Element gsElement;
+
         if (element instanceof Vertex)
         {
             gsElement = _gsGraph.getNode(element.getId());
@@ -349,8 +282,11 @@ public class GraphstreamViewManager implements IGraphListener
             throw new IllegalArgumentException("unexpected element type: " + element);
         }
 
-        String styleCSS = _styleConverter.getStyleString(element);
-        gsElement.setAttribute("ui.style", styleCSS);
+        return gsElement;
     }
 
+    public BaseGraphElement getBaseGraphElement(String id)
+    {
+        return _graph.getElement(id);
+    }
 }

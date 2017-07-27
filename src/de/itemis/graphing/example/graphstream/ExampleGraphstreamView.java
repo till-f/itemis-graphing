@@ -23,7 +23,7 @@ public class ExampleGraphstreamView
         viewManager.addStyleCode("node:selected { fill-color: yellow; } node:clicked { fill-color: red; } sprite:selected { fill-color: yellow; } sprite:clicked { fill-color: red; }");
 
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
-        DefaultView view = viewManager.createView(layout);
+        DefaultView view = viewManager.createView(layout, new ExampleViewListener());
 
         JFrame jframe = new JFrame("Graph Example");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,7 +31,5 @@ public class ExampleGraphstreamView
         jframe.add(view);
 
         jframe.setVisible(true);
-
-        //view.getCamera().setViewPercent(1.1);
     }
 }

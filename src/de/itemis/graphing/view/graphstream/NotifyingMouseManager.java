@@ -1,5 +1,7 @@
 package de.itemis.graphing.view.graphstream;
 
+import de.itemis.graphing.model.BaseGraphElement;
+import de.itemis.graphing.model.IViewListener;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphicElement;
@@ -14,8 +16,10 @@ import org.graphstream.ui.view.util.MouseManager;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.HashSet;
+import java.util.LinkedList;
 
-public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
+public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 {
     public class MousePan
     {
@@ -59,12 +63,14 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
         }
     }
 
+    protected final GraphstreamViewManager _viewManager;
+    protected final IViewListener _viewListener;
     protected final boolean _allowDragNodes;
     protected final boolean _allowDragSprites;
 
     protected ViewPanel _view;
     protected GraphicGraph _graph;
-    private Camera _camera;
+    protected Camera _camera;
 
     protected GraphicElement _touchedElement;
     protected GraphicElement _dragElement;
@@ -72,8 +78,15 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
     protected float _selectionY;
     protected MousePan _mousePan;
 
-    public GraphstreamMouseManager(boolean allowDragNodes, boolean allowDragSprites)
+    public NotifyingMouseManager(GraphstreamViewManager viewManager, IViewListener viewListener)
     {
+        this(viewManager, viewListener, false, false);
+    }
+
+    public NotifyingMouseManager(GraphstreamViewManager viewManager, IViewListener viewListener, boolean allowDragNodes, boolean allowDragSprites)
+    {
+        _viewManager = viewManager;
+        _viewListener = viewListener;
         _allowDragNodes = allowDragNodes;
         _allowDragSprites = allowDragSprites;
     }
@@ -84,7 +97,7 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
         if (view instanceof ViewPanel)
             _view = (ViewPanel)view;
         else
-            throw new IllegalArgumentException("GraphstreamMouseManager requires ViewPanel instance for 'view'");
+            throw new IllegalArgumentException("NotifyingMouseManager requires ViewPanel instance for 'view'");
 
         _graph = graph;
         _mousePan = new MousePan(view.getCamera());
@@ -118,6 +131,7 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
                     if (sprite.hasAttribute("ui.selected"))
                         sprite.removeAttribute("ui.selected");
                 }
+                notifySelectionChanged();
             }
         }
 
@@ -137,6 +151,7 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
                 element.addAttribute("ui.selected");
             }
         }
+        notifySelectionChanged();
     }
 
     protected void elementMoving(GraphicElement element, MouseEvent event)
@@ -161,6 +176,7 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
         if (event.getButton() == 1)
         {
             element.removeAttribute("ui.clicked");
+            notifyClicked(element);
 
             if (element instanceof GraphicNode)
             {
@@ -172,6 +188,7 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
                 {
                     element.addAttribute("ui.selected");
                 }
+                notifySelectionChanged();
             }
         }
     }
@@ -301,6 +318,60 @@ public class GraphstreamMouseManager implements MouseManager, MouseWheelListener
         double currentZoom = _camera.getViewPercent();
         double zoomOffset = 0.1 * rotation * currentZoom;
         _camera.setViewPercent(currentZoom + zoomOffset);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // IViewListener notification
+
+    private void notifyClicked(GraphicElement gsElement)
+    {
+        if (_viewListener == null)
+            return;
+
+        BaseGraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
+
+        if (element != null)
+        {
+            _viewListener.elementClicked(element);
+        }
+    }
+
+    private HashSet<BaseGraphElement> _lastSelection = new HashSet<>();
+    private void notifySelectionChanged()
+    {
+        if (_viewListener == null)
+            return;
+
+        HashSet<BaseGraphElement> newSelection = new HashSet<>();
+        for (Node node : _graph)
+        {
+            if (node.hasAttribute("ui.selected"))
+            {
+                BaseGraphElement element = _viewManager.getBaseGraphElement(node.getId());
+
+                if (element != null)
+                    newSelection.add(element);
+            }
+        }
+
+        HashSet<BaseGraphElement> selected = new HashSet<>();
+        HashSet<BaseGraphElement> unselected = new HashSet<>();
+
+        for (BaseGraphElement e : _lastSelection)
+        {
+            if (!newSelection.contains(e))
+                unselected.add(e);
+        }
+        for (BaseGraphElement e : newSelection)
+        {
+            if (!_lastSelection.contains(e))
+                selected.add(e);
+        }
+
+        _lastSelection = newSelection;
+
+        if (selected.size() != 0 || unselected.size() != 0)
+            _viewListener.selectionChanged(selected, unselected);
     }
 
 }
