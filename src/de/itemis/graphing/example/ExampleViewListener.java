@@ -9,9 +9,16 @@ import java.util.Set;
 public class ExampleViewListener implements IViewListener
 {
     @Override
-    public void elementClicked(BaseGraphElement element)
+    public void elementClickStart(BaseGraphElement element)
     {
         System.out.println("INFO: Clicked element     : " + element.getId());
+    }
+
+    @Override
+    public void elementClickEnd(BaseGraphElement element)
+    {
+        System.out.println("INFO: Released element    : " + element.getId());
+
     }
 
     @Override

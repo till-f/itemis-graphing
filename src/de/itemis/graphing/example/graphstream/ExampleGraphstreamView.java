@@ -13,15 +13,11 @@ import javax.swing.*;
 
 public class ExampleGraphstreamView
 {
-
-
-    public static void main(String[] args)
+   public static void main(String[] args)
     {
         Graph graph = ExampleGraph.getExampleGraph();
 
         GraphstreamViewManager viewManager = new GraphstreamViewManager(graph);
-        viewManager.addStyleCode("node:selected { fill-color: yellow; } node:clicked { fill-color: red; } sprite:selected { fill-color: yellow; } sprite:clicked { fill-color: red; }");
-
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
         DefaultView view = viewManager.createView(layout, new ExampleViewListener());
 

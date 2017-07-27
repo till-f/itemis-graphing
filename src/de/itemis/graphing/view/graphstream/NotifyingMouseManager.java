@@ -64,9 +64,9 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     }
 
     protected final GraphstreamViewManager _viewManager;
-    protected final IViewListener _viewListener;
     protected final boolean _allowDragNodes;
     protected final boolean _allowDragSprites;
+    protected final HashSet<IViewListener> _viewListeners = new HashSet<IViewListener>();
 
     protected ViewPanel _view;
     protected GraphicGraph _graph;
@@ -78,15 +78,14 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     protected float _selectionY;
     protected MousePan _mousePan;
 
-    public NotifyingMouseManager(GraphstreamViewManager viewManager, IViewListener viewListener)
+    public NotifyingMouseManager(GraphstreamViewManager viewManager)
     {
-        this(viewManager, viewListener, false, false);
+        this(viewManager, false, false);
     }
 
-    public NotifyingMouseManager(GraphstreamViewManager viewManager, IViewListener viewListener, boolean allowDragNodes, boolean allowDragSprites)
+    public NotifyingMouseManager(GraphstreamViewManager viewManager, boolean allowDragNodes, boolean allowDragSprites)
     {
         _viewManager = viewManager;
-        _viewListener = viewListener;
         _allowDragNodes = allowDragNodes;
         _allowDragSprites = allowDragSprites;
     }
@@ -112,6 +111,11 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     {
         _view.removeMouseListener(this);
         _view.removeMouseMotionListener(this);
+    }
+
+    public void registerViewListener(IViewListener listener)
+    {
+        _viewListeners.add(listener);
     }
 
     protected void mouseButtonPress(MouseEvent event)
@@ -166,6 +170,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         if (event.getButton() == 1)
         {
             element.addAttribute("ui.clicked");
+            notifyClickStart(element);
         }
     }
 
@@ -176,7 +181,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         if (event.getButton() == 1)
         {
             element.removeAttribute("ui.clicked");
-            notifyClicked(element);
+            notifyClickEnd(element);
 
             if (element instanceof GraphicNode)
             {
@@ -313,7 +318,8 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     }
 
     @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
+    public void mouseWheelMoved(MouseWheelEvent e)
+    {
         int rotation =  e.getWheelRotation();
         double currentZoom = _camera.getViewPercent();
         double zoomOffset = 0.1 * rotation * currentZoom;
@@ -323,25 +329,35 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     // -----------------------------------------------------------------------------------------------------------------
     // IViewListener notification
 
-    private void notifyClicked(GraphicElement gsElement)
+    private void notifyClickStart(GraphicElement gsElement)
     {
-        if (_viewListener == null)
-            return;
-
         BaseGraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
 
         if (element != null)
         {
-            _viewListener.elementClicked(element);
+            for(IViewListener listener : _viewListeners)
+            {
+                listener.elementClickStart(element);
+            }
+        }
+    }
+
+    private void notifyClickEnd(GraphicElement gsElement)
+    {
+        BaseGraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
+
+        if (element != null)
+        {
+            for(IViewListener listener : _viewListeners)
+            {
+                listener.elementClickEnd(element);
+            }
         }
     }
 
     private HashSet<BaseGraphElement> _lastSelection = new HashSet<>();
     private void notifySelectionChanged()
     {
-        if (_viewListener == null)
-            return;
-
         HashSet<BaseGraphElement> newSelection = new HashSet<>();
         for (Node node : _graph)
         {
@@ -371,7 +387,12 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         _lastSelection = newSelection;
 
         if (selected.size() != 0 || unselected.size() != 0)
-            _viewListener.selectionChanged(selected, unselected);
+        {
+            for(IViewListener listener : _viewListeners)
+            {
+                listener.selectionChanged(selected, unselected);
+            }
+        }
     }
 
 }

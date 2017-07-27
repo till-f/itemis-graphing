@@ -3,6 +3,7 @@ package de.itemis.graphing.view.graphstream;
 import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.Edge;
 import de.itemis.graphing.model.Graph;
+import de.itemis.graphing.util.StylingViewListener;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.layout.Layout;
@@ -11,7 +12,6 @@ import org.graphstream.ui.spriteManager.SpriteManager;
 import org.graphstream.ui.swingViewer.DefaultView;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
-import org.graphstream.ui.view.util.MouseManager;
 
 import java.awt.Component;
 import java.awt.event.MouseWheelListener;
@@ -45,19 +45,6 @@ public class GraphstreamViewManager implements IGraphListener
         graph.registerGraphListener(this);
     }
 
-    public org.graphstream.graph.Graph getGraphstreamGraph()
-    {
-        return _gsGraph;
-    }
-
-    public void addStyleCode(String styleCode)
-    {
-        if (styleCode == null || styleCode.isEmpty())
-            throw new IllegalArgumentException("styleCode is mandatory");
-
-        _gsGraph.addAttribute("ui.stylesheet", styleCode);
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     // view creation
 
@@ -73,7 +60,11 @@ public class GraphstreamViewManager implements IGraphListener
 
     public View createView(Layout layout, IViewListener viewListener, Viewer viewer, String viewID)
     {
-        MouseManager mouseManager = new NotifyingMouseManager(this, viewListener);
+        NotifyingMouseManager mouseManager = new NotifyingMouseManager(this);
+        mouseManager.registerViewListener(new StylingViewListener());
+
+        if (viewListener != null)
+            mouseManager.registerViewListener(viewListener);
 
         if (viewer == null)
         {
