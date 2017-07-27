@@ -11,23 +11,26 @@ public class ExampleViewListener implements IViewListener
     @Override
     public void elementClicked(BaseGraphElement element)
     {
-        System.out.println("INFO: Element '" + element.getId() + "' clicked.");
+        System.out.println("INFO: Clicked element     : " + element.getId());
     }
 
     @Override
     public void selectionChanged(Set<BaseGraphElement> selected, Set<BaseGraphElement> unselected)
     {
-        System.out.println("INFO: Selection changed.");
-        System.out.println("  New selected elements: ");
+        System.out.print("INFO: Selected elements   : ");
         for(BaseGraphElement element: selected)
         {
-            System.out.println("    " + element.getId());
+            System.out.print(element.getId() + ", ");
         }
 
-        System.out.println("  Unselected elements: ");
+        System.out.println();
+
+        System.out.print("INFO: Unselected elements : ");
         for(BaseGraphElement element: unselected)
         {
-            System.out.println("    " + element.getId());
+            System.out.print(element.getId() + ", ");
         }
+
+        System.out.println();
     }
 }
