@@ -7,7 +7,7 @@ import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.IGraphListener;
 import de.itemis.graphing.model.IViewListener;
 import de.itemis.graphing.model.Vertex;
-import de.itemis.graphing.util.InteractionHighlightingViewListener;
+import de.itemis.graphing.listeners.HighlightInteractionsVL;
 import de.itemis.graphing.view.IViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
@@ -71,7 +71,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     public void configure(Layout layout, List<IViewListener> viewListeners, Viewer viewer, String viewID)
     {
         NotifyingMouseManager mouseManager = new NotifyingMouseManager(this);
-        mouseManager.registerViewListener(new InteractionHighlightingViewListener());
+        mouseManager.registerViewListener(new HighlightInteractionsVL());
 
         if (viewListeners != null)
         {

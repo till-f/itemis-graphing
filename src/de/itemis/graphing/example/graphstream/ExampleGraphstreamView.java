@@ -1,15 +1,13 @@
 package de.itemis.graphing.example.graphstream;
 
-import de.itemis.graphing.example.ExampleViewListener;
 import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.example.ExampleGraph;
 import de.itemis.graphing.model.IViewListener;
-import de.itemis.graphing.util.AutomarkViewListener;
+import de.itemis.graphing.listeners.AutomarkLinksVL;
 import de.itemis.graphing.view.graphstream.GraphstreamViewManager;
 import de.itemis.graphing.view.graphstream.layout.StaticLayout;
 import org.graphstream.ui.layout.Layout;
-import org.graphstream.ui.swingViewer.DefaultView;
 
 import javax.swing.*;
 import java.util.LinkedList;
@@ -23,7 +21,7 @@ public class ExampleGraphstreamView
         GraphstreamViewManager viewManager = new GraphstreamViewManager(graph);
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
         LinkedList<IViewListener> listeners = new LinkedList<>();
-        listeners.add(new AutomarkViewListener());
+        listeners.add(new AutomarkLinksVL());
         viewManager.configure(layout, listeners);
 
         JPanel view = viewManager.getView();
