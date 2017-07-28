@@ -13,13 +13,13 @@ public class TreeLayoutAbego implements ILayout
         @Override
         public double getWidth(Vertex treeNode)
         {
-            return treeNode.getFinalWidth();
+            return treeNode.getOuterSize().getWidth();
         }
 
         @Override
         public double getHeight(Vertex treeNode)
         {
-            return treeNode.getFinalHeight();
+            return treeNode.getOuterSize().getHeight();
         }
     }
 

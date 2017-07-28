@@ -1,22 +1,18 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.model.style.BlockStyle;
-
 public class Attachment extends BaseGraphElement implements ISized
 {
     public enum ELocation { North, East, South, West }
 
     private final Vertex _parent;
-    private final double _width;
-    private final double _height;
+    private final Size _size;
     private final ELocation _location;
 
-    public Attachment(Vertex vertex, String id, double width, double height, ELocation location)
+    public Attachment(Vertex vertex, String id, Size size, ELocation location)
     {
         super(vertex.getGraph(), id);
         _parent = vertex;
-        _width = width;
-        _height = height;
+        _size = size;
         _location = location;
         setSelectable(false);
         setStyle(EStyle.Regular, _graph.getDefaultAttachmentStyle(EStyle.Regular));
@@ -30,27 +26,15 @@ public class Attachment extends BaseGraphElement implements ISized
     }
 
     @Override
-    public double getBaseWidth()
+    public Size getInnerSize()
     {
-        return _width;
+        return _size;
     }
 
     @Override
-    public double getBaseHeight()
+    public Size getOuterSize()
     {
-        return _height;
-    }
-
-    @Override
-    public double getFinalWidth()
-    {
-        return _width;
-    }
-
-    @Override
-    public double getFinalHeight()
-    {
-        return _height;
+        return _size;
     }
 
     public ELocation getLocation()

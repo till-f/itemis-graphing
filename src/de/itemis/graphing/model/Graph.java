@@ -68,7 +68,7 @@ public class Graph
 
     public Vertex addVertex(String id, double width, double height)
     {
-        Vertex vertex = new Vertex(this, id, width, height);
+        Vertex vertex = new Vertex(this, id, new Size(width, height));
         _vertexes.put(id, vertex);
 
         for(IGraphListener listener : _graphListeners)

@@ -36,13 +36,13 @@ public class StyleToGraphstreamCSS
                 }
                 else if (blockStyle.getSizeMode() == BlockStyle.ESizeMode.BaseSize)
                 {
-                    width = ((ISized) element).getBaseWidth();
-                    height = ((ISized) element).getBaseHeight();
+                    width = ((ISized) element).getInnerSize().getWidth();
+                    height = ((ISized) element).getInnerSize().getHeight();
                 }
                 else if (blockStyle.getSizeMode() == BlockStyle.ESizeMode.FinalSize)
                 {
-                    width = ((ISized) element).getFinalWidth();
-                    height = ((ISized) element).getFinalHeight();
+                    width = ((ISized) element).getOuterSize().getWidth();
+                    height = ((ISized) element).getOuterSize().getHeight();
                 }
                 else
                 {

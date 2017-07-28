@@ -42,7 +42,7 @@ public class HierarchicalLayoutJGraphX implements ILayout
         {
             for (Vertex n : graph.getVertexes())
             {
-                mxCell cell = (mxCell) mxGraph.insertVertex(parent, n.getId(), n, 0, 0, n.getFinalWidth()*SCALE_FACTOR, n.getFinalHeight()*SCALE_FACTOR);
+                mxCell cell = (mxCell) mxGraph.insertVertex(parent, n.getId(), n, 0, 0, n.getOuterSize().getWidth()*SCALE_FACTOR, n.getOuterSize().getHeight()*SCALE_FACTOR);
                 vertexToCell.put(n, cell);
             }
 

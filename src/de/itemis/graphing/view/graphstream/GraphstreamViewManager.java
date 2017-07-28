@@ -14,7 +14,6 @@ import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
 import java.awt.Component;
-import java.awt.event.MouseWheelListener;
 import java.util.List;
 
 public class GraphstreamViewManager implements IGraphListener
@@ -171,9 +170,9 @@ public class GraphstreamViewManager implements IGraphListener
         double availableSpace = vertex.getAttachmentsSpace(attachment.getLocation());
         double neededSpace;
         if (attachment.getLocation() == Attachment.ELocation.South || attachment.getLocation() == Attachment.ELocation.North)
-            neededSpace = attachment.getBaseWidth();
+            neededSpace = attachment.getInnerSize().getWidth();
         else
-            neededSpace = attachment.getBaseHeight();
+            neededSpace = attachment.getInnerSize().getHeight();
 
         final double spaceOffset = alreadyConsumedSpace - availableSpace/2 + neededSpace/2;
         final double x;
@@ -182,18 +181,18 @@ public class GraphstreamViewManager implements IGraphListener
         {
             case North:
                 x = spaceOffset;
-                y = 0.5 * (vertex.getBaseHeight() + attachment.getBaseHeight());
+                y = 0.5 * (vertex.getInnerSize().getHeight() + attachment.getInnerSize().getHeight());
                 break;
             case East:
-                x = 0.5 * (vertex.getBaseWidth() + attachment.getBaseWidth());
+                x = 0.5 * (vertex.getInnerSize().getWidth() + attachment.getInnerSize().getWidth());
                 y = -spaceOffset;
                 break;
             case South:
                 x = spaceOffset;
-                y = -0.5 * (vertex.getBaseHeight() + attachment.getBaseHeight());
+                y = -0.5 * (vertex.getInnerSize().getHeight() + attachment.getInnerSize().getHeight());
                 break;
             case West:
-                x = -0.5 * (vertex.getBaseWidth() + attachment.getBaseWidth());
+                x = -0.5 * (vertex.getInnerSize().getWidth() + attachment.getInnerSize().getWidth());
                 y = -spaceOffset;
                 break;
             default:

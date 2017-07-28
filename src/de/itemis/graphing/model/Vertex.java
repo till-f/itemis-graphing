@@ -1,11 +1,14 @@
 package de.itemis.graphing.model;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class Vertex extends BaseGraphElement implements ISized
 {
-    private final double _width;
-    private final double _height;
+    private final Size _size;
 
     private final HashMap<String, Attachment> _attachments = new HashMap<String, Attachment>();
 
@@ -15,11 +18,10 @@ public class Vertex extends BaseGraphElement implements ISized
     private Double _x = null;
     private Double _y = null;
 
-    public Vertex(Graph g, String id, double width, double height)
+    public Vertex(Graph g, String id, Size size)
     {
         super(g, id);
-        _width = width;
-        _height = height;
+        _size = size;
         setStyle(EStyle.Regular, g.getDefaultVertexStyle(EStyle.Regular));
         setStyle(EStyle.Clicked, g.getDefaultVertexStyle(EStyle.Clicked));
         setStyle(EStyle.Selected, g.getDefaultVertexStyle(EStyle.Selected));
@@ -47,7 +49,7 @@ public class Vertex extends BaseGraphElement implements ISized
 
     public Attachment addAttachment(String id, double width, double height, Attachment.ELocation location)
     {
-        Attachment a = new Attachment(this, id, width, height, location);
+        Attachment a = new Attachment(this, id, new Size(width, height), location);
         _attachments.put(id, a);
 
         _graph.attachmentAdded(a);
@@ -87,47 +89,41 @@ public class Vertex extends BaseGraphElement implements ISized
     }
 
     @Override
-    public double getBaseWidth()
+    public Size getInnerSize()
     {
-        return _width;
+        return _size;
     }
 
     @Override
-    public double getBaseHeight()
+    public Size getOuterSize()
     {
-        return _height;
-    }
-
-    @Override
-    public double getFinalWidth()
-    {
+        // width
         double maxWidthEast = 0;
         double maxWidthWest = 0;
         for(Attachment a : _attachments.values())
         {
             if (a.getLocation() == Attachment.ELocation.East)
-                maxWidthEast = Math.max(maxWidthEast, a.getFinalWidth());
+                maxWidthEast = Math.max(maxWidthEast, a.getOuterSize().getWidth());
             if (a.getLocation() == Attachment.ELocation.West)
-                maxWidthWest = Math.max(maxWidthWest, a.getFinalWidth());
+                maxWidthWest = Math.max(maxWidthWest, a.getOuterSize().getWidth());
         }
         double maxWidthNorthSouth = Math.max(getAttachmentsSpace(Attachment.ELocation.North), getAttachmentsSpace(Attachment.ELocation.South));
-        return Math.max(maxWidthNorthSouth, _width + maxWidthEast + maxWidthWest);
-    }
+        double width = Math.max(maxWidthNorthSouth, _size.getWidth() + maxWidthEast + maxWidthWest);
 
-    @Override
-    public double getFinalHeight()
-    {
+        // height
         double maxHeightNorth = 0;
         double maxHeightSouth = 0;
         for(Attachment a : _attachments.values())
         {
             if (a.getLocation() == Attachment.ELocation.North)
-                maxHeightNorth = Math.max(maxHeightNorth, a.getFinalHeight());
+                maxHeightNorth = Math.max(maxHeightNorth, a.getOuterSize().getHeight());
             if (a.getLocation() == Attachment.ELocation.South)
-                maxHeightSouth = Math.max(maxHeightSouth, a.getFinalHeight());
+                maxHeightSouth = Math.max(maxHeightSouth, a.getOuterSize().getHeight());
         }
         double maxHeightEastWest = Math.max(getAttachmentsSpace(Attachment.ELocation.East), getAttachmentsSpace(Attachment.ELocation.West));
-        return Math.max(maxHeightEastWest, _height + maxHeightNorth + maxHeightSouth);
+        double height = Math.max(maxHeightEastWest, _size.getHeight() + maxHeightNorth + maxHeightSouth);
+
+        return new Size(width, height);
     }
 
     public double getAttachmentsSpace(Attachment.ELocation location)
@@ -140,11 +136,11 @@ public class Vertex extends BaseGraphElement implements ISized
 
             if (location == Attachment.ELocation.North || location == Attachment.ELocation.South)
             {
-                space += a.getFinalWidth();
+                space += a.getOuterSize().getWidth();
             }
             else
             {
-                space += a.getFinalHeight();
+                space += a.getOuterSize().getHeight();
             }
         }
         return space;
