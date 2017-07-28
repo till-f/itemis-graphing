@@ -121,19 +121,22 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     @Override
     public void zoomIn()
     {
-
+        double currentZoom =  _view.getCamera().getViewPercent();
+        _view.getCamera().setViewPercent(currentZoom - 0.1 * currentZoom);
     }
 
     @Override
     public void zoomOut()
     {
-
+        double currentZoom = _view.getCamera().getViewPercent();
+        _view.getCamera().setViewPercent(currentZoom + 0.1 * currentZoom);
     }
 
     @Override
     public void fitView()
     {
-
+        _view.getCamera().resetView();
+        _view.getCamera().setViewPercent(1.1);
     }
 
     @Override
