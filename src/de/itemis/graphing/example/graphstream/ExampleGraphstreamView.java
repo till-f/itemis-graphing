@@ -1,6 +1,7 @@
 package de.itemis.graphing.example.graphstream;
 
 import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
+import de.itemis.graphing.listeners.HighlightInteractions;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.example.ExampleGraph;
 import de.itemis.graphing.model.IInteractionListener;
@@ -21,6 +22,7 @@ public class ExampleGraphstreamView
         GraphstreamViewManager viewManager = new GraphstreamViewManager(graph);
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
         LinkedList<IInteractionListener> listeners = new LinkedList<>();
+        listeners.add(new HighlightInteractions());
         listeners.add(new AutomarkLinks());
         viewManager.configure(layout, listeners);
 

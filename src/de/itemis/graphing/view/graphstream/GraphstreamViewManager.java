@@ -66,7 +66,6 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     public void configure(Layout layout, List<IInteractionListener> interactionListeners, Viewer viewer, String viewID)
     {
         NotifyingMouseManager mouseManager = new NotifyingMouseManager(this);
-        mouseManager.registerInteractionListener(new HighlightInteractions());
 
         if (interactionListeners != null)
         {
