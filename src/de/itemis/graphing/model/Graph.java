@@ -43,6 +43,7 @@ public class Graph
         _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()] = new EdgeStyle();
         _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_EDGE_SELECTION_LINE_THICKNESS);
         _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_SELECTION_LINE_COLOR);
+        _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()].setzIndex(2);
 
         _defaultAttachmentStyle[IStyled.EStyle.Regular.ordinal()] = new AttachmentStyle();
         _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()] = new AttachmentStyle();
