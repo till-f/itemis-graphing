@@ -87,15 +87,19 @@ public abstract class BaseGraphElement implements IStyled
         _styles[styleSelector.ordinal()] = newStyle.getCopy();
         _styles[styleSelector.ordinal()].setParent(this);
 
+        // adapt clicked/selected style to new regular style (user may set them explicitely to override this)
         if (styleSelector == EStyle.Regular)
         {
+            double thickness = (this instanceof Edge) ? Graph.DEFAULT_HL_LINE_THICKNESS_EDGE : Graph.DEFAULT_HL_LINE_THICKNESS;
+
             Style clicked = newStyle.getCopy();
-            clicked.setFillColor(Graph.DEFAULT_CLICK_FILL_COLOR);
+            clicked.setLineThickness(thickness);
+            clicked.setLineColor(Graph.DEFAULT_HL_LINE_COLOR);
             setStyle(EStyle.Clicked, clicked);
 
             Style selected = newStyle.getCopy();
-            selected.setLineThickness(Graph.DEFAULT_BLOCK_SELECTION_LINE_THICKNESS);
-            selected.setLineColor(Graph.DEFAULT_SELECTION_LINE_COLOR);
+            selected.setLineThickness(thickness);
+            selected.setLineColor(Graph.DEFAULT_HL_LINE_COLOR);
             setStyle(EStyle.Selected, selected);
         }
 
