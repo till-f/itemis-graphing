@@ -2,12 +2,16 @@ package de.itemis.graphing.listeners;
 
 import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.IInteractionListener;
+import de.itemis.graphing.model.style.Style;
 
+import java.util.HashMap;
 import java.util.Set;
 
 public class AutomarkLinks implements IInteractionListener
 {
     private Vertex _lastMarkedVertex = null;
+
+    private HashMap<BaseGraphElement, Style> _storedStyles = new HashMap<>();
 
     @Override
     public void elementClickStart(BaseGraphElement element)
@@ -15,60 +19,77 @@ public class AutomarkLinks implements IInteractionListener
         if (element instanceof Vertex)
         {
             _lastMarkedVertex = (Vertex) element;
-            for(Edge edge : _lastMarkedVertex.getIncomingEdges())
-            {
-                edge.getStyle().setLineThickness(6.0);
-                edge.getStyle().setLineColor("088A29");
-                edge.getStyle().setzIndex(2);
-                edge.getFrom().getStyle().setLineThickness(3.0);
-                edge.getFrom().getStyle().setLineColor("088A29");
-            }
-            for(Edge edge : _lastMarkedVertex.getOutgoingEdges())
-            {
-                edge.getStyle().setLineThickness(6.0);
-                edge.getStyle().setLineColor("DF7401");
-                edge.getStyle().setzIndex(2);
-                edge.getTo().getStyle().setLineThickness(3.0);
-                edge.getTo().getStyle().setLineColor("DF7401");
-            }
+            highlight(_lastMarkedVertex, false);
         }
     }
 
     @Override
     public void elementClickEnd(BaseGraphElement element)
     {
-        if (_lastMarkedVertex != null && !_lastMarkedVertex.isSelectable())
+        if (_lastMarkedVertex != null)
         {
-            restoreStyle(_lastMarkedVertex);
+            highlight(_lastMarkedVertex, true);
+            _lastMarkedVertex = null;
         }
     }
 
     @Override
     public void selectionChanged(Set<BaseGraphElement> selected, Set<BaseGraphElement> unselected)
     {
-        if (_lastMarkedVertex != null && unselected.contains(_lastMarkedVertex))
-        {
-            restoreStyle(_lastMarkedVertex);
-        }
     }
 
-    private void restoreStyle(Vertex vertex)
+    private void highlight(Vertex v, boolean isRestore)
     {
-        for(Edge edge : vertex.getIncomingEdges())
+        for(Edge edge : v.getIncomingEdges())
         {
-            edge.getStyle(IStyled.EStyle.Regular).setLineThickness(1.0);
-            edge.getStyle(IStyled.EStyle.Regular).setLineColor("000000");
-            edge.getStyle(IStyled.EStyle.Regular).setzIndex(1);
-            edge.getFrom().getStyle().setLineThickness(1.0);
-            edge.getFrom().getStyle().setLineColor("000000");
+            updateStyle(edge, true, isRestore);
+            updateStyle(edge.getFrom(), true, isRestore);
         }
-        for(Edge edge : vertex.getOutgoingEdges())
+
+        for(Edge edge : v.getOutgoingEdges())
         {
-            edge.getStyle(IStyled.EStyle.Regular).setLineThickness(1.0);
-            edge.getStyle(IStyled.EStyle.Regular).setLineColor("000000");
-            edge.getStyle(IStyled.EStyle.Regular).setzIndex(1);
-            edge.getTo().getStyle().setLineThickness(1.0);
-            edge.getTo().getStyle().setLineColor("000000");
+            updateStyle(edge, false, isRestore);
+            updateStyle(edge.getTo(), false, isRestore);
+        }
+
+    }
+
+    private void updateStyle(BaseGraphElement element, boolean isIncomingEdge, boolean isRestore)
+    {
+        if (isRestore)
+        {
+            if (!_storedStyles.containsKey(element))
+                return;
+
+            element.setStyle(_storedStyles.get(element));
+
+            _storedStyles.remove(element);
+        }
+        else
+        {
+            if (_storedStyles.containsKey(element))
+                return;
+
+            _storedStyles.put(element, element.getStyle().getCopy());
+
+            if (isIncomingEdge)
+            {
+                element.getStyle().setLineThickness(4.0);
+                element.getStyle().setLineColor("088A29");
+                if (element instanceof Edge)
+                {
+                    element.getStyle().setzIndex(1);
+                }
+            }
+            else
+            {
+                element.getStyle().setLineThickness(4.0);
+                element.getStyle().setLineColor("DF7401");
+                if (element instanceof Edge)
+                {
+                    element.getStyle().setzIndex(1);
+                }
+            }
         }
     }
 }

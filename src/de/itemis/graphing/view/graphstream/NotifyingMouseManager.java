@@ -123,14 +123,17 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() != 3)
         {
-            // Unselect all.
-            if (!event.isShiftDown()) {
-                for (Node node : _graph) {
+            // unselect all.
+            if (!event.isShiftDown())
+            {
+                for (Node node : _graph)
+                {
                     if (node.hasAttribute("ui.selected"))
                         node.removeAttribute("ui.selected");
                 }
 
-                for (GraphicSprite sprite : _graph.spriteSet()) {
+                for (GraphicSprite sprite : _graph.spriteSet())
+                {
                     if (sprite.hasAttribute("ui.selected"))
                         sprite.removeAttribute("ui.selected");
                 }
@@ -147,11 +150,15 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
     protected void selectElementsInArea(Iterable<GraphicElement> elementsInArea)
     {
-        for (GraphicElement element : elementsInArea)
+        for (GraphicElement gsElement : elementsInArea)
         {
-            if (!element.hasAttribute("ui.selected"))
+            BaseGraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
+            if (!element.isSelectable())
+                continue;
+
+            if (!gsElement.hasAttribute("ui.selected"))
             {
-                element.addAttribute("ui.selected");
+                gsElement.addAttribute("ui.selected");
             }
         }
         notifySelectionChanged();
@@ -168,8 +175,16 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() == 1)
         {
-            element.addAttribute("ui.clicked");
-            notifyClickStart(element);
+            if (event.isShiftDown())
+            {
+                toggleSelection(element);
+                notifySelectionChanged();
+            }
+            else
+            {
+                element.addAttribute("ui.clicked");
+                notifyClickStart(element);
+            }
         }
     }
 
@@ -179,33 +194,27 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() == 1)
         {
-            element.removeAttribute("ui.clicked");
-            notifyClickEnd(element);
-
-            if (element instanceof GraphicNode)
+            if (element.hasAttribute("ui.clicked"))
             {
-                if (event.isShiftDown())
-                {
-                    toggleSelection(element);
-                }
-                else
-                {
-                    element.addAttribute("ui.selected");
-                }
-                notifySelectionChanged();
+                element.removeAttribute("ui.clicked");
+                notifyClickEnd(element);
             }
         }
     }
 
-    private void toggleSelection(GraphicElement element)
+    private void toggleSelection(GraphicElement gsElement)
     {
-        if (element.hasAttribute("ui.selected"))
+        BaseGraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
+        if (!element.isSelectable())
+            return;
+
+        if (gsElement.hasAttribute("ui.selected"))
         {
-            element.removeAttribute("ui.selected");
+            gsElement.removeAttribute("ui.selected");
         }
         else
         {
-            element.addAttribute("ui.selected");
+            gsElement.addAttribute("ui.selected");
         }
     }
 
@@ -363,11 +372,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
             if (node.hasAttribute("ui.selected"))
             {
                 BaseGraphElement element = _viewManager.getBaseGraphElement(node.getId());
-
-                if (element != null && element.isSelectable())
-                {
-                    newSelection.add(element);
-                }
+                newSelection.add(element);
             }
         }
         for (GraphicSprite sprite : _graph.spriteSet())
@@ -375,11 +380,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
             if (sprite.hasAttribute("ui.selected"))
             {
                 BaseGraphElement element = _viewManager.getBaseGraphElement(sprite.getId());
-
-                if (element != null && element.isSelectable())
-                {
-                    newSelection.add(element);
-                }
+                newSelection.add(element);
             }
         }
 
