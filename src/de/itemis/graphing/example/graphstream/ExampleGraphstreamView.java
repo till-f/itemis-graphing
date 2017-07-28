@@ -22,11 +22,11 @@ public class ExampleGraphstreamView
 
         GraphstreamViewManager viewManager = new GraphstreamViewManager(graph);
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
-
         LinkedList<IViewListener> listeners = new LinkedList<>();
         listeners.add(new AutomarkViewListener());
-        DefaultView view = viewManager.createView(layout, listeners);
+        viewManager.configure(layout, listeners);
 
+        JPanel view = viewManager.getView();
         JFrame jframe = new JFrame("Graph Example");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setSize(600, 600);

@@ -62,12 +62,11 @@ public class ExampleGraph {
         vertex3.setStyle(IStyled.EStyle.Regular, operatorStyle);
         vertex3.setSelectable(false);
 
-        Edge e = graph.addEdge("A", "&1");
-        e.setLabel("refers");
-
+        graph.addEdge("A", "&1");
         graph.addEdge("&1", "B");
         graph.addEdge("&1", "C");
-        graph.addEdge("C", "&2");
+        Edge e = graph.addEdge("C", "&2");
+        e.setLabel("edgelabel");
         graph.addEdge("&2", "D");
         graph.addEdge("&2", "E");
         graph.addEdge("A", "&3");

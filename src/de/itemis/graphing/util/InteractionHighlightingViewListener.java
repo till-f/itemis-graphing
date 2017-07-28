@@ -6,7 +6,7 @@ import de.itemis.graphing.model.IViewListener;
 
 import java.util.Set;
 
-public class StylingViewListener implements IViewListener
+public class InteractionHighlightingViewListener implements IViewListener
 {
     @Override
     public void elementClickStart(BaseGraphElement element)

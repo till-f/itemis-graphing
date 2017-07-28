@@ -1,10 +1,16 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.Attachment;
+import de.itemis.graphing.model.BaseGraphElement;
 import de.itemis.graphing.model.Edge;
 import de.itemis.graphing.model.Graph;
-import de.itemis.graphing.util.StylingViewListener;
-import org.graphstream.graph.*;
+import de.itemis.graphing.model.IGraphListener;
+import de.itemis.graphing.model.IViewListener;
+import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.util.InteractionHighlightingViewListener;
+import de.itemis.graphing.view.IViewManager;
+import org.graphstream.graph.Element;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.spriteManager.Sprite;
@@ -13,15 +19,19 @@ import org.graphstream.ui.swingViewer.DefaultView;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
+import javax.swing.JPanel;
 import java.awt.Component;
 import java.util.List;
 
-public class GraphstreamViewManager implements IGraphListener
+public class GraphstreamViewManager implements IGraphListener, IViewManager
 {
+    private final Graph _graph;
+
     private final org.graphstream.graph.Graph _gsGraph;
     private final SpriteManager _spriteManager;
     private final StyleToGraphstreamCSS _styleConverter;
-    private final Graph _graph;
+
+    private View _view = null;
 
     public GraphstreamViewManager(Graph graph)
     {
@@ -48,20 +58,20 @@ public class GraphstreamViewManager implements IGraphListener
     // -----------------------------------------------------------------------------------------------------------------
     // view creation
 
-    public DefaultView createView(Layout layout)
+    public void configure(Layout layout)
     {
-        return (DefaultView) createView(layout, null, null, null);
+        configure(layout, null, null, null);
     }
 
-    public DefaultView createView(Layout layout, List<IViewListener> viewListeners)
+    public void configure(Layout layout, List<IViewListener> viewListeners)
     {
-        return (DefaultView) createView(layout, viewListeners, null, null);
+        configure(layout, viewListeners, null, null);
     }
 
-    public View createView(Layout layout, List<IViewListener> viewListeners, Viewer viewer, String viewID)
+    public void configure(Layout layout, List<IViewListener> viewListeners, Viewer viewer, String viewID)
     {
         NotifyingMouseManager mouseManager = new NotifyingMouseManager(this);
-        mouseManager.registerViewListener(new StylingViewListener());
+        mouseManager.registerViewListener(new InteractionHighlightingViewListener());
 
         if (viewListeners != null)
         {
@@ -102,7 +112,37 @@ public class GraphstreamViewManager implements IGraphListener
             viewer.enableAutoLayout();
         }
 
-        return view;
+        _view = view;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // IViewManager
+
+    @Override
+    public void zoomIn()
+    {
+
+    }
+
+    @Override
+    public void zoomOut()
+    {
+
+    }
+
+    @Override
+    public void fitView()
+    {
+
+    }
+
+    @Override
+    public JPanel getView()
+    {
+        if (!(_view instanceof JPanel))
+            throw new RuntimeException("GraphstreamViewManager not configured properly.");
+
+        return (JPanel)_view;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -265,7 +305,7 @@ public class GraphstreamViewManager implements IGraphListener
         gsElement.setAttribute("ui.style", styleCSS);
     }
 
-    public Element getGraphstreamElement(BaseGraphElement element)
+    private Element getGraphstreamElement(BaseGraphElement element)
     {
         Element gsElement;
 
@@ -289,8 +329,17 @@ public class GraphstreamViewManager implements IGraphListener
         return gsElement;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // nice little helpers
+
     public BaseGraphElement getBaseGraphElement(String id)
     {
         return _graph.getElement(id);
     }
+
+    public org.graphstream.graph.Graph getGraphstreamGraph()
+    {
+        return _gsGraph;
+    }
+
 }
