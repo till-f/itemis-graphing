@@ -4,7 +4,7 @@ import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
 import de.itemis.graphing.listeners.HighlightInteractions;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.example.ExampleGraph;
-import de.itemis.graphing.model.IInteractionListener;
+import de.itemis.graphing.listeners.IInteractionListener;
 import de.itemis.graphing.listeners.AutomarkLinks;
 import de.itemis.graphing.view.graphstream.GraphstreamViewManager;
 import de.itemis.graphing.view.graphstream.layout.StaticLayout;

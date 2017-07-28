@@ -1,7 +1,7 @@
 package de.itemis.graphing.view.graphstream;
 
 import de.itemis.graphing.model.*;
-import de.itemis.graphing.model.IInteractionListener;
+import de.itemis.graphing.listeners.IInteractionListener;
 import de.itemis.graphing.view.IViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;

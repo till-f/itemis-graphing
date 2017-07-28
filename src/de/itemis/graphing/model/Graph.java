@@ -19,9 +19,9 @@ public class Graph
     private final HashMap<String, Edge> _edges = new HashMap<String, Edge>();
     private final HashMap<String, Attachment> _attachments = new HashMap<String, Attachment>();
 
-    private Style[] _defaultVertexStyle = new Style[3];
-    private Style[] _defaultEdgeStyle = new Style[3];
-    private Style[] _defaultAttachmentStyle = new Style[3];
+    private VertexStyle[] _defaultVertexStyle = new VertexStyle[3];
+    private EdgeStyle[] _defaultEdgeStyle = new EdgeStyle[3];
+    private AttachmentStyle[] _defaultAttachmentStyle = new AttachmentStyle[3];
 
     private final HashSet<IGraphListener> _graphListeners = new HashSet<IGraphListener>();
 
@@ -205,34 +205,34 @@ public class Graph
     // -----------------------------------------------------------------------------------------------------------------
     // default styles
 
-    public Style getDefaultVertexStyle(IStyled.EStyle styleSelector)
+    public VertexStyle getDefaultVertexStyle(IStyled.EStyle styleSelector)
     {
-        return _defaultVertexStyle[styleSelector.ordinal()];
+        return (VertexStyle)_defaultVertexStyle[styleSelector.ordinal()].getCopy();
     }
 
-    public Style getDefaultEdgeStyle(IStyled.EStyle styleSelector)
+    public EdgeStyle getDefaultEdgeStyle(IStyled.EStyle styleSelector)
     {
-        return _defaultEdgeStyle[styleSelector.ordinal()];
+        return (EdgeStyle) _defaultEdgeStyle[styleSelector.ordinal()].getCopy();
     }
 
-    public Style getDefaultAttachmentStyle(IStyled.EStyle styleSelector)
+    public AttachmentStyle getDefaultAttachmentStyle(IStyled.EStyle styleSelector)
     {
-        return _defaultAttachmentStyle[styleSelector.ordinal()];
+        return (AttachmentStyle) _defaultAttachmentStyle[styleSelector.ordinal()].getCopy();
     }
 
     public void setDefaultVertexStyle(IStyled.EStyle styleSelector, BlockStyle newStyle)
     {
-        _defaultVertexStyle[styleSelector.ordinal()] = newStyle.getCopy();
+        _defaultVertexStyle[styleSelector.ordinal()] = (VertexStyle)newStyle.getCopy();
     }
 
     public void setDefaultEdgeStyle(IStyled.EStyle styleSelector, EdgeStyle newStyle)
     {
-        _defaultEdgeStyle[styleSelector.ordinal()] = newStyle.getCopy();
+        _defaultEdgeStyle[styleSelector.ordinal()] = (EdgeStyle)newStyle.getCopy();
     }
 
     public void setDefaultAttachmentStyle(IStyled.EStyle styleSelector, BlockStyle newStyle)
     {
-        _defaultAttachmentStyle[styleSelector.ordinal()] = newStyle.getCopy();
+        _defaultAttachmentStyle[styleSelector.ordinal()] = (AttachmentStyle)newStyle.getCopy();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

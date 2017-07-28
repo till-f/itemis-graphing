@@ -1,20 +1,26 @@
 package de.itemis.graphing.example;
 
 import de.itemis.graphing.model.BaseGraphElement;
-import de.itemis.graphing.model.IInteractionListener;
+import de.itemis.graphing.listeners.IInteractionListener;
 
 import java.util.Set;
 
 public class ExampleInteractionListener implements IInteractionListener
 {
     @Override
-    public void elementClickStart(BaseGraphElement element)
+    public void clickBegin()
+    {
+        System.out.println("INFO: Clicked");
+    }
+
+    @Override
+    public void clickBegin(BaseGraphElement element)
     {
         System.out.println("INFO: Clicked element     : " + element.getId());
     }
 
     @Override
-    public void elementClickEnd(BaseGraphElement element)
+    public void clickEnd(BaseGraphElement element)
     {
         System.out.println("INFO: Released element    : " + element.getId());
 

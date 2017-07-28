@@ -1,7 +1,7 @@
 package de.itemis.graphing.view.graphstream;
 
 import de.itemis.graphing.model.BaseGraphElement;
-import de.itemis.graphing.model.IInteractionListener;
+import de.itemis.graphing.listeners.IInteractionListener;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphicElement;
@@ -121,8 +121,10 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     {
         _view.requestFocus();
 
-        if (event.getButton() != 3)
+        if (event.getButton() == 1)
         {
+            notifyClick();
+
             // unselect all.
             if (!event.isShiftDown())
             {
@@ -183,7 +185,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
             else
             {
                 element.addAttribute("ui.clicked");
-                notifyClickStart(element);
+                notifyClickBegin(element);
             }
         }
     }
@@ -337,7 +339,15 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     // -----------------------------------------------------------------------------------------------------------------
     // IInteractionListener notification
 
-    private void notifyClickStart(GraphicElement gsElement)
+    private void notifyClick()
+    {
+        for(IInteractionListener listener : _interactionListeners)
+        {
+            listener.clickBegin();
+        }
+    }
+
+    private void notifyClickBegin(GraphicElement gsElement)
     {
         BaseGraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
 
@@ -345,7 +355,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         {
             for(IInteractionListener listener : _interactionListeners)
             {
-                listener.elementClickStart(element);
+                listener.clickBegin(element);
             }
         }
     }
@@ -358,7 +368,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         {
             for(IInteractionListener listener : _interactionListeners)
             {
-                listener.elementClickEnd(element);
+                listener.clickEnd(element);
             }
         }
     }

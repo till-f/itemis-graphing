@@ -10,9 +10,15 @@ public class ExampleGraph {
     {
         Graph graph = new Graph();
 
-        BlockStyle operatorStyle = new VertexStyle();
+        VertexStyle operatorStyle = graph.getDefaultVertexStyle(IStyled.EStyle.Regular);
         operatorStyle.setShape(BlockStyle.EShape.Circle);
         operatorStyle.setFillColor("CCCCCC");
+        VertexStyle operatorStyleClicked = graph.getDefaultVertexStyle(IStyled.EStyle.Clicked);
+        operatorStyleClicked.setShape(BlockStyle.EShape.Circle);
+        operatorStyleClicked.setFillColor("CCCCCC");
+        VertexStyle operatorStyleSelected = graph.getDefaultVertexStyle(IStyled.EStyle.Selected);
+        operatorStyleSelected.setShape(BlockStyle.EShape.Circle);
+        operatorStyleSelected.setFillColor("CCCCCC");
 
         Vertex vertexA = graph.addVertex("A", 1.0, 0.5);
         vertexA.setLabel("vertex A");
@@ -50,16 +56,22 @@ public class ExampleGraph {
         Vertex vertex1 = graph.addVertex("&1", 0.5, 0.5);
         vertex1.setLabel("&");
         vertex1.setStyle(operatorStyle);
+        vertex1.setStyle(IStyled.EStyle.Clicked, operatorStyleClicked);
+        vertex1.setStyle(IStyled.EStyle.Selected, operatorStyleSelected);
         vertex1.setSelectable(false);
 
         Vertex vertex2 = graph.addVertex("&2", 0.5, 0.5);
         vertex2.setLabel("&");
         vertex2.setStyle(operatorStyle);
+        vertex2.setStyle(IStyled.EStyle.Clicked, operatorStyleClicked);
+        vertex2.setStyle(IStyled.EStyle.Selected, operatorStyleSelected);
         vertex2.setSelectable(false);
 
         Vertex vertex3 = graph.addVertex("&3", 0.5, 0.5);
         vertex3.setLabel("&");
         vertex3.setStyle(operatorStyle);
+        vertex3.setStyle(IStyled.EStyle.Clicked, operatorStyleClicked);
+        vertex3.setStyle(IStyled.EStyle.Selected, operatorStyleSelected);
         vertex3.setSelectable(false);
 
         graph.addEdge("A", "&1");
