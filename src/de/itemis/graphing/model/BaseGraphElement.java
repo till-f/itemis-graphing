@@ -94,7 +94,7 @@ public abstract class BaseGraphElement implements IStyled
             setStyle(EStyle.Clicked, clicked);
 
             Style selected = newStyle.getCopy();
-            selected.setLineThickness(Graph.DEFAULT_SELECTION_LINE_THICKNESS);
+            selected.setLineThickness(Graph.DEFAULT_BLOCK_SELECTION_LINE_THICKNESS);
             selected.setLineColor(Graph.DEFAULT_SELECTION_LINE_COLOR);
             setStyle(EStyle.Selected, selected);
         }

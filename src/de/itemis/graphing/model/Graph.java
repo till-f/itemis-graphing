@@ -9,9 +9,10 @@ import java.util.List;
 
 public class Graph
 {
-    public static final String DEFAULT_SELECTION_LINE_COLOR = "0431B4";
-    public static final String DEFAULT_CLICK_FILL_COLOR = "A0A0FF";
-    public static final Double DEFAULT_SELECTION_LINE_THICKNESS = 3.0;
+    public static final String DEFAULT_SELECTION_LINE_COLOR = "0099FF";
+    public static final String DEFAULT_CLICK_FILL_COLOR = "CCEEFF";
+    public static final Double DEFAULT_BLOCK_SELECTION_LINE_THICKNESS = 3.0;
+    public static final Double DEFAULT_EDGE_SELECTION_LINE_THICKNESS = 5.0;
 
     private final HashMap<String, Edge> _uninsertedEdges = new HashMap<String, Edge>();
 
@@ -34,18 +35,20 @@ public class Graph
         _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()] = new VertexStyle();
         _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()].setFillColor(DEFAULT_CLICK_FILL_COLOR);
         _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()] = new VertexStyle();
-        _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_SELECTION_LINE_THICKNESS);
+        _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_BLOCK_SELECTION_LINE_THICKNESS);
         _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_SELECTION_LINE_COLOR);
 
         _defaultEdgeStyle[IStyled.EStyle.Regular.ordinal()] = new EdgeStyle();
         _defaultEdgeStyle[IStyled.EStyle.Clicked.ordinal()] = new EdgeStyle();
         _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()] = new EdgeStyle();
+        _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_EDGE_SELECTION_LINE_THICKNESS);
+        _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_SELECTION_LINE_COLOR);
 
         _defaultAttachmentStyle[IStyled.EStyle.Regular.ordinal()] = new AttachmentStyle();
         _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()] = new AttachmentStyle();
         _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()].setFillColor(DEFAULT_CLICK_FILL_COLOR);
         _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()] = new AttachmentStyle();
-        _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_SELECTION_LINE_THICKNESS);
+        _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_BLOCK_SELECTION_LINE_THICKNESS);
         _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_SELECTION_LINE_COLOR);
     }
 

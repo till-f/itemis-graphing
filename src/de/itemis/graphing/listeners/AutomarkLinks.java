@@ -58,38 +58,50 @@ public class AutomarkLinks implements IInteractionListener
     {
         if (isRestore)
         {
-            if (!_storedStyles.containsKey(element))
-                return;
-
-            element.setStyle(_storedStyles.get(element));
-
-            _storedStyles.remove(element);
+            element.selectActiveStyle(IStyled.EStyle.Regular);
         }
         else
         {
-            if (_storedStyles.containsKey(element))
-                return;
-
-            _storedStyles.put(element, element.getStyle().getCopy());
-
-            if (isIncomingEdge)
-            {
-                element.getStyle().setLineThickness(4.0);
-                element.getStyle().setLineColor("088A29");
-                if (element instanceof Edge)
-                {
-                    element.getStyle().setzIndex(1);
-                }
-            }
-            else
-            {
-                element.getStyle().setLineThickness(4.0);
-                element.getStyle().setLineColor("DF7401");
-                if (element instanceof Edge)
-                {
-                    element.getStyle().setzIndex(1);
-                }
-            }
+            element.selectActiveStyle(IStyled.EStyle.Selected);
         }
     }
+
+//    private void updateStyle(BaseGraphElement element, boolean isIncomingEdge, boolean isRestore)
+//    {
+//        if (isRestore)
+//        {
+//            if (!_storedStyles.containsKey(element))
+//                return;
+//
+//            element.setStyle(_storedStyles.get(element));
+//
+//            _storedStyles.remove(element);
+//        }
+//        else
+//        {
+//            if (_storedStyles.containsKey(element))
+//                return;
+//
+//            _storedStyles.put(element, element.getStyle().getCopy());
+//
+//            if (isIncomingEdge)
+//            {
+//                element.getStyle().setLineThickness(4.0);
+//                element.getStyle().setLineColor("088A29");
+//                if (element instanceof Edge)
+//                {
+//                    element.getStyle().setzIndex(1);
+//                }
+//            }
+//            else
+//            {
+//                element.getStyle().setLineThickness(4.0);
+//                element.getStyle().setLineColor("DF7401");
+//                if (element instanceof Edge)
+//                {
+//                    element.getStyle().setzIndex(1);
+//                }
+//            }
+//        }
+//    }
 }
