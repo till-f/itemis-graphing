@@ -1,12 +1,11 @@
 package de.itemis.graphing.example;
 
 import de.itemis.graphing.model.BaseGraphElement;
-import de.itemis.graphing.model.IViewListener;
+import de.itemis.graphing.model.IInteractionListener;
 
-import java.util.List;
 import java.util.Set;
 
-public class ExampleViewListener implements IViewListener
+public class ExampleInteractionListener implements IInteractionListener
 {
     @Override
     public void elementClickStart(BaseGraphElement element)

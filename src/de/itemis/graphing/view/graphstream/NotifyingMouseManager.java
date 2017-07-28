@@ -1,7 +1,7 @@
 package de.itemis.graphing.view.graphstream;
 
 import de.itemis.graphing.model.BaseGraphElement;
-import de.itemis.graphing.model.IViewListener;
+import de.itemis.graphing.model.IInteractionListener;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphicElement;
@@ -17,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 {
@@ -66,7 +65,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     protected final GraphstreamViewManager _viewManager;
     protected final boolean _allowDragNodes;
     protected final boolean _allowDragSprites;
-    protected final HashSet<IViewListener> _viewListeners = new HashSet<IViewListener>();
+    protected final HashSet<IInteractionListener> _interactionListeners = new HashSet<IInteractionListener>();
 
     protected ViewPanel _view;
     protected GraphicGraph _graph;
@@ -113,9 +112,9 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         _view.removeMouseMotionListener(this);
     }
 
-    public void registerViewListener(IViewListener listener)
+    public void registerInteractionListener(IInteractionListener listener)
     {
-        _viewListeners.add(listener);
+        _interactionListeners.add(listener);
     }
 
     protected void mouseButtonPress(MouseEvent event)
@@ -327,7 +326,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // IViewListener notification
+    // IInteractionListener notification
 
     private void notifyClickStart(GraphicElement gsElement)
     {
@@ -335,7 +334,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (element != null)
         {
-            for(IViewListener listener : _viewListeners)
+            for(IInteractionListener listener : _interactionListeners)
             {
                 listener.elementClickStart(element);
             }
@@ -348,7 +347,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (element != null)
         {
-            for(IViewListener listener : _viewListeners)
+            for(IInteractionListener listener : _interactionListeners)
             {
                 listener.elementClickEnd(element);
             }
@@ -402,7 +401,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (selected.size() != 0 || unselected.size() != 0)
         {
-            for(IViewListener listener : _viewListeners)
+            for(IInteractionListener listener : _interactionListeners)
             {
                 listener.selectionChanged(selected, unselected);
             }

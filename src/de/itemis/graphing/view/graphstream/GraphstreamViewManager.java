@@ -1,13 +1,8 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.model.Attachment;
-import de.itemis.graphing.model.BaseGraphElement;
-import de.itemis.graphing.model.Edge;
-import de.itemis.graphing.model.Graph;
-import de.itemis.graphing.model.IGraphListener;
-import de.itemis.graphing.model.IViewListener;
-import de.itemis.graphing.model.Vertex;
-import de.itemis.graphing.listeners.HighlightInteractionsVL;
+import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.IInteractionListener;
+import de.itemis.graphing.listeners.HighlightInteractions;
 import de.itemis.graphing.view.IViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
@@ -63,21 +58,21 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         configure(layout, null, null, null);
     }
 
-    public void configure(Layout layout, List<IViewListener> viewListeners)
+    public void configure(Layout layout, List<IInteractionListener> interactionListeners)
     {
-        configure(layout, viewListeners, null, null);
+        configure(layout, interactionListeners, null, null);
     }
 
-    public void configure(Layout layout, List<IViewListener> viewListeners, Viewer viewer, String viewID)
+    public void configure(Layout layout, List<IInteractionListener> interactionListeners, Viewer viewer, String viewID)
     {
         NotifyingMouseManager mouseManager = new NotifyingMouseManager(this);
-        mouseManager.registerViewListener(new HighlightInteractionsVL());
+        mouseManager.registerInteractionListener(new HighlightInteractions());
 
-        if (viewListeners != null)
+        if (interactionListeners != null)
         {
-            for(IViewListener viewListener : viewListeners)
+            for(IInteractionListener interactionListener : interactionListeners)
             {
-                mouseManager.registerViewListener(viewListener);
+                mouseManager.registerInteractionListener(interactionListener);
             }
         }
 

@@ -2,7 +2,7 @@ package de.itemis.graphing.model;
 
 import java.util.Set;
 
-public interface IViewListener
+public interface IInteractionListener
 {
     void elementClickStart(BaseGraphElement element);
 

@@ -1,14 +1,11 @@
 package de.itemis.graphing.listeners;
 
-import de.itemis.graphing.model.BaseGraphElement;
-import de.itemis.graphing.model.Edge;
-import de.itemis.graphing.model.IViewListener;
-import de.itemis.graphing.model.IStyled;
-import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.IInteractionListener;
 
 import java.util.Set;
 
-public class AutomarkLinksVL implements IViewListener
+public class AutomarkLinks implements IInteractionListener
 {
     private Vertex _lastMarkedVertex = null;
 

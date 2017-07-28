@@ -1,12 +1,12 @@
 package de.itemis.graphing.listeners;
 
 import de.itemis.graphing.model.BaseGraphElement;
+import de.itemis.graphing.model.IInteractionListener;
 import de.itemis.graphing.model.IStyled;
-import de.itemis.graphing.model.IViewListener;
 
 import java.util.Set;
 
-public class HighlightInteractionsVL implements IViewListener
+public class HighlightInteractions implements IInteractionListener
 {
     @Override
     public void elementClickStart(BaseGraphElement element)
