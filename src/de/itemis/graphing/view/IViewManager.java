@@ -10,5 +10,7 @@ public interface IViewManager
 
     void fitView();
 
+    void relayout();
+
     JPanel getView();
 }

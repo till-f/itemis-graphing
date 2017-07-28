@@ -2,7 +2,6 @@ package de.itemis.graphing.view.graphstream;
 
 import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.IInteractionListener;
-import de.itemis.graphing.listeners.HighlightInteractions;
 import de.itemis.graphing.view.IViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
@@ -27,6 +26,8 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     private final StyleToGraphstreamCSS _styleConverter;
 
     private View _view = null;
+    private Viewer _viewer = null;
+    private Layout _layout = null;
 
     public GraphstreamViewManager(Graph graph)
     {
@@ -97,16 +98,11 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
             ((Component)view).addMouseWheelListener(mouseManager);
         }
 
-        if (layout != null)
-        {
-            viewer.enableAutoLayout(layout);
-        }
-        else
-        {
-            viewer.enableAutoLayout();
-        }
-
         _view = view;
+        _viewer = viewer;
+        _layout = layout;
+
+        relayout();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -130,7 +126,20 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     public void fitView()
     {
         _view.getCamera().resetView();
-        _view.getCamera().setViewPercent(1.1);
+        _view.getCamera().setViewPercent(1.3);
+    }
+
+    @Override
+    public void relayout()
+    {
+        if (_layout != null)
+        {
+            _viewer.enableAutoLayout(_layout);
+        }
+        else
+        {
+            _viewer.enableAutoLayout();
+        }
     }
 
     @Override
