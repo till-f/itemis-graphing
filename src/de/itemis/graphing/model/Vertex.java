@@ -49,7 +49,12 @@ public class Vertex extends BaseGraphElement implements ISized
 
     public Attachment addAttachment(String id, double width, double height, Attachment.ELocation location)
     {
-        Attachment a = new Attachment(this, id, new Size(width, height), location);
+        return addAttachment(id, width, height, 0.0, location);
+    }
+
+    public Attachment addAttachment(String id, double width, double height, double padding, Attachment.ELocation location)
+    {
+        Attachment a = new Attachment(this, id, new Size(width, height), padding, location);
         _attachments.put(id, a);
 
         _graph.attachmentAdded(a);
@@ -129,19 +134,25 @@ public class Vertex extends BaseGraphElement implements ISized
     public double getAttachmentsSpace(Attachment.ELocation location)
     {
         double space = 0;
-        for(Attachment a : _attachments.values())
+        Attachment previousAttachment = null;
+        for(Attachment attachment : _attachments.values())
         {
-            if (a.getLocation() != location)
+            if (attachment.getLocation() != location)
                 continue;
+
+            if (previousAttachment != null)
+                space -= Math.min(attachment.getPadding(), previousAttachment.getPadding());
 
             if (location == Attachment.ELocation.North || location == Attachment.ELocation.South)
             {
-                space += a.getOuterSize().getWidth();
+                space += attachment.getOuterSize().getWidth();
             }
             else
             {
-                space += a.getOuterSize().getHeight();
+                space += attachment.getOuterSize().getHeight();
             }
+
+            previousAttachment = attachment;
         }
         return space;
     }

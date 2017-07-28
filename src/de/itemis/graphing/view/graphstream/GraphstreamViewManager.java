@@ -145,14 +145,16 @@ public class GraphstreamViewManager implements IGraphListener
     private void addAttachments(Vertex vertex)
     {
         double[] consumed = new double[4];
+        Attachment previousAttachment = null;
         for(Attachment attachment : vertex.getAttachments())
         {
             int ordinal = attachment.getLocation().ordinal();
-            consumed[ordinal] += addAttachment(attachment, consumed[ordinal]);
+            consumed[ordinal] += addAttachment(attachment, consumed[ordinal], previousAttachment);
+            previousAttachment = attachment;
         }
     }
 
-    private double addAttachment(Attachment attachment, final double alreadyConsumedSpace)
+    private double addAttachment(Attachment attachment, double alreadyConsumedSpace, Attachment previousAttachment)
     {
         Vertex vertex = attachment.getParent();
 
@@ -167,32 +169,38 @@ public class GraphstreamViewManager implements IGraphListener
         sprite.attachToNode(vertex.getId());
 
         // calculate rendering position for the attachment
+        // -------------------------------------------------------------------------------------------------------------
+
         double availableSpace = vertex.getAttachmentsSpace(attachment.getLocation());
         double neededSpace;
         if (attachment.getLocation() == Attachment.ELocation.South || attachment.getLocation() == Attachment.ELocation.North)
-            neededSpace = attachment.getInnerSize().getWidth();
+            neededSpace = attachment.getOuterSize().getWidth();
         else
-            neededSpace = attachment.getInnerSize().getHeight();
+            neededSpace = attachment.getOuterSize().getHeight();
 
-        final double spaceOffset = alreadyConsumedSpace - availableSpace/2 + neededSpace/2;
+        double paddingCorrection = 0.0;
+        if (previousAttachment != null)
+            paddingCorrection = Math.min(attachment.getPadding(), previousAttachment.getPadding());
+
+        final double spaceOffset = alreadyConsumedSpace - availableSpace/2 + neededSpace/2 - paddingCorrection;
         final double x;
         final double y;
         switch (attachment.getLocation())
         {
             case North:
                 x = spaceOffset;
-                y = 0.5 * (vertex.getInnerSize().getHeight() + attachment.getInnerSize().getHeight());
+                y = 0.5 * (vertex.getInnerSize().getHeight() + attachment.getOuterSize().getHeight());
                 break;
             case East:
-                x = 0.5 * (vertex.getInnerSize().getWidth() + attachment.getInnerSize().getWidth());
+                x = 0.5 * (vertex.getInnerSize().getWidth() + attachment.getOuterSize().getWidth());
                 y = -spaceOffset;
                 break;
             case South:
                 x = spaceOffset;
-                y = -0.5 * (vertex.getInnerSize().getHeight() + attachment.getInnerSize().getHeight());
+                y = -0.5 * (vertex.getInnerSize().getHeight() + attachment.getOuterSize().getHeight());
                 break;
             case West:
-                x = -0.5 * (vertex.getInnerSize().getWidth() + attachment.getInnerSize().getWidth());
+                x = -0.5 * (vertex.getInnerSize().getWidth() + attachment.getOuterSize().getWidth());
                 y = -spaceOffset;
                 break;
             default:
@@ -205,7 +213,7 @@ public class GraphstreamViewManager implements IGraphListener
 
         sprite.setPosition(distance, 0.0, degree);
 
-        return neededSpace;
+        return neededSpace - paddingCorrection;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

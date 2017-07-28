@@ -21,4 +21,9 @@ public class Size
     {
         return _height;
     }
+
+    public Size addPadding(double padding)
+    {
+        return new Size(_width + padding*2, _height + padding*2);
+    }
 }

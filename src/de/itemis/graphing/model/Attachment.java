@@ -5,14 +5,16 @@ public class Attachment extends BaseGraphElement implements ISized
     public enum ELocation { North, East, South, West }
 
     private final Vertex _parent;
-    private final Size _size;
+    private final Size _innerSize;
+    private final double _padding;
     private final ELocation _location;
 
-    public Attachment(Vertex vertex, String id, Size size, ELocation location)
+    public Attachment(Vertex vertex, String id, Size innerSize, double padding, ELocation location)
     {
         super(vertex.getGraph(), id);
         _parent = vertex;
-        _size = size;
+        _innerSize = innerSize;
+        _padding = padding;
         _location = location;
         setSelectable(false);
         setStyle(EStyle.Regular, _graph.getDefaultAttachmentStyle(EStyle.Regular));
@@ -28,13 +30,18 @@ public class Attachment extends BaseGraphElement implements ISized
     @Override
     public Size getInnerSize()
     {
-        return _size;
+        return _innerSize;
     }
 
     @Override
     public Size getOuterSize()
     {
-        return _size;
+        return _innerSize.addPadding(_padding);
+    }
+
+    public double getPadding()
+    {
+        return _padding;
     }
 
     public ELocation getLocation()
