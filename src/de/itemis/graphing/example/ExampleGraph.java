@@ -49,17 +49,17 @@ public class ExampleGraph {
 
         Vertex vertex1 = graph.addVertex("&1", 0.5, 0.5);
         vertex1.setLabel("&");
-        vertex1.setStyle(IStyled.EStyle.Regular, operatorStyle);
+        vertex1.setStyle(operatorStyle);
         vertex1.setSelectable(false);
 
         Vertex vertex2 = graph.addVertex("&2", 0.5, 0.5);
         vertex2.setLabel("&");
-        vertex2.setStyle(IStyled.EStyle.Regular, operatorStyle);
+        vertex2.setStyle(operatorStyle);
         vertex2.setSelectable(false);
 
         Vertex vertex3 = graph.addVertex("&3", 0.5, 0.5);
         vertex3.setLabel("&");
-        vertex3.setStyle(IStyled.EStyle.Regular, operatorStyle);
+        vertex3.setStyle(operatorStyle);
         vertex3.setSelectable(false);
 
         graph.addEdge("A", "&1");

@@ -66,26 +66,19 @@ public abstract class BaseGraphElement implements IStyled
     @Override
     public Style getStyle()
     {
-        return _styles[EStyle.Regular.ordinal()];
+        return getStyle(EStyle.Regular);
     }
 
     @Override
-    public Style getActiveStyle()
+    public void setStyle(Style newStyle)
     {
-        return _styles[_activeStyle.ordinal()];
+        setStyle(EStyle.Regular, newStyle);
     }
 
     @Override
     public Style getStyle(EStyle styleSelecgtor)
     {
         return _styles[styleSelecgtor.ordinal()];
-    }
-
-    @Override
-    public void selectActiveStyle(EStyle styleSelector)
-    {
-        _activeStyle = styleSelector;
-        styleChanged();
     }
 
     @Override
@@ -109,5 +102,19 @@ public abstract class BaseGraphElement implements IStyled
         if (styleSelector == _activeStyle)
             styleChanged();
     }
+
+    @Override
+    public void selectActiveStyle(EStyle styleSelector)
+    {
+        _activeStyle = styleSelector;
+        styleChanged();
+    }
+
+    @Override
+    public Style getActiveStyle()
+    {
+        return _styles[_activeStyle.ordinal()];
+    }
+
 
 }
