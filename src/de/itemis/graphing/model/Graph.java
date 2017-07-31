@@ -246,6 +246,14 @@ public class Graph
         }
     }
 
+    public void labelChanged(BaseGraphElement element)
+    {
+        for(IGraphListener listener : _graphListeners)
+        {
+            listener.labelChanged(element);
+        }
+    }
+
     public void attachmentAdded(Attachment attachment)
     {
         _attachments.put(attachment.getId(), attachment);
@@ -298,5 +306,4 @@ public class Graph
             listener.edgeAdded(e);
         }
     }
-
 }

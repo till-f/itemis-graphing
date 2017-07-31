@@ -8,20 +8,17 @@ import java.util.Set;
 public class HighlightInteractions implements IInteractionListener
 {
     @Override
-    public void clickBegin()
-    {
-    }
-
-    @Override
     public void clickBegin(BaseGraphElement element)
     {
-        element.selectActiveStyle(IStyled.EStyle.Clicked);
+        if(element != null)
+            element.selectActiveStyle(IStyled.EStyle.Clicked);
     }
 
     @Override
     public void clickEnd(BaseGraphElement element)
     {
-        element.selectActiveStyle(IStyled.EStyle.Regular);
+        if(element != null)
+            element.selectActiveStyle(IStyled.EStyle.Regular);
     }
 
     @Override

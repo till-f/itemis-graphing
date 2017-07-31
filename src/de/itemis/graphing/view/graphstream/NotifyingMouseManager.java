@@ -123,8 +123,6 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() == 1)
         {
-            notifyClick();
-
             // unselect all.
             if (!event.isShiftDown())
             {
@@ -146,7 +144,8 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         _dragElement = null;
     }
 
-    private void mouseButtonRelease(MouseEvent event) {
+    private void mouseButtonRelease(MouseEvent event)
+    {
         _dragElement = null;
     }
 
@@ -185,7 +184,6 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
             else
             {
                 element.addAttribute("ui.clicked");
-                notifyClickBegin(element);
             }
         }
     }
@@ -265,6 +263,9 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         _touchedElement = _view.findNodeOrSpriteAt(event.getX(), event.getY());
 
+        if (event.getButton() == 1)
+            notifyClickBegin(_touchedElement);
+
         if (_touchedElement != null)
         {
             // TODO: consider using an attribute like "ui.fixed" to prevent possibility to move nodes
@@ -325,6 +326,9 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         {
             _mousePan.endPan();
         }
+
+        if (event.getButton() == 1)
+            notifyClickEnd(_touchedElement);
     }
 
     @Override
@@ -337,52 +341,17 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // IInteractionListener notification
+    // methods to retrieve current interaction state
 
-    private void notifyClick()
+    public HashSet<BaseGraphElement> getCurrentSelection()
     {
-        for(IInteractionListener listener : _interactionListeners)
-        {
-            listener.clickBegin();
-        }
-    }
-
-    private void notifyClickBegin(GraphicElement gsElement)
-    {
-        BaseGraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
-
-        if (element != null)
-        {
-            for(IInteractionListener listener : _interactionListeners)
-            {
-                listener.clickBegin(element);
-            }
-        }
-    }
-
-    private void notifyClickEnd(GraphicElement gsElement)
-    {
-        BaseGraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
-
-        if (element != null)
-        {
-            for(IInteractionListener listener : _interactionListeners)
-            {
-                listener.clickEnd(element);
-            }
-        }
-    }
-
-    private HashSet<BaseGraphElement> _lastSelection = new HashSet<>();
-    private void notifySelectionChanged()
-    {
-        HashSet<BaseGraphElement> newSelection = new HashSet<>();
+        HashSet<BaseGraphElement> currentSelection = new HashSet<>();
         for (Node node : _graph)
         {
             if (node.hasAttribute("ui.selected"))
             {
                 BaseGraphElement element = _viewManager.getBaseGraphElement(node.getId());
-                newSelection.add(element);
+                currentSelection.add(element);
             }
         }
         for (GraphicSprite sprite : _graph.spriteSet())
@@ -390,9 +359,46 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
             if (sprite.hasAttribute("ui.selected"))
             {
                 BaseGraphElement element = _viewManager.getBaseGraphElement(sprite.getId());
-                newSelection.add(element);
+                currentSelection.add(element);
             }
         }
+
+        return currentSelection;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // IInteractionListener notification
+
+    private void notifyClickBegin(GraphicElement gsElement)
+    {
+        BaseGraphElement element = null;
+
+        if (gsElement != null)
+            element = _viewManager.getBaseGraphElement(gsElement.getId());
+
+        for(IInteractionListener listener : _interactionListeners)
+        {
+            listener.clickBegin(element);
+        }
+    }
+
+    private void notifyClickEnd(GraphicElement gsElement)
+    {
+        BaseGraphElement element = null;
+
+        if (gsElement != null)
+            element = _viewManager.getBaseGraphElement(gsElement.getId());
+
+        for(IInteractionListener listener : _interactionListeners)
+        {
+            listener.clickEnd(element);
+        }
+    }
+
+    private HashSet<BaseGraphElement> _lastSelection = new HashSet<>();
+    private void notifySelectionChanged()
+    {
+        HashSet<BaseGraphElement> newSelection = getCurrentSelection();
 
         HashSet<BaseGraphElement> selected = new HashSet<>();
         HashSet<BaseGraphElement> unselected = new HashSet<>();

@@ -10,7 +10,7 @@ public class AutomarkLinks implements IInteractionListener
     private StyleStorage _styleStorage = new StyleStorage();
 
     @Override
-    public void clickBegin()
+    public void clickBegin(BaseGraphElement element)
     {
         if (_lastMarkedVertex != null)
         {
@@ -20,7 +20,7 @@ public class AutomarkLinks implements IInteractionListener
     }
 
     @Override
-    public void clickBegin(BaseGraphElement element)
+    public void clickEnd(BaseGraphElement element)
     {
         if (element instanceof Vertex)
         {
@@ -30,42 +30,38 @@ public class AutomarkLinks implements IInteractionListener
     }
 
     @Override
-    public void clickEnd(BaseGraphElement element)
-    {
-    }
-
-    @Override
     public void selectionChanged(Set<BaseGraphElement> selected, Set<BaseGraphElement> unselected)
     {
     }
 
-    private void selectStyle(Vertex vertex, boolean select)
+    private void selectStyle(Vertex vertex, boolean isCustomStyleActive)
     {
-        IStyled.EStyle styleType;
-        if (select)
-        {
-            _styleStorage.storeStyle(vertex);
-            vertex.getStyle().setLineThickness(6.0);
-            styleType = IStyled.EStyle.Selected;
-        }
-        else
-        {
-            _styleStorage.restoreStyle(vertex);
-            styleType = IStyled.EStyle.Regular;
-        }
-
-        vertex.selectActiveStyle(styleType);
+        switchStyle(vertex, isCustomStyleActive);
 
         for(Edge edge : vertex.getIncomingEdges())
         {
-            edge.selectActiveStyle(styleType);
-            edge.getFrom().selectActiveStyle(styleType);
+            switchStyle(edge, isCustomStyleActive);
+            switchStyle(edge.getFrom(), isCustomStyleActive);
         }
 
         for(Edge edge : vertex.getOutgoingEdges())
         {
-            edge.selectActiveStyle(styleType);
-            edge.getTo().selectActiveStyle(styleType);
+            switchStyle(edge, isCustomStyleActive);
+            switchStyle(edge.getTo(), isCustomStyleActive);
+        }
+    }
+
+    private void switchStyle(BaseGraphElement e, boolean isCustomStyleActive)
+    {
+        if (isCustomStyleActive)
+        {
+            _styleStorage.storeStyle(e);
+            e.getStyle().setLineThickness(Graph.DEFAULT_HL_LINE_THICKNESS);
+            e.getStyle().setLineColor("FF0000");
+        }
+        else
+        {
+            _styleStorage.restoreStyle(e);
         }
     }
 

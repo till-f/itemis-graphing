@@ -15,7 +15,9 @@ import org.graphstream.ui.view.Viewer;
 
 import javax.swing.JPanel;
 import java.awt.Component;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class GraphstreamViewManager implements IGraphListener, IViewManager
 {
@@ -28,6 +30,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     private View _view = null;
     private Viewer _viewer = null;
     private Layout _layout = null;
+    private NotifyingMouseManager _mouseManager = null;
 
     public GraphstreamViewManager(Graph graph)
     {
@@ -102,6 +105,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         _view = view;
         _viewer = viewer;
         _layout = layout;
+        _mouseManager = mouseManager;
 
         relayout();
     }
@@ -141,6 +145,12 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         {
             _viewer.enableAutoLayout();
         }
+    }
+
+    @Override
+    public Set<BaseGraphElement> getSelectedElements()
+    {
+        return _mouseManager.getCurrentSelection();
     }
 
     @Override
@@ -263,6 +273,13 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         return neededSpace - paddingCorrection;
     }
 
+    private void removeAttachment(Attachment attachment)
+    {
+        _spriteManager.removeSprite(attachment.getId());
+    }
+
+
+
     // -----------------------------------------------------------------------------------------------------------------
     // GraphListener
 
@@ -293,23 +310,48 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     @Override
     public void attachmentAdded(Attachment attachment)
     {
-        removeVertex(attachment.getParent());
-        addVertex(attachment.getParent());
+        // remove all attachments, then insert new set (required for space calculation)
+        for (Attachment existingAttachment : attachment.getParent().getAttachments())
+        {
+            if (existingAttachment != attachment)
+                removeAttachment(existingAttachment);
+        }
+        addAttachments(attachment.getParent());
     }
 
     @Override
     public void attachmentRemoved(Attachment attachment)
     {
-        removeVertex(attachment.getParent());
-        addVertex(attachment.getParent());
+        // remove all attachments, then insert new set (required for space calculation)
+        removeAttachment(attachment);
+        for (Attachment existingAttachment : attachment.getParent().getAttachments())
+        {
+            removeAttachment(existingAttachment);
+        }
+        addAttachments(attachment.getParent());
     }
 
     @Override
     public void styleChanged(BaseGraphElement element)
     {
         Element gsElement = getGraphstreamElement(element);
+
+        if (gsElement == null)
+            return;
+
         String styleCSS = _styleConverter.getAtciveStyleCSS(element);
         gsElement.setAttribute("ui.style", styleCSS);
+    }
+
+    @Override
+    public void labelChanged(BaseGraphElement element)
+    {
+        Element gsElement = getGraphstreamElement(element);
+
+        if (gsElement == null)
+            return;
+
+        gsElement.setAttribute("ui.label", element.getLabel());
     }
 
     private Element getGraphstreamElement(BaseGraphElement element)

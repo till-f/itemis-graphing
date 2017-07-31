@@ -8,17 +8,12 @@ public interface IInteractionListener
 {
 
     /**
-     * called when left mouse button is clicked somewhere.
-     */
-    void clickBegin();
-
-    /**
-     * called when left mouse button is clicked on element. clickBegin() has been called before in this case.
+     * called when left mouse button is clicked.
      */
     void clickBegin(BaseGraphElement element);
 
     /**
-     * called when left mouse button is released after element has been clicked.
+     * called when left mouse button is released. element is ensured to be the same as last call to clickBegin().
      */
     void clickEnd(BaseGraphElement element);
 

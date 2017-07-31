@@ -46,6 +46,8 @@ public abstract class BaseGraphElement implements IStyled
     public void setLabel(String label)
     {
         _label = label;
+        _graph.labelChanged(this);
+
     }
 
     public void styleChanged()

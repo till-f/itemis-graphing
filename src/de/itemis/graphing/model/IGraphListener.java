@@ -9,4 +9,5 @@ public interface IGraphListener
     void attachmentAdded(Attachment attachment);
     void attachmentRemoved(Attachment attachment);
     void styleChanged(BaseGraphElement element);
+    void labelChanged(BaseGraphElement element);
 }

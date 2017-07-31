@@ -5,25 +5,26 @@ import de.itemis.graphing.listeners.IInteractionListener;
 
 import java.util.Set;
 
-public class ExampleInteractionListener implements IInteractionListener
+public class DebugInteractionListener implements IInteractionListener
 {
-    @Override
-    public void clickBegin()
-    {
-        System.out.println("INFO: Clicked");
-    }
-
     @Override
     public void clickBegin(BaseGraphElement element)
     {
-        System.out.println("INFO: Clicked element     : " + element.getId());
+        String id = "";
+        if (element != null)
+            id = element.getId();
+
+        System.out.println("INFO: Clicked element     : " + id);
     }
 
     @Override
     public void clickEnd(BaseGraphElement element)
     {
-        System.out.println("INFO: Released element    : " + element.getId());
+        String id = "";
+        if (element != null)
+            id = element.getId();
 
+        System.out.println("INFO: Released element    : " + id);
     }
 
     @Override
