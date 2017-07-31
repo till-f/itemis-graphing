@@ -106,5 +106,9 @@ public abstract class BaseGraphElement implements IStyled
         return _styles[_activeStyle.ordinal()];
     }
 
-
+    @Override
+    public String toString()
+    {
+        return getId();
+    }
 }

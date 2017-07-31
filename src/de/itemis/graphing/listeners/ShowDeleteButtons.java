@@ -6,15 +6,23 @@ import de.itemis.graphing.model.style.BlockStyle;
 
 import java.util.Set;
 
-public class ShowDeleteButton implements IInteractionListener
+public class ShowDeleteButtons implements IInteractionListener
 {
+    private final Size _size;
+    private final double _padding;
+    private final Attachment.ELocation _location;
+
     private final AttachmentStyle regularStyle = new AttachmentStyle();
     private final AttachmentStyle clickedStyle;
 
     private Attachment _deleteAttachment = null;
 
-    public ShowDeleteButton()
+    public ShowDeleteButtons(double width, double height, double padding, Attachment.ELocation location)
     {
+        _size = new Size(width, height);
+        _padding = padding;
+        _location = location;
+
         regularStyle.setShape(BlockStyle.EShape.Circle);
         regularStyle.setFillColor("F4D2D2");
 
@@ -36,10 +44,16 @@ public class ShowDeleteButton implements IInteractionListener
         if (element instanceof Vertex)
         {
             Vertex vertex = (Vertex) element;
-            _deleteAttachment = vertex.addAttachment(element.getId() + "_delete", 0.2, 0.2, 0.05, Attachment.ELocation.West);
+            _deleteAttachment = vertex.addAttachment("DELETE_BUTTON", _size.getWidth(), _size.getHeight(), _padding, _location);
             _deleteAttachment.setLabel("-");
             _deleteAttachment.setStyle(IStyled.EStyle.Regular, regularStyle);
             _deleteAttachment.setStyle(IStyled.EStyle.Clicked, clickedStyle);
+        }
+
+        if (element instanceof Attachment && element.getId().equals("DELETE_BUTTON"))
+        {
+            element.getGraph().removeVertex(((Attachment) element).getParent().getId());
+            _deleteAttachment = null;
         }
     }
 

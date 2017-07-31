@@ -3,7 +3,8 @@ package de.itemis.graphing.example.graphstream;
 import de.itemis.graphing.example.DebugInteractionListener;
 import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
 import de.itemis.graphing.listeners.HighlightInteractions;
-import de.itemis.graphing.listeners.ShowDeleteButton;
+import de.itemis.graphing.listeners.ShowDeleteButtons;
+import de.itemis.graphing.model.Attachment;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.example.ExampleGraph;
 import de.itemis.graphing.listeners.IInteractionListener;
@@ -26,7 +27,7 @@ public class ExampleGraphstreamView
         LinkedList<IInteractionListener> listeners = new LinkedList<>();
         listeners.add(new HighlightInteractions());
         listeners.add(new AutomarkLinks());
-        listeners.add(new ShowDeleteButton());
+        listeners.add(new ShowDeleteButtons(0.2, 0.2, 0.05, Attachment.ELocation.West));
         listeners.add(new DebugInteractionListener());
         viewManager.configure(layout, listeners);
 

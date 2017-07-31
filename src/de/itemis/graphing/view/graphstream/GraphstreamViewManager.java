@@ -180,6 +180,11 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
 
     private void removeVertex(Vertex vertex)
     {
+        for (Attachment a : vertex.getAttachments())
+        {
+            removeAttachment(a);
+        }
+
         _gsGraph.removeNode(vertex.getId());
     }
 

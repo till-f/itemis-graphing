@@ -20,7 +20,7 @@ public class HierarchicalLayoutJGraphX implements ILayout
 
     public HierarchicalLayoutJGraphX()
     {
-        this(0.5, 0.5, 0.5);
+        this(0.6, 0.6, 0.6);
     }
 
     public HierarchicalLayoutJGraphX(double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing)
