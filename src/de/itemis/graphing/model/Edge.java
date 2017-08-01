@@ -52,7 +52,7 @@ public class Edge extends GraphElement
 
     public void setFromTo(Vertex from, Vertex to)
     {
-        if (from == null && to == null)
+        if (_from == null && _to == null)
         {
             _from = from;
             _to = to;
