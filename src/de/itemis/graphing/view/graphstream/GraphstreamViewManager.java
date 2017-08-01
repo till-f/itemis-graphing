@@ -291,6 +291,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     public void graphCleared()
     {
         _gsGraph.clear();
+        _spriteManager.resetSpriteFactory();
     }
 
     @Override
