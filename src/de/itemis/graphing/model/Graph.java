@@ -177,7 +177,7 @@ public class Graph
         return rootVertexes;
     }
 
-    public BaseGraphElement getElement(String id)
+    public GraphElement getElement(String id)
     {
         if (_vertexes.containsKey(id))
             return _vertexes.get(id);
@@ -238,7 +238,7 @@ public class Graph
     // -----------------------------------------------------------------------------------------------------------------
     // internal methods
 
-    public void styleChanged(BaseGraphElement element)
+    public void styleChanged(GraphElement element)
     {
         for(IGraphListener listener : _graphListeners)
         {
@@ -246,7 +246,7 @@ public class Graph
         }
     }
 
-    public void labelChanged(BaseGraphElement element)
+    public void labelChanged(GraphElement element)
     {
         for(IGraphListener listener : _graphListeners)
         {

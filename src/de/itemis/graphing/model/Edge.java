@@ -1,10 +1,8 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.model.style.EdgeStyle;
-
 import java.util.LinkedList;
 
-public class Edge extends BaseGraphElement
+public class Edge extends GraphElement
 {
     private final LinkedList<Attachment> _attachments = new LinkedList<>();
 

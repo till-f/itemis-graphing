@@ -10,7 +10,7 @@ public class AutomarkLinks implements IInteractionListener
     private StyleStorage _styleStorage = new StyleStorage();
 
     @Override
-    public void clickBegin(BaseGraphElement element)
+    public void clickBegin(GraphElement element)
     {
         if (_lastMarkedVertex != null)
         {
@@ -20,7 +20,7 @@ public class AutomarkLinks implements IInteractionListener
     }
 
     @Override
-    public void clickEnd(BaseGraphElement element)
+    public void clickEnd(GraphElement element)
     {
         if (element instanceof Vertex)
         {
@@ -30,7 +30,7 @@ public class AutomarkLinks implements IInteractionListener
     }
 
     @Override
-    public void selectionChanged(Set<BaseGraphElement> selected, Set<BaseGraphElement> unselected)
+    public void selectionChanged(Set<GraphElement> selected, Set<GraphElement> unselected)
     {
     }
 
@@ -51,7 +51,7 @@ public class AutomarkLinks implements IInteractionListener
         }
     }
 
-    private void switchStyle(BaseGraphElement e, boolean isCustomStyleActive)
+    private void switchStyle(GraphElement e, boolean isCustomStyleActive)
     {
         if (isCustomStyleActive)
         {

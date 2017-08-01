@@ -1,15 +1,15 @@
 package de.itemis.graphing.listeners;
 
-import de.itemis.graphing.model.BaseGraphElement;
+import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.style.Style;
 
 import java.util.HashMap;
 
 public class StyleStorage
 {
-    private HashMap<BaseGraphElement, Style> _storedStyles = new HashMap<>();
+    private HashMap<GraphElement, Style> _storedStyles = new HashMap<>();
 
-    public void restoreStyle(BaseGraphElement element)
+    public void restoreStyle(GraphElement element)
     {
         if (!_storedStyles.containsKey(element))
             return;
@@ -19,7 +19,7 @@ public class StyleStorage
         _storedStyles.remove(element);
     }
 
-    public void storeStyle(BaseGraphElement element)
+    public void storeStyle(GraphElement element)
     {
         if (_storedStyles.containsKey(element))
             return;

@@ -32,14 +32,14 @@ public class ShowDeleteButtons implements IInteractionListener
     }
 
     @Override
-    public void clickBegin(BaseGraphElement element)
+    public void clickBegin(GraphElement element)
     {
         if (_deleteAttachment != null && (_deleteAttachment != element || element == null))
             _deleteAttachment.getParent().removeAttachment(_deleteAttachment.getId());
     }
 
     @Override
-    public void clickEnd(BaseGraphElement element)
+    public void clickEnd(GraphElement element)
     {
         if (element instanceof Vertex)
         {
@@ -58,7 +58,7 @@ public class ShowDeleteButtons implements IInteractionListener
     }
 
     @Override
-    public void selectionChanged(Set<BaseGraphElement> selected, Set<BaseGraphElement> unselected)
+    public void selectionChanged(Set<GraphElement> selected, Set<GraphElement> unselected)
     {
     }
 }

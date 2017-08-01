@@ -1,6 +1,6 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.model.BaseGraphElement;
+import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.ISized;
 import de.itemis.graphing.model.style.BlockStyle;
 import de.itemis.graphing.model.style.EdgeStyle;
@@ -8,7 +8,7 @@ import de.itemis.graphing.model.style.Style;
 
 public class StyleToGraphstreamCSS
 {
-    public String getAtciveStyleCSS(BaseGraphElement element)
+    public String getAtciveStyleCSS(GraphElement element)
     {
         StringBuilder sb = new StringBuilder();
 

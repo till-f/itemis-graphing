@@ -1,6 +1,6 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.model.BaseGraphElement;
+import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.listeners.IInteractionListener;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
@@ -153,7 +153,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     {
         for (GraphicElement gsElement : elementsInArea)
         {
-            BaseGraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
+            GraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
             if (!element.isSelectable())
                 continue;
 
@@ -204,7 +204,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
     private void toggleSelection(GraphicElement gsElement)
     {
-        BaseGraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
+        GraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
         if (!element.isSelectable())
             return;
 
@@ -343,14 +343,14 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     // -----------------------------------------------------------------------------------------------------------------
     // methods to retrieve current interaction state
 
-    public HashSet<BaseGraphElement> getCurrentSelection()
+    public HashSet<GraphElement> getCurrentSelection()
     {
-        HashSet<BaseGraphElement> currentSelection = new HashSet<>();
+        HashSet<GraphElement> currentSelection = new HashSet<>();
         for (Node node : _graph)
         {
             if (node.hasAttribute("ui.selected"))
             {
-                BaseGraphElement element = _viewManager.getBaseGraphElement(node.getId());
+                GraphElement element = _viewManager.getBaseGraphElement(node.getId());
                 currentSelection.add(element);
             }
         }
@@ -358,7 +358,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         {
             if (sprite.hasAttribute("ui.selected"))
             {
-                BaseGraphElement element = _viewManager.getBaseGraphElement(sprite.getId());
+                GraphElement element = _viewManager.getBaseGraphElement(sprite.getId());
                 currentSelection.add(element);
             }
         }
@@ -371,7 +371,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
     private void notifyClickBegin(GraphicElement gsElement)
     {
-        BaseGraphElement element = null;
+        GraphElement element = null;
 
         if (gsElement != null)
             element = _viewManager.getBaseGraphElement(gsElement.getId());
@@ -384,7 +384,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
     private void notifyClickEnd(GraphicElement gsElement)
     {
-        BaseGraphElement element = null;
+        GraphElement element = null;
 
         if (gsElement != null)
             element = _viewManager.getBaseGraphElement(gsElement.getId());
@@ -395,20 +395,20 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         }
     }
 
-    private HashSet<BaseGraphElement> _lastSelection = new HashSet<>();
+    private HashSet<GraphElement> _lastSelection = new HashSet<>();
     private void notifySelectionChanged()
     {
-        HashSet<BaseGraphElement> newSelection = getCurrentSelection();
+        HashSet<GraphElement> newSelection = getCurrentSelection();
 
-        HashSet<BaseGraphElement> selected = new HashSet<>();
-        HashSet<BaseGraphElement> unselected = new HashSet<>();
+        HashSet<GraphElement> selected = new HashSet<>();
+        HashSet<GraphElement> unselected = new HashSet<>();
 
-        for (BaseGraphElement e : _lastSelection)
+        for (GraphElement e : _lastSelection)
         {
             if (!newSelection.contains(e))
                 unselected.add(e);
         }
-        for (BaseGraphElement e : newSelection)
+        for (GraphElement e : newSelection)
         {
             if (!_lastSelection.contains(e))
                 selected.add(e);

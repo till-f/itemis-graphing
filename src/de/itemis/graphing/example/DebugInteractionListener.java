@@ -1,6 +1,6 @@
 package de.itemis.graphing.example;
 
-import de.itemis.graphing.model.BaseGraphElement;
+import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.listeners.IInteractionListener;
 
 import java.util.Set;
@@ -8,7 +8,7 @@ import java.util.Set;
 public class DebugInteractionListener implements IInteractionListener
 {
     @Override
-    public void clickBegin(BaseGraphElement element)
+    public void clickBegin(GraphElement element)
     {
         String id = "";
         if (element != null)
@@ -18,7 +18,7 @@ public class DebugInteractionListener implements IInteractionListener
     }
 
     @Override
-    public void clickEnd(BaseGraphElement element)
+    public void clickEnd(GraphElement element)
     {
         String id = "";
         if (element != null)
@@ -28,10 +28,10 @@ public class DebugInteractionListener implements IInteractionListener
     }
 
     @Override
-    public void selectionChanged(Set<BaseGraphElement> selected, Set<BaseGraphElement> unselected)
+    public void selectionChanged(Set<GraphElement> selected, Set<GraphElement> unselected)
     {
         System.out.print("INFO: Selected elements   : ");
-        for(BaseGraphElement element: selected)
+        for(GraphElement element: selected)
         {
             System.out.print(element.getId() + ", ");
         }
@@ -39,7 +39,7 @@ public class DebugInteractionListener implements IInteractionListener
         System.out.println();
 
         System.out.print("INFO: Unselected elements : ");
-        for(BaseGraphElement element: unselected)
+        for(GraphElement element: unselected)
         {
             System.out.print(element.getId() + ", ");
         }

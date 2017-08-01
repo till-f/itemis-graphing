@@ -15,7 +15,6 @@ import org.graphstream.ui.view.Viewer;
 
 import javax.swing.JPanel;
 import java.awt.Component;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -148,7 +147,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     }
 
     @Override
-    public Set<BaseGraphElement> getSelectedElements()
+    public Set<GraphElement> getSelectedElements()
     {
         return _mouseManager.getCurrentSelection();
     }
@@ -337,7 +336,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     }
 
     @Override
-    public void styleChanged(BaseGraphElement element)
+    public void styleChanged(GraphElement element)
     {
         Element gsElement = getGraphstreamElement(element);
 
@@ -349,7 +348,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     }
 
     @Override
-    public void labelChanged(BaseGraphElement element)
+    public void labelChanged(GraphElement element)
     {
         Element gsElement = getGraphstreamElement(element);
 
@@ -359,7 +358,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         gsElement.setAttribute("ui.label", element.getLabel());
     }
 
-    private Element getGraphstreamElement(BaseGraphElement element)
+    private Element getGraphstreamElement(GraphElement element)
     {
         Element gsElement;
 
@@ -386,7 +385,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     // -----------------------------------------------------------------------------------------------------------------
     // nice little helpers
 
-    public BaseGraphElement getBaseGraphElement(String id)
+    public GraphElement getBaseGraphElement(String id)
     {
         return _graph.getElement(id);
     }

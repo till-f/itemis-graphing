@@ -1,6 +1,6 @@
 package de.itemis.graphing.model;
 
-public class Attachment extends BaseGraphElement implements ISized
+public class Attachment extends GraphElement implements ISized
 {
     public enum ELocation { North, East, South, West }
 

@@ -2,7 +2,7 @@ package de.itemis.graphing.model;
 
 import de.itemis.graphing.model.style.Style;
 
-public abstract class BaseGraphElement implements IStyled
+public abstract class GraphElement implements IStyled
 {
     protected final Graph _graph;
     protected final String _id;
@@ -14,7 +14,7 @@ public abstract class BaseGraphElement implements IStyled
     private EStyle _activeStyle = EStyle.Regular;
     private boolean _isSelectable = true;
 
-    public BaseGraphElement(Graph g, String id)
+    public GraphElement(Graph g, String id)
     {
         _graph = g;
         _id = id;

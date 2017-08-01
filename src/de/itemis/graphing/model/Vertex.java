@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class Vertex extends BaseGraphElement implements ISized
+public class Vertex extends GraphElement implements ISized
 {
     private final Size _size;
 

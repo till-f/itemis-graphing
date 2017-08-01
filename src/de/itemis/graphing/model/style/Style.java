@@ -1,13 +1,12 @@
 package de.itemis.graphing.model.style;
 
-import de.itemis.graphing.model.BaseGraphElement;
-import de.itemis.graphing.model.Edge;
+import de.itemis.graphing.model.GraphElement;
 
 public abstract class Style implements Cloneable
 {
     public enum ELineMode { None, Solid, Dotted }
 
-    private BaseGraphElement _parent = null;
+    private GraphElement _parent = null;
 
     protected String lineColor = "000000";
     protected String fillColor = "FFFFFF";
@@ -28,7 +27,7 @@ public abstract class Style implements Cloneable
         }
     }
 
-    public void setParent(BaseGraphElement parent)
+    public void setParent(GraphElement parent)
     {
         _parent = parent;
     }

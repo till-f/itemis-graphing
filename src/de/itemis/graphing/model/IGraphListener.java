@@ -8,6 +8,6 @@ public interface IGraphListener
     void edgeRemoved(Edge edge);
     void attachmentAdded(Attachment attachment);
     void attachmentRemoved(Attachment attachment);
-    void styleChanged(BaseGraphElement element);
-    void labelChanged(BaseGraphElement element);
+    void styleChanged(GraphElement element);
+    void labelChanged(GraphElement element);
 }
