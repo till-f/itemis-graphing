@@ -1,4 +1,4 @@
-package de.itemis.graphing.example;
+package de.itemis.graphing.listeners;
 
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.listeners.IInteractionListener;

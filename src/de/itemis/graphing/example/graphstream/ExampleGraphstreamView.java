@@ -1,6 +1,6 @@
 package de.itemis.graphing.example.graphstream;
 
-import de.itemis.graphing.example.DebugInteractionListener;
+import de.itemis.graphing.listeners.DebugInteractionListener;
 import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
 import de.itemis.graphing.listeners.HighlightInteractions;
 import de.itemis.graphing.listeners.ShowDeleteButtons;
