@@ -9,8 +9,6 @@ import org.graphstream.ui.layout.Layout;
 
 public class StaticLayout extends PipeBase implements Layout
 {
-    protected final Object _graphLock = new Object();
-
     protected final Graph _graph;
     protected final ILayout _layout;
 
@@ -25,59 +23,42 @@ public class StaticLayout extends PipeBase implements Layout
 
     public void nodeAdded(String sourceId, long timeId, String nodeId)
     {
-        synchronized (_graphLock)
-        {
-            _isLayouted = false;
-        }
+        _isLayouted = false;
     }
 
     public void nodeRemoved(String sourceId, long timeId, String nodeId)
     {
-        synchronized (_graphLock)
-        {
-            _isLayouted = false;
-        }
+        _isLayouted = false;
     }
 
     public void edgeAdded(String sourceId, long timeId, String edgeId,
                           String fromId, String toId, boolean directed)
     {
-        synchronized (_graphLock)
-        {
-            _isLayouted = false;
-        }
+        _isLayouted = false;
     }
 
     public void edgeRemoved(String sourceId, long timeId, String edgeId)
     {
-        synchronized (_graphLock)
-        {
-            _isLayouted = false;
-        }
+        _isLayouted = false;
     }
 
     public void graphCleared(String sourceId, long timeId)
     {
-        synchronized (_graphLock)
-        {
-            _isLayouted = false;
-        }
+        _isLayouted = false;
     }
 
     @Override
     public void compute()
     {
-        synchronized (_graphLock)
-        {
-            resetLayout();
+        _isLayouted = true;
 
-            computeLayout();
+        resetLayout();
 
-            publishLayout();
+        computeLayout();
 
-            _isLayouted = true;
-            _lastComputeTime = System.currentTimeMillis();
-        }
+        publishLayout();
+
+        _lastComputeTime = System.currentTimeMillis();
     }
 
     @Override
@@ -95,10 +76,7 @@ public class StaticLayout extends PipeBase implements Layout
     @Override
     public double getStabilization()
     {
-        synchronized (_graphLock)
-        {
-            return _isLayouted ? 1 : 0;
-        }
+        return _isLayouted ? 1 : 0;
     }
 
     @Override
@@ -203,6 +181,12 @@ public class StaticLayout extends PipeBase implements Layout
     {
         for (Vertex n : _graph.getVertexes())
         {
+            if (!n.isPlaced())
+            {
+                _isLayouted = false;
+                continue;
+            }
+
             sendNodeAttributeChanged(sourceId, n.getId(), "xyz", null,
                     new double[] { n.getX(), n.getY(), 0 });
         }

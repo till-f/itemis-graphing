@@ -27,6 +27,9 @@ public class Vertex extends GraphElement implements ISized
         setStyle(EStyle.Selected, g.getDefaultVertexStyle(EStyle.Selected));
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // edges and relations to other vertexes
+
     public void addOutgoingEdge(Edge e)
     {
         _outgoingEdges.add(e);
@@ -46,6 +49,65 @@ public class Vertex extends GraphElement implements ISized
     {
         _incomingEdges.remove(e);
     }
+
+    public Set<Edge> getOutgoingEdges()
+    {
+        return _outgoingEdges;
+    }
+
+    public Set<Edge> getIncomingEdges()
+    {
+        return _incomingEdges;
+    }
+
+    public List<Vertex> getTargets()
+    {
+        LinkedList<Vertex> targets = new LinkedList<Vertex>();
+        for (Edge e : _outgoingEdges)
+        {
+            targets.add(e.getTo());
+        }
+        return targets;
+    }
+
+    public List<Vertex> getSources()
+    {
+        LinkedList<Vertex> sources = new LinkedList<Vertex>();
+        for (Edge e : _incomingEdges)
+        {
+            sources.add(e.getFrom());
+        }
+        return sources;
+    }
+
+    public List<Edge> removeEdgesTo(Vertex target)
+    {
+        LinkedList<Edge> toRemove = new LinkedList<Edge>();
+        for (Edge e : _outgoingEdges)
+        {
+            if (e.getTo() == target)
+                toRemove.add(e);
+        }
+        _outgoingEdges.removeAll(toRemove);
+
+        return toRemove;
+    }
+
+    public List<Edge> removeEdgesFrom(Vertex source)
+    {
+        LinkedList<Edge> toRemove = new LinkedList<Edge>();
+        for (Edge e : _incomingEdges)
+        {
+            if (e.getFrom() == source)
+                toRemove.add(e);
+        }
+        _incomingEdges.removeAll(toRemove);
+
+        return toRemove;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // attachments and calculated size
 
     public Attachment addAttachment(String id, double width, double height, Attachment.ELocation location)
     {
@@ -71,16 +133,6 @@ public class Vertex extends GraphElement implements ISized
             _attachments.remove(id);
             _graph.attachmentRemoved(a);
         }
-    }
-
-    public double getX()
-    {
-        return _x;
-    }
-
-    public double getY()
-    {
-        return _y;
     }
 
     public List<Attachment> getAttachments()
@@ -157,35 +209,8 @@ public class Vertex extends GraphElement implements ISized
         return space;
     }
 
-    public List<Vertex> getTargets()
-    {
-        LinkedList<Vertex> targets = new LinkedList<Vertex>();
-        for (Edge e : _outgoingEdges)
-        {
-            targets.add(e.getTo());
-        }
-        return targets;
-    }
-
-    public List<Vertex> getSources()
-    {
-        LinkedList<Vertex> sources = new LinkedList<Vertex>();
-        for (Edge e : _incomingEdges)
-        {
-            sources.add(e.getFrom());
-        }
-        return sources;
-    }
-
-    public Set<Edge> getOutgoingEdges()
-    {
-        return _outgoingEdges;
-    }
-
-    public Set<Edge> getIncomingEdges()
-    {
-        return _incomingEdges;
-    }
+    // -----------------------------------------------------------------------------------------------------------------
+    // placement
 
     public void reset()
     {
@@ -204,29 +229,19 @@ public class Vertex extends GraphElement implements ISized
         _y = y;
     }
 
-    public List<Edge> removeEdgesTo(Vertex target)
+    public boolean isPlaced()
     {
-        LinkedList<Edge> toRemove = new LinkedList<Edge>();
-        for (Edge e : _outgoingEdges)
-        {
-            if (e.getTo() == target)
-                toRemove.add(e);
-        }
-        _outgoingEdges.removeAll(toRemove);
-
-        return toRemove;
+        return _x != null && _y != null;
     }
 
-    public List<Edge> removeEdgesFrom(Vertex source)
+    public double getX()
     {
-        LinkedList<Edge> toRemove = new LinkedList<Edge>();
-        for (Edge e : _incomingEdges)
-        {
-            if (e.getFrom() == source)
-                toRemove.add(e);
-        }
-        _incomingEdges.removeAll(toRemove);
-
-        return toRemove;
+        return _x;
     }
+
+    public double getY()
+    {
+        return _y;
+    }
+
 }
