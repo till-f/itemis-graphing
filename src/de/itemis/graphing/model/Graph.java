@@ -71,6 +71,19 @@ public class Graph
         return edges;
     }
 
+    public void clear()
+    {
+        _vertexes.clear();
+        _edges.clear();
+        _attachments.clear();
+        _uninsertedEdges.clear();
+
+        for(IGraphListener listener : _graphListeners)
+        {
+            listener.graphCleared();
+        }
+    }
+
     public Vertex addVertex(String id, double width, double height)
     {
         Vertex vertex = new Vertex(this, id, new Size(width, height));

@@ -2,6 +2,7 @@ package de.itemis.graphing.model;
 
 public interface IGraphListener
 {
+    void graphCleared();
     void vertexAdded(Vertex vertex);
     void vertexRemoved(Vertex vertex);
     void edgeAdded(Edge edge);

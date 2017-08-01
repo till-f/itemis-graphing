@@ -288,6 +288,12 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     // GraphListener
 
     @Override
+    public void graphCleared()
+    {
+        _gsGraph.clear();
+    }
+
+    @Override
     public void vertexAdded(Vertex vertex)
     {
         addVertex(vertex);
