@@ -136,7 +136,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     public void fitView()
     {
         _view.getCamera().resetView();
-        _view.getCamera().setViewPercent(1.3);
+        _view.getCamera().setAutoFitView(true);
     }
 
     @Override
