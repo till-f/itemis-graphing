@@ -9,6 +9,8 @@ import org.graphstream.ui.layout.Layout;
 
 public class StaticLayout extends PipeBase implements Layout
 {
+    protected final Object _graphLock = new Object();
+
     protected final Graph _graph;
     protected final ILayout _layout;
 
@@ -23,41 +25,59 @@ public class StaticLayout extends PipeBase implements Layout
 
     public void nodeAdded(String sourceId, long timeId, String nodeId)
     {
-        _isLayouted = false;
+        synchronized (_graphLock)
+        {
+            _isLayouted = false;
+        }
     }
 
     public void nodeRemoved(String sourceId, long timeId, String nodeId)
     {
-        _isLayouted = false;
+        synchronized (_graphLock)
+        {
+            _isLayouted = false;
+        }
     }
 
     public void edgeAdded(String sourceId, long timeId, String edgeId,
                           String fromId, String toId, boolean directed)
     {
-        _isLayouted = false;
+        synchronized (_graphLock)
+        {
+            _isLayouted = false;
+        }
     }
 
     public void edgeRemoved(String sourceId, long timeId, String edgeId)
     {
-        _isLayouted = false;
+        synchronized (_graphLock)
+        {
+            _isLayouted = false;
+        }
     }
 
     public void graphCleared(String sourceId, long timeId)
     {
-        _isLayouted = false;
+        synchronized (_graphLock)
+        {
+            _isLayouted = false;
+        }
     }
 
     @Override
     public void compute()
     {
-        resetLayout();
+        synchronized (_graphLock)
+        {
+            resetLayout();
 
-        computeLayout();
+            computeLayout();
 
-        publishLayout();
+            publishLayout();
 
-        _isLayouted = true;
-        _lastComputeTime = System.currentTimeMillis();
+            _isLayouted = true;
+            _lastComputeTime = System.currentTimeMillis();
+        }
     }
 
     @Override
@@ -75,7 +95,10 @@ public class StaticLayout extends PipeBase implements Layout
     @Override
     public double getStabilization()
     {
-        return _isLayouted ? 1 : 0;
+        synchronized (_graphLock)
+        {
+            return _isLayouted ? 1 : 0;
+        }
     }
 
     @Override
