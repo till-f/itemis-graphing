@@ -23,8 +23,8 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     private final Graph _graph;
 
     private final org.graphstream.graph.Graph _gsGraph;
-    private final SpriteManager _spriteManager;
     private final StyleToGraphstreamCSS _styleConverter;
+    private SpriteManager _spriteManager;                   // cannot be final due to bug in graphstream (reset of SpriteManager does not work properly)
 
     private View _view = null;
     private Viewer _viewer = null;
@@ -35,11 +35,10 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     {
         _graph = graph;
         _gsGraph = new SingleGraph("Graph");
-        _gsGraph.addAttribute("ui.quality");
-        _gsGraph.addAttribute("ui.antialias");
-        _gsGraph.addAttribute("ui.stylesheet", "node { text-visibility: 2.4; text-visibility-mode: under-zoom; } sprite { text-visibility: 1.8; text-visibility-mode: under-zoom; } edge { arrow-size: 0.1gu,0.04gu; text-visibility: 2.4; text-visibility-mode: under-zoom; }");
         _spriteManager = new SpriteManager(_gsGraph);
         _styleConverter = new StyleToGraphstreamCSS();
+
+        setGSGraphProperties();
 
         for(Vertex vertex : graph.getVertexes())
         {
@@ -291,7 +290,9 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     public void graphCleared()
     {
         _gsGraph.clear();
-        _spriteManager.resetSpriteFactory();
+        _spriteManager = new SpriteManager(_gsGraph);
+
+        setGSGraphProperties();
     }
 
     @Override
@@ -400,6 +401,13 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     public org.graphstream.graph.Graph getGraphstreamGraph()
     {
         return _gsGraph;
+    }
+
+    private void setGSGraphProperties()
+    {
+        _gsGraph.addAttribute("ui.quality");
+        _gsGraph.addAttribute("ui.antialias");
+        _gsGraph.addAttribute("ui.stylesheet", "node { text-visibility: 2.4; text-visibility-mode: under-zoom; } sprite { text-visibility: 1.8; text-visibility-mode: under-zoom; } edge { arrow-size: 0.1gu,0.04gu; text-visibility: 2.4; text-visibility-mode: under-zoom; }");
     }
 
 }

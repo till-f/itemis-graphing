@@ -9,7 +9,12 @@ public class ExampleGraph {
     public static Graph getExampleGraph()
     {
         Graph graph = new Graph();
+        fillExampleGraph(graph);
+        return graph;
+    }
 
+    public static void fillExampleGraph(Graph graph)
+    {
         VertexStyle operatorStyle = graph.getDefaultVertexStyle(IStyled.EStyle.Regular);
         operatorStyle.setShape(BlockStyle.EShape.Circle);
         operatorStyle.setFillColor("CCCCCC");
@@ -90,8 +95,6 @@ public class ExampleGraph {
 
         // from 2nd root
         graph.addEdge("F", "E");
-
-        return graph;
     }
 
 }
