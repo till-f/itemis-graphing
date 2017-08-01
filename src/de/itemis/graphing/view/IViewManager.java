@@ -13,8 +13,6 @@ public interface IViewManager
 
     void fitView();
 
-    void relayout();
-
     Set<GraphElement> getSelectedElements();
 
     JPanel getView();

@@ -9,11 +9,12 @@ import org.graphstream.ui.layout.Layout;
 
 public class StaticLayout extends PipeBase implements Layout
 {
+    public static final int RELAYOUT_COUNT = 1;
+
     protected final Graph _graph;
     protected final ILayout _layout;
 
-    protected boolean _isLayouted = false;
-    protected long _lastComputeTime = 0;
+    protected int _relayoutCount = 0;
 
     public StaticLayout(Graph graph, ILayout layout)
     {
@@ -23,28 +24,28 @@ public class StaticLayout extends PipeBase implements Layout
 
     public void nodeAdded(String sourceId, long timeId, String nodeId)
     {
-        _isLayouted = false;
+        relayoutNeeded();
     }
 
     public void nodeRemoved(String sourceId, long timeId, String nodeId)
     {
-        _isLayouted = false;
+        relayoutNeeded();
     }
 
     public void edgeAdded(String sourceId, long timeId, String edgeId,
                           String fromId, String toId, boolean directed)
     {
-        _isLayouted = false;
+        relayoutNeeded();
     }
 
     public void edgeRemoved(String sourceId, long timeId, String edgeId)
     {
-        _isLayouted = false;
+        relayoutNeeded();
     }
 
     public void graphCleared(String sourceId, long timeId)
     {
-        _isLayouted = false;
+        relayoutNeeded();
     }
 
     @Override
@@ -54,9 +55,9 @@ public class StaticLayout extends PipeBase implements Layout
 
         computeLayout();
 
-        _isLayouted = publishLayout();
+        publishLayout();
 
-        _lastComputeTime = System.currentTimeMillis();
+        _relayoutCount++;
     }
 
     @Override
@@ -74,7 +75,7 @@ public class StaticLayout extends PipeBase implements Layout
     @Override
     public double getStabilization()
     {
-        return _isLayouted ? 1 : 0;
+        return (double)_relayoutCount / (double)RELAYOUT_COUNT;
     }
 
     @Override
@@ -167,6 +168,11 @@ public class StaticLayout extends PipeBase implements Layout
         // not supported
     }
 
+    protected void relayoutNeeded()
+    {
+        _relayoutCount = 0;
+    }
+
     protected void resetLayout()
     {
         for (Vertex n : _graph.getVertexes())
@@ -175,22 +181,19 @@ public class StaticLayout extends PipeBase implements Layout
         }
     }
 
-    protected boolean publishLayout()
+    protected void publishLayout()
     {
-        boolean everythingPlaced = true;
         for (Vertex n : _graph.getVertexes())
         {
             if (!n.isPlaced())
             {
-                everythingPlaced = false;
+                _relayoutCount--;
                 continue;
             }
 
             sendNodeAttributeChanged(sourceId, n.getId(), "xyz", null,
                     new double[] { n.getX(), n.getY(), 0 });
         }
-
-        return everythingPlaced;
     }
 
     protected void computeLayout()

@@ -105,7 +105,14 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         _layout = layout;
         _mouseManager = mouseManager;
 
-        relayout();
+        if (_layout != null)
+        {
+            _viewer.enableAutoLayout(_layout);
+        }
+        else
+        {
+            _viewer.enableAutoLayout();
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -130,19 +137,6 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     {
         _view.getCamera().resetView();
         _view.getCamera().setViewPercent(1.3);
-    }
-
-    @Override
-    public void relayout()
-    {
-        if (_layout != null)
-        {
-            _viewer.enableAutoLayout(_layout);
-        }
-        else
-        {
-            _viewer.enableAutoLayout();
-        }
     }
 
     @Override
