@@ -50,13 +50,11 @@ public class StaticLayout extends PipeBase implements Layout
     @Override
     public void compute()
     {
-        _isLayouted = true;
-
         resetLayout();
 
         computeLayout();
 
-        publishLayout();
+        _isLayouted = publishLayout();
 
         _lastComputeTime = System.currentTimeMillis();
     }
@@ -177,19 +175,22 @@ public class StaticLayout extends PipeBase implements Layout
         }
     }
 
-    protected void publishLayout()
+    protected boolean publishLayout()
     {
+        boolean everythingPlaced = true;
         for (Vertex n : _graph.getVertexes())
         {
             if (!n.isPlaced())
             {
-                _isLayouted = false;
+                everythingPlaced = false;
                 continue;
             }
 
             sendNodeAttributeChanged(sourceId, n.getId(), "xyz", null,
                     new double[] { n.getX(), n.getY(), 0 });
         }
+
+        return everythingPlaced;
     }
 
     protected void computeLayout()
