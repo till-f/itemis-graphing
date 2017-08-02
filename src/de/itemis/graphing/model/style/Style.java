@@ -6,6 +6,8 @@ public abstract class Style implements Cloneable
 {
     public enum ELineMode { None, Solid, Dotted }
 
+    public enum ELabelAlignment { Center, Above, AtRight, Under, AtLeft, Left, Right }
+
     private GraphElement _parent = null;
 
     protected String lineColor = "000000";
@@ -14,6 +16,7 @@ public abstract class Style implements Cloneable
     protected Double lineThickness = 1.0;
     protected ELineMode lineMode = ELineMode.Solid;
     protected Double fontSize = 12.0;
+    protected ELabelAlignment labelAlignment = ELabelAlignment.Center;
     protected Integer zIndex = 1;
 
     public Style getCopy()
@@ -52,11 +55,6 @@ public abstract class Style implements Cloneable
         return lineThickness;
     }
 
-    public Integer getzIndex()
-    {
-        return zIndex;
-    }
-
     public ELineMode getLineMode() {
         return lineMode;
     }
@@ -64,6 +62,16 @@ public abstract class Style implements Cloneable
     public Double getFontSize()
     {
         return fontSize;
+    }
+
+    public ELabelAlignment getLabelAlignment()
+    {
+        return labelAlignment;
+    }
+
+    public Integer getzIndex()
+    {
+        return zIndex;
     }
 
     public void setLineColor(String lineColor)
@@ -99,6 +107,12 @@ public abstract class Style implements Cloneable
     public void setFontSize(Double fontSize)
     {
         this.fontSize = fontSize;
+        updated();
+    }
+
+    public void setLabelAlignment(ELabelAlignment labelAlignment)
+    {
+        this.labelAlignment = labelAlignment;
         updated();
     }
 

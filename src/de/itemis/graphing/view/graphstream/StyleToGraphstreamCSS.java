@@ -93,6 +93,7 @@ public class StyleToGraphstreamCSS
 
         sb.append("text-color: #" + style.getTextColor() + ";");
         sb.append("text-size: " + style.getFontSize() + ";");
+        sb.append("text-alignment: " + getGraphstreamTextAlignment(style.getLabelAlignment()) + ";");
         sb.append("z-index: " + style.getzIndex() + ";");
 
         return sb.toString();
@@ -143,6 +144,29 @@ public class StyleToGraphstreamCSS
         }
 
         throw new IllegalArgumentException("invalid mode: " + mode);
+    }
+
+    private String getGraphstreamTextAlignment(Style.ELabelAlignment alignment)
+    {
+        switch (alignment)
+        {
+            case Center:
+                return "center";
+            case Above:
+                return "above";
+            case AtRight:
+                return "at-right";
+            case Under:
+                return "under";
+            case AtLeft:
+                return "at-left";
+            case Left:
+                return "left";
+            case Right:
+                return "right";
+        }
+
+        throw new IllegalArgumentException("invalid mode: " + alignment);
     }
 
 }
