@@ -10,10 +10,11 @@ public abstract class GraphElement implements IStyled
     private Object _userObject = null;
     private String _label = null;
 
-    private Style[] _styles = new Style[3];
+    private Style[] _styles = new Style[EStyle.values().length];
     private boolean _isSelectable = true;
     private boolean _isSelected = false;
     private boolean _isClicked = false;
+    private boolean _isHighlighted = false;
 
     public GraphElement(Graph g, String id)
     {
@@ -96,19 +97,13 @@ public abstract class GraphElement implements IStyled
     @Override
     public Style getStyle()
     {
-        return getStyle(EStyle.Regular);
+        return _styles[EStyle.Regular.ordinal()].getCopy();
     }
 
     @Override
     public void setStyle(Style newStyle)
     {
         setStyle(EStyle.Regular, newStyle);
-    }
-
-    @Override
-    public Style getStyle(EStyle styleSelecgtor)
-    {
-        return _styles[styleSelecgtor.ordinal()];
     }
 
     @Override
@@ -121,14 +116,30 @@ public abstract class GraphElement implements IStyled
     }
 
     @Override
+    public void beginHighlight(Style hightlightingStyle)
+    {
+        _isHighlighted = true;
+        setStyle(EStyle.Highlighted, hightlightingStyle);
+    }
+
+    @Override
+    public void endHighlight()
+    {
+        _isHighlighted = false;
+        styleChanged();
+    }
+
+    @Override
     public Style getActiveStyle()
     {
         if (_isClicked)
-            return _styles[EStyle.Clicked.ordinal()];
-        if (_isSelected)
-            return _styles[EStyle.Selected.ordinal()];
-
-        return _styles[EStyle.Regular.ordinal()];
+            return _styles[EStyle.Clicked.ordinal()].getCopy();
+        else if (_isSelected)
+            return _styles[EStyle.Selected.ordinal()].getCopy();
+        else if (_isHighlighted)
+            return _styles[EStyle.Highlighted.ordinal()].getCopy();
+        else
+            return _styles[EStyle.Regular.ordinal()].getCopy();
     }
 
     @Override

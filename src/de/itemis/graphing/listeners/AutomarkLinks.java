@@ -8,7 +8,6 @@ import java.util.Set;
 public class AutomarkLinks implements IInteractionListener
 {
     private Vertex _lastMarkedVertex = null;
-    private StyleStorage _styleStorage = new StyleStorage();
 
     @Override
     public void clickBegin(GraphElement element)
@@ -56,13 +55,14 @@ public class AutomarkLinks implements IInteractionListener
     {
         if (isCustomStyleActive)
         {
-            _styleStorage.storeStyle(e);
-            e.getStyle().setLineThickness(Graph.DEFAULT_HL_LINE_THICKNESS);
-            e.getStyle().setLineColor("FF0000");
+            Style s = e.getStyle();
+            s.setLineThickness(Graph.DEFAULT_HL_LINE_THICKNESS);
+            s.setLineColor("FF0000");
+            e.beginHighlight(s);
         }
         else
         {
-            _styleStorage.restoreStyle(e);
+            e.endHighlight();
         }
     }
 
