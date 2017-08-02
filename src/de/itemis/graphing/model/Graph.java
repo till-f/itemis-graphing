@@ -111,6 +111,9 @@ public class Graph
 
     public Vertex addVertex(String id, double width, double height)
     {
+        if (_vertexes.containsKey(id))
+            return null;
+
         Vertex vertex = new Vertex(this, id, new Size(width, height));
         _vertexes.put(id, vertex);
 
@@ -156,16 +159,14 @@ public class Graph
     public Edge addEdge(String fromId, String toId)
     {
         String edgeId = fromId + "." + toId;
-        while (_edges.containsKey(edgeId))
-        {
-            edgeId = edgeId + "+";
-        }
-
         return addEdge(edgeId, fromId, toId);
     }
 
     public Edge addEdge(String edgeId, String fromId, String toId)
     {
+        if (_edges.containsKey(edgeId) || _uninsertedEdges.containsKey(edgeId))
+            return null;
+
         Vertex from = _vertexes.get(fromId);
         Vertex to = _vertexes.get(toId);
 
