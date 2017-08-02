@@ -1,7 +1,7 @@
 package de.itemis.graphing.model;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -10,10 +10,10 @@ public class Vertex extends GraphElement implements ISized
 {
     private final Size _size;
 
-    private final HashMap<String, Attachment> _attachments = new HashMap<String, Attachment>();
+    private final LinkedHashMap<String, Attachment> _attachments = new LinkedHashMap<String, Attachment>();
 
-    private HashSet<Edge> _outgoingEdges = new HashSet<Edge>();
-    private HashSet<Edge> _incomingEdges = new HashSet<Edge>();
+    private LinkedHashSet<Edge> _outgoingEdges = new LinkedHashSet<Edge>();
+    private LinkedHashSet<Edge> _incomingEdges = new LinkedHashSet<Edge>();
 
     private Double _x = null;
     private Double _y = null;

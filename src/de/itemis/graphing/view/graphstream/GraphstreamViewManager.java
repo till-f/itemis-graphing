@@ -1,7 +1,12 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.model.*;
 import de.itemis.graphing.listeners.IInteractionListener;
+import de.itemis.graphing.model.Attachment;
+import de.itemis.graphing.model.Edge;
+import de.itemis.graphing.model.Graph;
+import de.itemis.graphing.model.GraphElement;
+import de.itemis.graphing.model.IGraphListener;
+import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.view.IViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;

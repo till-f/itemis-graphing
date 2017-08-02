@@ -1,11 +1,11 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.model.style.*;
+import de.itemis.graphing.model.style.AttachmentStyle;
+import de.itemis.graphing.model.style.BlockStyle;
+import de.itemis.graphing.model.style.EdgeStyle;
+import de.itemis.graphing.model.style.VertexStyle;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Graph
 {
@@ -13,17 +13,17 @@ public class Graph
     public static final Double DEFAULT_HL_LINE_THICKNESS = 3.0;
     public static final Double DEFAULT_HL_LINE_THICKNESS_EDGE = 5.0;
 
-    private final HashMap<String, Edge> _uninsertedEdges = new HashMap<String, Edge>();
+    private final LinkedHashMap<String, Edge> _uninsertedEdges = new LinkedHashMap<String, Edge>();
 
-    private final HashMap<String, Vertex> _vertexes = new HashMap<String, Vertex>();
-    private final HashMap<String, Edge> _edges = new HashMap<String, Edge>();
-    private final HashMap<String, Attachment> _attachments = new HashMap<String, Attachment>();
+    private final LinkedHashMap<String, Vertex> _vertexes = new LinkedHashMap<String, Vertex>();
+    private final LinkedHashMap<String, Edge> _edges = new LinkedHashMap<String, Edge>();
+    private final LinkedHashMap<String, Attachment> _attachments = new LinkedHashMap<String, Attachment>();
 
     private VertexStyle[] _defaultVertexStyle = new VertexStyle[IStyled.EStyle.values().length];
     private EdgeStyle[] _defaultEdgeStyle = new EdgeStyle[IStyled.EStyle.values().length];
     private AttachmentStyle[] _defaultAttachmentStyle = new AttachmentStyle[IStyled.EStyle.values().length];
 
-    private final HashSet<IGraphListener> _graphListeners = new HashSet<IGraphListener>();
+    private final LinkedHashSet<IGraphListener> _graphListeners = new LinkedHashSet<IGraphListener>();
 
     // -----------------------------------------------------------------------------------------------------------------
     // constructor

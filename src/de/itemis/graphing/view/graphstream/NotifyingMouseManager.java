@@ -16,7 +16,7 @@ import org.graphstream.ui.view.util.MouseManager;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 {
@@ -65,7 +65,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     protected final GraphstreamViewManager _viewManager;
     protected final boolean _allowDragNodes;
     protected final boolean _allowDragSprites;
-    protected final HashSet<IInteractionListener> _interactionListeners = new HashSet<IInteractionListener>();
+    protected final LinkedHashSet<IInteractionListener> _interactionListeners = new LinkedHashSet<IInteractionListener>();
 
     protected ViewPanel _view;
     protected GraphicGraph _graph;
@@ -329,9 +329,9 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     // -----------------------------------------------------------------------------------------------------------------
     // methods to retrieve current interaction state
 
-    public HashSet<GraphElement> getCurrentSelection()
+    public LinkedHashSet<GraphElement> getCurrentSelection()
     {
-        HashSet<GraphElement> currentSelection = new HashSet<>();
+        LinkedHashSet<GraphElement> currentSelection = new LinkedHashSet<>();
         for (Node node : _graph)
         {
             GraphElement element = _viewManager.getGraphElement(node.getId());
@@ -367,13 +367,13 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         }
     }
 
-    private HashSet<GraphElement> _lastSelection = new HashSet<>();
+    private LinkedHashSet<GraphElement> _lastSelection = new LinkedHashSet<>();
     private void notifySelectionChanged()
     {
-        HashSet<GraphElement> newSelection = getCurrentSelection();
+        LinkedHashSet<GraphElement> newSelection = getCurrentSelection();
 
-        HashSet<GraphElement> selected = new HashSet<>();
-        HashSet<GraphElement> unselected = new HashSet<>();
+        LinkedHashSet<GraphElement> selected = new LinkedHashSet<>();
+        LinkedHashSet<GraphElement> unselected = new LinkedHashSet<>();
 
         for (GraphElement e : _lastSelection)
         {

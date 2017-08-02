@@ -1,6 +1,9 @@
 package de.itemis.graphing.listeners;
 
-import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.Edge;
+import de.itemis.graphing.model.Graph;
+import de.itemis.graphing.model.GraphElement;
+import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.Style;
 
 import java.util.Set;
