@@ -58,6 +58,10 @@ public class AutomarkLinks implements IInteractionListener
             Style s = e.getStyle();
             s.setLineThickness(Graph.DEFAULT_HL_LINE_THICKNESS);
             s.setLineColor("FF0000");
+            if (e instanceof Edge)
+            {
+                s.setzIndex(2);
+            }
             e.beginHighlight(s);
         }
         else
