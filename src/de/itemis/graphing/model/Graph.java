@@ -84,6 +84,22 @@ public class Graph
         }
     }
 
+    public void resetStyles()
+    {
+        for(Vertex v : _vertexes.values())
+        {
+            v.selectActiveStyle(IStyled.EStyle.Regular);
+        }
+        for(Edge e : _edges.values())
+        {
+            e.selectActiveStyle(IStyled.EStyle.Regular);
+        }
+        for(Attachment a : _attachments.values())
+        {
+            a.selectActiveStyle(IStyled.EStyle.Regular);
+        }
+    }
+
     public Vertex addVertex(String id, double width, double height)
     {
         Vertex vertex = new Vertex(this, id, new Size(width, height));
