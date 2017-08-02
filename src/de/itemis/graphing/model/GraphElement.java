@@ -11,8 +11,9 @@ public abstract class GraphElement implements IStyled
     private String _label = null;
 
     private Style[] _styles = new Style[3];
-    private EStyle _activeStyle = EStyle.Regular;
     private boolean _isSelectable = true;
+    private boolean _isSelected = false;
+    private boolean _isClicked = false;
 
     public GraphElement(Graph g, String id)
     {
@@ -50,11 +51,6 @@ public abstract class GraphElement implements IStyled
 
     }
 
-    public void styleChanged()
-    {
-        _graph.styleChanged(this);
-    }
-
     public boolean isSelectable()
     {
         return _isSelectable;
@@ -64,6 +60,38 @@ public abstract class GraphElement implements IStyled
     {
         _isSelectable = selectable;
     }
+
+    public boolean isSelected()
+    {
+        return _isSelected;
+    }
+
+    public void setSelected(boolean selected)
+    {
+        if (_isSelected != selected)
+        {
+            _isSelected = selected;
+            styleChanged();
+        }
+    }
+
+    public void clickBegin()
+    {
+        _isClicked = true;
+        styleChanged();
+    }
+
+    public void clickEnd()
+    {
+        _isClicked = false;
+        styleChanged();
+    }
+
+    public void styleChanged()
+    {
+        _graph.styleChanged(this);
+    }
+
 
     @Override
     public Style getStyle()
@@ -89,21 +117,18 @@ public abstract class GraphElement implements IStyled
         _styles[styleSelector.ordinal()] = newStyle.getCopy();
         _styles[styleSelector.ordinal()].setParent(this);
 
-        if (styleSelector == _activeStyle)
-            styleChanged();
-    }
-
-    @Override
-    public void selectActiveStyle(EStyle styleSelector)
-    {
-        _activeStyle = styleSelector;
         styleChanged();
     }
 
     @Override
     public Style getActiveStyle()
     {
-        return _styles[_activeStyle.ordinal()];
+        if (_isClicked)
+            return _styles[EStyle.Clicked.ordinal()];
+        if (_isSelected)
+            return _styles[EStyle.Selected.ordinal()];
+
+        return _styles[EStyle.Regular.ordinal()];
     }
 
     @Override

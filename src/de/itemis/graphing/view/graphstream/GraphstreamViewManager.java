@@ -401,7 +401,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     {
         _gsGraph.addAttribute("ui.quality");
         _gsGraph.addAttribute("ui.antialias");
-        _gsGraph.addAttribute("ui.stylesheet", "node { text-visibility: 2.4; text-visibility-mode: under-zoom; } sprite { text-visibility: 1.8; text-visibility-mode: under-zoom; } edge { arrow-size: 0.1gu,0.04gu; text-visibility: 2.4; text-visibility-mode: under-zoom; }");
+        //_gsGraph.addAttribute("ui.stylesheet", "node { text-visibility: 2.4; text-visibility-mode: under-zoom; } sprite { text-visibility: 1.8; text-visibility-mode: under-zoom; } edge { arrow-size: 0.1gu,0.04gu; text-visibility: 2.4; text-visibility-mode: under-zoom; }");
     }
 
 }

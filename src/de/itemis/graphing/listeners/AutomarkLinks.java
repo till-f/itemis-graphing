@@ -1,6 +1,7 @@
 package de.itemis.graphing.listeners;
 
 import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.style.Style;
 
 import java.util.Set;
 

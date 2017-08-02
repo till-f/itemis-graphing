@@ -27,11 +27,6 @@ public interface IStyled
     void setStyle(EStyle styleSelector, Style newStyle);
 
     /**
-     * selects the active style (should be used by interaction handler only)
-     */
-    void selectActiveStyle(EStyle styleSelector);
-
-    /**
      * returns the current active style (should be used by view only)
      */
     Style getActiveStyle();
