@@ -13,6 +13,8 @@ public interface IViewManager
 
     void fitView();
 
+    void setShowLabels(boolean show);
+
     Set<GraphElement> getSelectedElements();
 
     JPanel getView();

@@ -128,13 +128,13 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
             {
                 for (Node node : _graph)
                 {
-                    GraphElement element = _viewManager.getBaseGraphElement(node.getId());
+                    GraphElement element = _viewManager.getGraphElement(node.getId());
                     element.setSelected(false);
                 }
 
                 for (GraphicSprite sprite : _graph.spriteSet())
                 {
-                    GraphElement element = _viewManager.getBaseGraphElement(sprite.getId());
+                    GraphElement element = _viewManager.getGraphElement(sprite.getId());
                     element.setSelected(false);
                 }
                 notifySelectionChanged();
@@ -153,7 +153,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     {
         for (GraphicElement gsElement : elementsInArea)
         {
-            GraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
+            GraphElement element = _viewManager.getGraphElement(gsElement.getId());
             if (!element.isSelectable())
                 continue;
 
@@ -173,7 +173,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() == 1)
         {
-            GraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
+            GraphElement element = _viewManager.getGraphElement(gsElement.getId());
             element.clickBegin();
             notifyClickBegin(element);
         }
@@ -185,7 +185,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() == 1)
         {
-            GraphElement element = _viewManager.getBaseGraphElement(gsElement.getId());
+            GraphElement element = _viewManager.getGraphElement(gsElement.getId());
             element.clickEnd();
             notifyClickEnd(element);
 
@@ -334,13 +334,13 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         HashSet<GraphElement> currentSelection = new HashSet<>();
         for (Node node : _graph)
         {
-            GraphElement element = _viewManager.getBaseGraphElement(node.getId());
+            GraphElement element = _viewManager.getGraphElement(node.getId());
             if (element.isSelected())
                 currentSelection.add(element);
         }
         for (GraphicSprite sprite : _graph.spriteSet())
         {
-            GraphElement element = _viewManager.getBaseGraphElement(sprite.getId());
+            GraphElement element = _viewManager.getGraphElement(sprite.getId());
             if (element.isSelected())
                 currentSelection.add(element);
         }

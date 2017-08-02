@@ -38,7 +38,8 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         _spriteManager = new SpriteManager(_gsGraph);
         _styleConverter = new StyleToGraphstreamCSS();
 
-        setGSGraphProperties();
+        setInitialAttributes();
+        setShowLabels(true);
 
         for(Vertex vertex : graph.getVertexes())
         {
@@ -137,6 +138,15 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     {
         _view.getCamera().resetView();
         _view.getCamera().setAutoFitView(true);
+    }
+
+    @Override
+    public void setShowLabels(boolean show)
+    {
+        if (show)
+            _gsGraph.addAttribute("ui.stylesheet", "node { text-visibility-mode: normal; } sprite { text-visibility-mode: normal; } edge { text-visibility-mode: normal; }");
+        else
+            _gsGraph.addAttribute("ui.stylesheet", "node { text-visibility-mode: hidden; } sprite { text-visibility-mode: hidden; } edge { text-visibility-mode: hidden; }");
     }
 
     @Override
@@ -286,7 +296,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         _gsGraph.clear();
         _spriteManager = new SpriteManager(_gsGraph);
 
-        setGSGraphProperties();
+        setInitialAttributes();
     }
 
     @Override
@@ -387,7 +397,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     // -----------------------------------------------------------------------------------------------------------------
     // nice little helpers
 
-    public GraphElement getBaseGraphElement(String id)
+    public GraphElement getGraphElement(String id)
     {
         return _graph.getElement(id);
     }
@@ -397,11 +407,11 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         return _gsGraph;
     }
 
-    private void setGSGraphProperties()
+    private void setInitialAttributes()
     {
         _gsGraph.addAttribute("ui.quality");
         _gsGraph.addAttribute("ui.antialias");
-        //_gsGraph.addAttribute("ui.stylesheet", "node { text-visibility: 2.4; text-visibility-mode: under-zoom; } sprite { text-visibility: 1.8; text-visibility-mode: under-zoom; } edge { arrow-size: 0.1gu,0.04gu; text-visibility: 2.4; text-visibility-mode: under-zoom; }");
+        _gsGraph.addAttribute("ui.stylesheet", "edge { arrow-size: 0.1gu,0.04gu; ");
     }
 
 }
