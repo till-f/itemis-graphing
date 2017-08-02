@@ -93,6 +93,22 @@ public class Graph
         }
     }
 
+    public void resetHighlighting()
+    {
+        for(Vertex v : _vertexes.values())
+        {
+            v.endHighlight();
+        }
+        for(Edge e : _edges.values())
+        {
+            e.endHighlight();
+        }
+        for(Attachment a : _attachments.values())
+        {
+            a.endHighlight();
+        }
+    }
+
     public Vertex addVertex(String id, double width, double height)
     {
         Vertex vertex = new Vertex(this, id, new Size(width, height));
