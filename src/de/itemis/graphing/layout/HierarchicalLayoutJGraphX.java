@@ -12,22 +12,49 @@ import java.util.HashMap;
 
 public class HierarchicalLayoutJGraphX implements ILayout
 {
+    public enum EHierarchyDirection { WEST, SOUTH, EAST, NORTH;}
+
     private static final int SCALE_FACTOR = 100;
 
     private final double _intraCellSpacing;
     private final double _interHierarchySpacing;
     private final double _interRankCellSpacing;
+    private final int _hierarchyDirection;
 
     public HierarchicalLayoutJGraphX()
     {
-        this(0.6, 0.6, 0.6);
+        this(0.6, 0.6, 0.6, EHierarchyDirection.WEST);
     }
 
-    public HierarchicalLayoutJGraphX(double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing)
+    public HierarchicalLayoutJGraphX(EHierarchyDirection hierarchyDirection)
+    {
+        this(0.6, 0.6, 0.6, hierarchyDirection);
+    }
+
+    public HierarchicalLayoutJGraphX(double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing, EHierarchyDirection hierarchyDirection)
     {
         _intraCellSpacing = intraCellSpacing * SCALE_FACTOR;
         _interHierarchySpacing = interHierarchySpacing * SCALE_FACTOR;
         _interRankCellSpacing = interRankCellSpacing * SCALE_FACTOR;
+
+        // get rid of the insane practice in java to use int for everything
+        switch (hierarchyDirection)
+        {
+            case WEST:
+                _hierarchyDirection = SwingConstants.WEST;
+                break;
+            case SOUTH:
+                _hierarchyDirection = SwingConstants.SOUTH;
+                break;
+            case EAST:
+                _hierarchyDirection = SwingConstants.EAST;
+                break;
+            case NORTH:
+                _hierarchyDirection = SwingConstants.NORTH;
+                break;
+            default:
+                throw new RuntimeException("invalid hierarchyDirection: " + hierarchyDirection);
+        }
     }
 
     @Override
@@ -56,7 +83,7 @@ public class HierarchicalLayoutJGraphX implements ILayout
                 }
             }
 
-            mxHierarchicalLayout layout = new mxHierarchicalLayout(mxGraph, SwingConstants.SOUTH);
+            mxHierarchicalLayout layout = new mxHierarchicalLayout(mxGraph, _hierarchyDirection);
             layout.setFineTuning(true);
             layout.setIntraCellSpacing(_intraCellSpacing);
             layout.setInterHierarchySpacing(_interHierarchySpacing);
