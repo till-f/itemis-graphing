@@ -23,7 +23,7 @@ public class HierarchicalLayoutJGraphX implements ILayout
 
     public HierarchicalLayoutJGraphX()
     {
-        this(0.6, 0.6, 0.6, EHierarchyDirection.WEST);
+        this(0.6, 0.6, 0.6, EHierarchyDirection.SOUTH);
     }
 
     public HierarchicalLayoutJGraphX(EHierarchyDirection hierarchyDirection)
