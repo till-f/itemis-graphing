@@ -10,6 +10,8 @@ public class Attachment extends GraphElement implements ISized
     private final ELocation _location;
     private final boolean _affectDynamicLayout;
 
+    private boolean _delegateInteractionToParent = false;
+
     public Attachment(Vertex vertex, String id, Size innerSize, double padding, ELocation location, boolean affectDynamicLayout)
     {
         super(vertex.getGraph(), id);
@@ -55,5 +57,17 @@ public class Attachment extends GraphElement implements ISized
     {
         return _affectDynamicLayout;
     }
+
+    public boolean isDelegateInteractionToParent()
+    {
+        return _delegateInteractionToParent;
+    }
+
+    public void setDelegateInteractionToParent(boolean delegateInteractionToParent)
+    {
+        _delegateInteractionToParent = delegateInteractionToParent;
+    }
+
+
 
 }

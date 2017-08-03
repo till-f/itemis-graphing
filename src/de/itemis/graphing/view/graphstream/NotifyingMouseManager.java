@@ -1,5 +1,6 @@
 package de.itemis.graphing.view.graphstream;
 
+import de.itemis.graphing.model.Attachment;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.listeners.IInteractionListener;
 import org.graphstream.graph.Node;
@@ -128,14 +129,12 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
             {
                 for (Node node : _graph)
                 {
-                    GraphElement element = _viewManager.getGraphElement(node.getId());
-                    element.setSelected(false);
+                    interact(node.getId(), false, null, null, null);
                 }
 
                 for (GraphicSprite sprite : _graph.spriteSet())
                 {
-                    GraphElement element = _viewManager.getGraphElement(sprite.getId());
-                    element.setSelected(false);
+                    interact(sprite.getId(), false, null, null, null);
                 }
                 notifySelectionChanged();
             }
@@ -151,13 +150,9 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
     protected void selectElementsInArea(Iterable<GraphicElement> elementsInArea)
     {
-        for (GraphicElement gsElement : elementsInArea)
+        for (GraphicElement element : elementsInArea)
         {
-            GraphElement element = _viewManager.getGraphElement(gsElement.getId());
-            if (!element.isSelectable())
-                continue;
-
-            element.setSelected(true);
+            interact(element.getId(), true, null, null, null);
         }
         notifySelectionChanged();
     }
@@ -173,9 +168,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() == 1)
         {
-            GraphElement element = _viewManager.getGraphElement(gsElement.getId());
-            element.clickBegin();
-            notifyClickBegin(element);
+            interact(gsElement.getId(), null, null, true, null);
         }
     }
 
@@ -185,22 +178,47 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() == 1)
         {
-            GraphElement element = _viewManager.getGraphElement(gsElement.getId());
-            element.clickEnd();
-            notifyClickEnd(element);
-
-            if (!element.isSelectable())
-                return;
+            interact(gsElement.getId(), null, null, null, true);
 
             if (event.isShiftDown())
             {
-                element.setSelected(!element.isSelected());
+                interact(gsElement.getId(), null, true, null, null);
             }
             else
             {
-                element.setSelected(true);
+                interact(gsElement.getId(), true, null, null, null);
             }
             notifySelectionChanged();
+        }
+    }
+
+    private void interact(String elementId, Boolean select, Boolean toggleSelect, Boolean clickBegin, Boolean clickEnd)
+    {
+        GraphElement element = _viewManager.getGraphElement(elementId);
+        if (element instanceof Attachment && ((Attachment) element).isDelegateInteractionToParent())
+        {
+            element = ((Attachment) element).getParent();
+        }
+
+        if (select != null)
+        {
+            if (element.isSelectable())
+                element.setSelected(select);
+        }
+        else if (toggleSelect != null && toggleSelect)
+        {
+            if (element.isSelectable())
+                element.setSelected(!element.isSelected());
+        }
+        else if (clickBegin != null && clickBegin)
+        {
+            element.clickBegin();
+            notifyClickBegin(element);
+        }
+        else if (clickEnd != null && clickEnd)
+        {
+            element.clickEnd();
+            notifyClickEnd(element);
         }
     }
 
