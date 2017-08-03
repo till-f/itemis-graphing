@@ -248,11 +248,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         else
             neededSpace = attachment.getOuterSize().getHeight();
 
-        double paddingCorrection = 0.0;
-        if (previousAttachment != null)
-            paddingCorrection = Math.min(attachment.getPadding(), previousAttachment.getPadding());
-
-        final double spaceOffset = alreadyConsumedSpace - availableSpace/2 + neededSpace/2 - paddingCorrection;
+        final double spaceOffset = alreadyConsumedSpace - availableSpace/2 + neededSpace/2;
 
         double x = 0;
         double y = 0;
@@ -289,7 +285,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
 
         sprite.setPosition(distance, 0.0, degree);
 
-        return neededSpace - paddingCorrection;
+        return neededSpace;
     }
 
     private void removeAttachment(Attachment attachment)

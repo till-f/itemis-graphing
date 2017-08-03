@@ -200,14 +200,10 @@ public class Vertex extends GraphElement implements ISized
     public double getAttachmentsStackSpace(Attachment.ELocation location)
     {
         double space = 0;
-        Attachment previousAttachment = null;
         for(Attachment attachment : _attachments.values())
         {
             if (attachment.getLocation() != location)
                 continue;
-
-            if (previousAttachment != null)
-                space -= Math.min(attachment.getPadding(), previousAttachment.getPadding());
 
             if (location == Attachment.ELocation.North || location == Attachment.ELocation.South)
             {
@@ -217,8 +213,6 @@ public class Vertex extends GraphElement implements ISized
             {
                 space += attachment.getOuterSize().getHeight();
             }
-
-            previousAttachment = attachment;
         }
 
         return space;
