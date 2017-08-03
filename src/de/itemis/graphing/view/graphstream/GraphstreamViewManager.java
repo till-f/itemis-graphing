@@ -338,6 +338,9 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
                 removeAttachment(existingAttachment);
         }
         addAttachments(attachment.getParent());
+
+        if (attachment.isDynamicLayoutAffected())
+            _layout.compute();
     }
 
     @Override
@@ -350,6 +353,9 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
             removeAttachment(existingAttachment);
         }
         addAttachments(attachment.getParent());
+
+        if (attachment.isDynamicLayoutAffected())
+            _layout.compute();
     }
 
     @Override

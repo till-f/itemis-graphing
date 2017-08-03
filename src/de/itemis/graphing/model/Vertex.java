@@ -111,12 +111,22 @@ public class Vertex extends GraphElement implements ISized
 
     public Attachment addAttachment(String id, double width, double height, Attachment.ELocation location)
     {
-        return addAttachment(id, width, height, 0.0, location);
+        return addAttachment(id, width, height, 0.0, location, false);
     }
 
     public Attachment addAttachment(String id, double width, double height, double padding, Attachment.ELocation location)
     {
-        Attachment a = new Attachment(this, id, new Size(width, height), padding, location);
+        return addAttachment(id, width, height, padding, location, false);
+    }
+
+    public Attachment addAttachment(String id, double width, double height, Attachment.ELocation location, boolean affectDynamicLayout)
+    {
+        return addAttachment(id, width, height, 0.0, location, affectDynamicLayout);
+    }
+
+    public Attachment addAttachment(String id, double width, double height, double padding, Attachment.ELocation location, boolean affectDynamicLayout)
+    {
+        Attachment a = new Attachment(this, id, new Size(width, height), padding, location, affectDynamicLayout);
         _attachments.put(id, a);
 
         _graph.attachmentAdded(a);

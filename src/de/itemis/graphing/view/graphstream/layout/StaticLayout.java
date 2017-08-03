@@ -9,7 +9,7 @@ import org.graphstream.ui.layout.Layout;
 
 public class StaticLayout extends PipeBase implements Layout
 {
-    public static final int RELAYOUT_COUNT = 1;
+    public static final int NUMBER_OF_RELAYOUTS_NEEDED_FOR_SATISFACTION = 1;
 
     protected final Graph _graph;
     protected final ILayout _layout;
@@ -75,7 +75,7 @@ public class StaticLayout extends PipeBase implements Layout
     @Override
     public double getStabilization()
     {
-        return (double)_relayoutCount / (double)RELAYOUT_COUNT;
+        return (double)_relayoutCount / (double) NUMBER_OF_RELAYOUTS_NEEDED_FOR_SATISFACTION;
     }
 
     @Override

@@ -8,14 +8,16 @@ public class Attachment extends GraphElement implements ISized
     private final Size _innerSize;
     private final double _padding;
     private final ELocation _location;
+    private final boolean _affectDynamicLayout;
 
-    public Attachment(Vertex vertex, String id, Size innerSize, double padding, ELocation location)
+    public Attachment(Vertex vertex, String id, Size innerSize, double padding, ELocation location, boolean affectDynamicLayout)
     {
         super(vertex.getGraph(), id);
         _parent = vertex;
         _innerSize = innerSize;
         _padding = padding;
         _location = location;
+        _affectDynamicLayout = affectDynamicLayout;
         setSelectable(false);
         setStyle(EStyle.Regular, _graph.getDefaultAttachmentStyle(EStyle.Regular));
         setStyle(EStyle.Clicked, _graph.getDefaultAttachmentStyle(EStyle.Clicked));
@@ -48,4 +50,10 @@ public class Attachment extends GraphElement implements ISized
     {
         return _location;
     }
+
+    public boolean isDynamicLayoutAffected()
+    {
+        return _affectDynamicLayout;
+    }
+
 }
