@@ -61,7 +61,7 @@ public class StyleToGraphstreamCSS
         {
             EdgeStyle edgeStyle = (EdgeStyle) style;
 
-            sb.append("shape: cubic-curve;");
+            sb.append("shape: " + getGraphstreamEdgeShape(edgeStyle.getEdgeRouting()) + ";");
             sb.append("arrow-shape: " + getGraphstreamArrowShape(edgeStyle.getShape()) + ";");
             sb.append("fill-color: #" + style.getLineColor() + ";");
 
@@ -129,6 +129,20 @@ public class StyleToGraphstreamCSS
         }
 
         throw new IllegalArgumentException("invalid shape: " + shape);
+    }
+
+    private String getGraphstreamEdgeShape(EdgeStyle.EEdgeRouting edgeRouting)
+    {
+        switch (edgeRouting)
+        {
+            case Routed:
+            case Direct:
+                return "line";
+            case Cubic:
+                return "cubic-curve";
+        }
+
+        throw new IllegalArgumentException("invalid edge routing: " + edgeRouting);
     }
 
     private String getGraphstreamStrokeMode(Style.ELineMode mode)
