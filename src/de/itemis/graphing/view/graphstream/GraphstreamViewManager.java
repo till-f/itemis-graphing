@@ -252,7 +252,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
 
         double x = 0;
         double y = 0;
-        if (((BlockStyle)vertex.getStyle()).getSizeMode() == BlockStyle.ESizeMode.FinalSize)
+        if (((BlockStyle)vertex.getStyle()).getSizeMode() == BlockStyle.EShapeSize.OuterBlockSize)
         {
             x = (vertex.getAttachmentsFlatSpace(Attachment.ELocation.West) - vertex.getAttachmentsFlatSpace(Attachment.ELocation.East))/2;
             y = (vertex.getAttachmentsFlatSpace(Attachment.ELocation.South) - vertex.getAttachmentsFlatSpace(Attachment.ELocation.North))/2;

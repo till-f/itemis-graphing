@@ -39,7 +39,7 @@ public class ExampleGraph {
 
         Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
         VertexStyle vs = (VertexStyle) vertexB.getStyle();
-        vs.setSizeMode(BlockStyle.ESizeMode.FinalSize);
+        vs.setSizeMode(BlockStyle.EShapeSize.OuterBlockSize);
         vertexB.setStyle(vs);
         vertexB.setLabel("vertex B");
         vertexB.addAttachment("BN1", 1.5, 0.2,0.03, Attachment.ELocation.North).setLabel("N1");

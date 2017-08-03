@@ -3,29 +3,29 @@ package de.itemis.graphing.model.style;
 public abstract class BlockStyle extends Style
 {
     public enum EShape { Box, RoundedBox, Circle }
-    public enum ESizeMode { None, Explicit, BaseSize, FinalSize }
+    public enum EShapeSize {Undefined, AsDefinedInStyle, InnerBlockSize, OuterBlockSize}
 
     protected EShape shape = EShape.RoundedBox;
-    protected ESizeMode sizeMode = ESizeMode.BaseSize;
-    protected Double width = null;
-    protected Double height = null;
+    protected EShapeSize sizeMode = EShapeSize.InnerBlockSize;
+    protected double width = 1.0;
+    protected double height = 1.0;
 
     public EShape getShape()
     {
         return shape;
     }
 
-    public Double getWidth()
+    public double getWidth()
     {
         return width;
     }
 
-    public Double getHeight()
+    public double getHeight()
     {
         return height;
     }
 
-    public ESizeMode getSizeMode()
+    public EShapeSize getSizeMode()
     {
         return sizeMode;
     }
@@ -48,7 +48,7 @@ public abstract class BlockStyle extends Style
         updated();
     }
 
-    public void setSizeMode(ESizeMode sizeMode)
+    public void setSizeMode(EShapeSize sizeMode)
     {
         this.sizeMode = sizeMode;
         updated();

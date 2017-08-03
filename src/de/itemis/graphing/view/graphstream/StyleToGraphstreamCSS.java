@@ -20,7 +20,7 @@ public class StyleToGraphstreamCSS
             sb.append("shape: " + getGraphstreamShape(blockStyle.getShape()) + ";");
 
 
-            if (blockStyle.getSizeMode() == BlockStyle.ESizeMode.None)
+            if (blockStyle.getSizeMode() == BlockStyle.EShapeSize.Undefined)
             {
                 sb.append("size-mode: fit;");
                 sb.append("padding: 2;");
@@ -29,17 +29,17 @@ public class StyleToGraphstreamCSS
             {
                 double width;
                 double height;
-                if (blockStyle.getSizeMode() == BlockStyle.ESizeMode.Explicit)
+                if (blockStyle.getSizeMode() == BlockStyle.EShapeSize.AsDefinedInStyle)
                 {
                     width = blockStyle.getWidth();
                     height = blockStyle.getHeight();
                 }
-                else if (blockStyle.getSizeMode() == BlockStyle.ESizeMode.BaseSize)
+                else if (blockStyle.getSizeMode() == BlockStyle.EShapeSize.InnerBlockSize)
                 {
                     width = ((ISized) element).getInnerSize().getWidth();
                     height = ((ISized) element).getInnerSize().getHeight();
                 }
-                else if (blockStyle.getSizeMode() == BlockStyle.ESizeMode.FinalSize)
+                else if (blockStyle.getSizeMode() == BlockStyle.EShapeSize.OuterBlockSize)
                 {
                     width = ((ISized) element).getOuterSize().getWidth();
                     height = ((ISized) element).getOuterSize().getHeight();
