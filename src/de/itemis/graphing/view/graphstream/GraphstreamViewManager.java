@@ -7,6 +7,7 @@ import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.IGraphListener;
 import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.model.style.BlockStyle;
 import de.itemis.graphing.view.IViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
@@ -240,7 +241,7 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         // calculate rendering position for the attachment
         // -------------------------------------------------------------------------------------------------------------
 
-        double availableSpace = vertex.getAttachmentsSpace(attachment.getLocation());
+        double availableSpace = vertex.getAttachmentsStackSpace(attachment.getLocation());
         double neededSpace;
         if (attachment.getLocation() == Attachment.ELocation.South || attachment.getLocation() == Attachment.ELocation.North)
             neededSpace = attachment.getOuterSize().getWidth();
@@ -252,25 +253,31 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
             paddingCorrection = Math.min(attachment.getPadding(), previousAttachment.getPadding());
 
         final double spaceOffset = alreadyConsumedSpace - availableSpace/2 + neededSpace/2 - paddingCorrection;
-        final double x;
-        final double y;
+
+        double x = 0;
+        double y = 0;
+        if (((BlockStyle)vertex.getStyle()).getSizeMode() == BlockStyle.ESizeMode.FinalSize)
+        {
+            x = (vertex.getAttachmentsFlatSpace(Attachment.ELocation.West) - vertex.getAttachmentsFlatSpace(Attachment.ELocation.East))/2;
+            y = (vertex.getAttachmentsFlatSpace(Attachment.ELocation.South) - vertex.getAttachmentsFlatSpace(Attachment.ELocation.North))/2;
+        }
         switch (attachment.getLocation())
         {
             case North:
-                x = spaceOffset;
-                y = 0.5 * (vertex.getInnerSize().getHeight() + attachment.getOuterSize().getHeight());
+                x += spaceOffset;
+                y += 0.5 * (vertex.getInnerSize().getHeight() + attachment.getOuterSize().getHeight());
                 break;
             case East:
-                x = 0.5 * (vertex.getInnerSize().getWidth() + attachment.getOuterSize().getWidth());
-                y = -spaceOffset;
+                x += 0.5 * (vertex.getInnerSize().getWidth() + attachment.getOuterSize().getWidth());
+                y += -spaceOffset;
                 break;
             case South:
-                x = spaceOffset;
-                y = -0.5 * (vertex.getInnerSize().getHeight() + attachment.getOuterSize().getHeight());
+                x += spaceOffset;
+                y += -0.5 * (vertex.getInnerSize().getHeight() + attachment.getOuterSize().getHeight());
                 break;
             case West:
-                x = -0.5 * (vertex.getInnerSize().getWidth() + attachment.getOuterSize().getWidth());
-                y = -spaceOffset;
+                x += -0.5 * (vertex.getInnerSize().getWidth() + attachment.getOuterSize().getWidth());
+                y += -spaceOffset;
                 break;
             default:
                 throw new IllegalArgumentException("invalid location: " + attachment.getLocation());

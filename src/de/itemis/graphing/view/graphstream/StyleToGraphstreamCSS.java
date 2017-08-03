@@ -174,10 +174,6 @@ public class StyleToGraphstreamCSS
                 return "under";
             case AtLeft:
                 return "at-left";
-            case Left:
-                return "left";
-            case Right:
-                return "right";
         }
 
         throw new IllegalArgumentException("invalid mode: " + alignment);

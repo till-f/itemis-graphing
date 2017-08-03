@@ -249,12 +249,8 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         _touchedElement = _view.findNodeOrSpriteAt(event.getX(), event.getY());
 
-        if (event.getButton() == 1)
-            notifyClickBegin(null);
-
         if (_touchedElement != null)
         {
-            // TODO: consider using an attribute like "ui.fixed" to prevent possibility to move nodes
             if (((_touchedElement instanceof GraphicSprite) && _allowDragSprites) ||
                 ((_touchedElement instanceof GraphicNode) && _allowDragNodes))
             {
@@ -264,6 +260,8 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         }
         else if (event.getButton() == 1)
         {
+            notifyClickBegin(null);
+
             _selectionX = event.getX();
             _selectionY = event.getY();
             _view.beginSelectionAt(_selectionX, _selectionY);
@@ -288,6 +286,8 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         }
         else if (event.getButton() == 1)
         {
+            notifyClickEnd(null);
+
             float x2 = event.getX();
             float y2 = event.getY();
             float t;
@@ -312,9 +312,6 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         {
             _mousePan.endPan();
         }
-
-        if (event.getButton() == 1)
-            notifyClickEnd(null);
     }
 
     @Override

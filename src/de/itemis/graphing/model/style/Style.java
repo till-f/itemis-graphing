@@ -6,7 +6,7 @@ public abstract class Style implements Cloneable
 {
     public enum ELineMode { None, Solid, Dotted }
 
-    public enum ELabelAlignment { Center, Above, AtRight, Under, AtLeft, Left, Right }
+    public enum ELabelAlignment { Center, Above, AtRight, Under, AtLeft }
 
     private GraphElement _parent = null;
 

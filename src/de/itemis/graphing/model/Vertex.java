@@ -131,6 +131,8 @@ public class Vertex extends GraphElement implements ISized
 
         _graph.attachmentAdded(a);
 
+        styleChanged();
+
         return a;
     }
 
@@ -143,6 +145,8 @@ public class Vertex extends GraphElement implements ISized
             _attachments.remove(id);
             _graph.attachmentRemoved(a);
         }
+
+        styleChanged();
     }
 
     public List<Attachment> getAttachments()
@@ -174,7 +178,7 @@ public class Vertex extends GraphElement implements ISized
             if (a.getLocation() == Attachment.ELocation.West)
                 maxWidthWest = Math.max(maxWidthWest, a.getOuterSize().getWidth());
         }
-        double maxWidthNorthSouth = Math.max(getAttachmentsSpace(Attachment.ELocation.North), getAttachmentsSpace(Attachment.ELocation.South));
+        double maxWidthNorthSouth = Math.max(getAttachmentsStackSpace(Attachment.ELocation.North), getAttachmentsStackSpace(Attachment.ELocation.South));
         double width = Math.max(maxWidthNorthSouth, _size.getWidth() + maxWidthEast + maxWidthWest);
 
         // height
@@ -187,13 +191,13 @@ public class Vertex extends GraphElement implements ISized
             if (a.getLocation() == Attachment.ELocation.South)
                 maxHeightSouth = Math.max(maxHeightSouth, a.getOuterSize().getHeight());
         }
-        double maxHeightEastWest = Math.max(getAttachmentsSpace(Attachment.ELocation.East), getAttachmentsSpace(Attachment.ELocation.West));
+        double maxHeightEastWest = Math.max(getAttachmentsStackSpace(Attachment.ELocation.East), getAttachmentsStackSpace(Attachment.ELocation.West));
         double height = Math.max(maxHeightEastWest, _size.getHeight() + maxHeightNorth + maxHeightSouth);
 
         return new Size(width, height);
     }
 
-    public double getAttachmentsSpace(Attachment.ELocation location)
+    public double getAttachmentsStackSpace(Attachment.ELocation location)
     {
         double space = 0;
         Attachment previousAttachment = null;
@@ -216,6 +220,28 @@ public class Vertex extends GraphElement implements ISized
 
             previousAttachment = attachment;
         }
+
+        return space;
+    }
+
+    public double getAttachmentsFlatSpace(Attachment.ELocation location)
+    {
+        double space = 0;
+        for(Attachment attachment : _attachments.values())
+        {
+            if (attachment.getLocation() != location)
+                continue;
+
+            if (location == Attachment.ELocation.North || location == Attachment.ELocation.South)
+            {
+                space = Math.max(space, attachment.getOuterSize().getHeight());
+            }
+            else
+            {
+                space = Math.max(space, attachment.getOuterSize().getWidth());
+            }
+        }
+
         return space;
     }
 

@@ -34,7 +34,7 @@ public class ShowDeleteButtons implements IInteractionListener
     @Override
     public void clickBegin(GraphElement element)
     {
-        if (element != null && _deleteAttachment != null && (_deleteAttachment != element || element == null))
+        if (_deleteAttachment != null && (_deleteAttachment != element || element == null))
             _deleteAttachment.getParent().removeAttachment(_deleteAttachment.getId());
     }
 
