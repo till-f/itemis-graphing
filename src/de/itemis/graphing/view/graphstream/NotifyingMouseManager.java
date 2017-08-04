@@ -1,8 +1,6 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.model.Attachment;
-import de.itemis.graphing.model.GraphElement;
-import de.itemis.graphing.listeners.IInteractionListener;
+import de.itemis.graphing.view.IInteractionListener;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphicElement;
@@ -17,7 +15,6 @@ import org.graphstream.ui.view.util.MouseManager;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.util.LinkedHashSet;
 
 public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 {
@@ -64,12 +61,11 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     }
 
     protected final GraphstreamViewManager _viewManager;
-    protected final boolean _allowDragNodes;
-    protected final boolean _allowDragSprites;
-    protected final LinkedHashSet<IInteractionListener> _interactionListeners = new LinkedHashSet<IInteractionListener>();
+    protected final boolean _allowDragNodes = false;        // not used atm
+    protected final boolean _allowDragSprites = false;      // not used atm
 
     protected ViewPanel _view;
-    protected GraphicGraph _graph;
+    protected GraphicGraph _gsGraph;
     protected Camera _camera;
 
     protected GraphicElement _touchedElement;
@@ -80,25 +76,18 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
     public NotifyingMouseManager(GraphstreamViewManager viewManager)
     {
-        this(viewManager, false, false);
-    }
-
-    public NotifyingMouseManager(GraphstreamViewManager viewManager, boolean allowDragNodes, boolean allowDragSprites)
-    {
         _viewManager = viewManager;
-        _allowDragNodes = allowDragNodes;
-        _allowDragSprites = allowDragSprites;
     }
 
     @Override
-    public void init(GraphicGraph graph, View view)
+    public void init(GraphicGraph gsGraph, View view)
     {
         if (view instanceof ViewPanel)
             _view = (ViewPanel)view;
         else
             throw new IllegalArgumentException("NotifyingMouseManager requires ViewPanel instance for 'view'");
 
-        _graph = graph;
+        _gsGraph = gsGraph;
         _mousePan = new MousePan(view.getCamera());
         _camera = view.getCamera();
 
@@ -113,11 +102,6 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         _view.removeMouseMotionListener(this);
     }
 
-    public void registerInteractionListener(IInteractionListener listener)
-    {
-        _interactionListeners.add(listener);
-    }
-
     protected void mouseButtonPress(MouseEvent event)
     {
         _view.requestFocus();
@@ -127,16 +111,16 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
             // unselect all.
             if (!event.isShiftDown())
             {
-                for (Node node : _graph)
+                for (Node node : _gsGraph)
                 {
-                    interact(node.getId(), false, null, null, null);
+                    _viewManager.applyInteraction(node.getId(), false, null, null, null, event);
                 }
 
-                for (GraphicSprite sprite : _graph.spriteSet())
+                for (GraphicSprite sprite : _gsGraph.spriteSet())
                 {
-                    interact(sprite.getId(), false, null, null, null);
+                    _viewManager.applyInteraction(sprite.getId(), false, null, null, null, event);
                 }
-                notifySelectionChanged();
+                _viewManager.notifySelectionChanged();
             }
         }
 
@@ -152,9 +136,9 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     {
         for (GraphicElement element : elementsInArea)
         {
-            interact(element.getId(), true, null, null, null);
+            _viewManager.applyInteraction(element.getId(), true, null, null, null, null);
         }
-        notifySelectionChanged();
+        _viewManager.notifySelectionChanged();
     }
 
     protected void elementMoving(GraphicElement element, MouseEvent event)
@@ -168,7 +152,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() == 1)
         {
-            interact(gsElement.getId(), null, null, true, null);
+            _viewManager.applyInteraction(gsElement.getId(), null, null, true, null, event);
         }
     }
 
@@ -178,47 +162,17 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
 
         if (event.getButton() == 1)
         {
-            interact(gsElement.getId(), null, null, null, true);
+            _viewManager.applyInteraction(gsElement.getId(), null, null, null, true, event);
 
             if (event.isShiftDown())
             {
-                interact(gsElement.getId(), null, true, null, null);
+                _viewManager.applyInteraction(gsElement.getId(), null, true, null, null, event);
             }
             else
             {
-                interact(gsElement.getId(), true, null, null, null);
+                _viewManager.applyInteraction(gsElement.getId(), true, null, null, null, event);
             }
-            notifySelectionChanged();
-        }
-    }
-
-    private void interact(String elementId, Boolean select, Boolean toggleSelect, Boolean clickBegin, Boolean clickEnd)
-    {
-        GraphElement element = _viewManager.getGraphElement(elementId);
-        if (element instanceof Attachment && ((Attachment) element).isDelegateInteractionToParent())
-        {
-            element = ((Attachment) element).getParent();
-        }
-
-        if (select != null)
-        {
-            if (element.isSelectable())
-                element.setSelected(select);
-        }
-        else if (toggleSelect != null && toggleSelect)
-        {
-            if (element.isSelectable())
-                element.setSelected(!element.isSelected());
-        }
-        else if (clickBegin != null && clickBegin)
-        {
-            element.clickBegin();
-            notifyClickBegin(element);
-        }
-        else if (clickEnd != null && clickEnd)
-        {
-            element.clickEnd();
-            notifyClickEnd(element);
+            _viewManager.notifySelectionChanged();
         }
     }
 
@@ -278,7 +232,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         }
         else if (event.getButton() == 1)
         {
-            notifyClickBegin(null);
+            _viewManager.notifyClickBegin(null, new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown()));
 
             _selectionX = event.getX();
             _selectionY = event.getY();
@@ -304,7 +258,7 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         }
         else if (event.getButton() == 1)
         {
-            notifyClickEnd(null);
+            _viewManager.notifyClickEnd(null, new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown()));
 
             float x2 = event.getX();
             float y2 = event.getY();
@@ -340,76 +294,4 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         double zoomOffset = 0.1 * rotation * currentZoom;
         _camera.setViewPercent(currentZoom + zoomOffset);
     }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // methods to retrieve current interaction state
-
-    public LinkedHashSet<GraphElement> getCurrentSelection()
-    {
-        LinkedHashSet<GraphElement> currentSelection = new LinkedHashSet<>();
-        for (Node node : _graph)
-        {
-            GraphElement element = _viewManager.getGraphElement(node.getId());
-            if (element.isSelected())
-                currentSelection.add(element);
-        }
-        for (GraphicSprite sprite : _graph.spriteSet())
-        {
-            GraphElement element = _viewManager.getGraphElement(sprite.getId());
-            if (element.isSelected())
-                currentSelection.add(element);
-        }
-
-        return currentSelection;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // IInteractionListener notification
-
-    private void notifyClickBegin(GraphElement element)
-    {
-        for(IInteractionListener listener : _interactionListeners)
-        {
-            listener.clickBegin(element);
-        }
-    }
-
-    private void notifyClickEnd(GraphElement element)
-    {
-        for(IInteractionListener listener : _interactionListeners)
-        {
-            listener.clickEnd(element);
-        }
-    }
-
-    private LinkedHashSet<GraphElement> _lastSelection = new LinkedHashSet<>();
-    private void notifySelectionChanged()
-    {
-        LinkedHashSet<GraphElement> newSelection = getCurrentSelection();
-
-        LinkedHashSet<GraphElement> selected = new LinkedHashSet<>();
-        LinkedHashSet<GraphElement> unselected = new LinkedHashSet<>();
-
-        for (GraphElement e : _lastSelection)
-        {
-            if (!newSelection.contains(e))
-                unselected.add(e);
-        }
-        for (GraphElement e : newSelection)
-        {
-            if (!_lastSelection.contains(e))
-                selected.add(e);
-        }
-
-        _lastSelection = newSelection;
-
-        if (selected.size() != 0 || unselected.size() != 0)
-        {
-            for(IInteractionListener listener : _interactionListeners)
-            {
-                listener.selectionChanged(selected, unselected);
-            }
-        }
-    }
-
 }

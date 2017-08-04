@@ -80,6 +80,13 @@ public class Graph
         return edges;
     }
 
+    public List<Attachment> getAttachments()
+    {
+        List<Attachment> attachments = new LinkedList<Attachment>();
+        attachments.addAll(_attachments.values());
+        return attachments;
+    }
+
     public void clear()
     {
         _vertexes.clear();

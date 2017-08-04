@@ -1,6 +1,7 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.listeners.IInteractionListener;
+import de.itemis.graphing.view.AbstractViewManager;
+import de.itemis.graphing.view.IInteractionListener;
 import de.itemis.graphing.model.Attachment;
 import de.itemis.graphing.model.Edge;
 import de.itemis.graphing.model.Graph;
@@ -8,7 +9,6 @@ import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.IGraphListener;
 import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.BlockStyle;
-import de.itemis.graphing.view.IViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -21,13 +21,9 @@ import org.graphstream.ui.view.Viewer;
 
 import javax.swing.JPanel;
 import java.awt.Component;
-import java.util.List;
-import java.util.Set;
 
-public class GraphstreamViewManager implements IGraphListener, IViewManager
+public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener
 {
-    private final Graph _graph;
-
     private final org.graphstream.graph.Graph _gsGraph;
     private final StyleToGraphstreamCSS _styleConverter;
     private SpriteManager _spriteManager;                   // cannot be final due to bug in graphstream (reset of SpriteManager does not work properly)
@@ -35,11 +31,11 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     private View _view = null;
     private Viewer _viewer = null;
     private Layout _layout = null;
-    private NotifyingMouseManager _mouseManager = null;
 
     public GraphstreamViewManager(Graph graph)
     {
-        _graph = graph;
+        super(graph);
+
         _gsGraph = new SingleGraph("Graph");
         _spriteManager = new SpriteManager(_gsGraph);
         _styleConverter = new StyleToGraphstreamCSS();
@@ -65,25 +61,12 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
 
     public void configure(Layout layout)
     {
-        configure(layout, null, null, null);
+        configure(layout, null, null);
     }
 
-    public void configure(Layout layout, List<IInteractionListener> interactionListeners)
-    {
-        configure(layout, interactionListeners, null, null);
-    }
-
-    public void configure(Layout layout, List<IInteractionListener> interactionListeners, Viewer viewer, String viewID)
+    public void configure(Layout layout, Viewer viewer, String viewID)
     {
         NotifyingMouseManager mouseManager = new NotifyingMouseManager(this);
-
-        if (interactionListeners != null)
-        {
-            for(IInteractionListener interactionListener : interactionListeners)
-            {
-                mouseManager.registerInteractionListener(interactionListener);
-            }
-        }
 
         if (viewer == null)
         {
@@ -110,7 +93,6 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
         _view = view;
         _viewer = viewer;
         _layout = layout;
-        _mouseManager = mouseManager;
 
         if (_layout != null)
         {
@@ -124,6 +106,15 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
 
     // -----------------------------------------------------------------------------------------------------------------
     // IViewManager
+
+    @Override
+    public JPanel getView()
+    {
+        if (!(_view instanceof JPanel))
+            throw new RuntimeException("GraphstreamViewManager not configured properly, viewer must provide a JPanel as view instance.");
+
+        return (JPanel)_view;
+    }
 
     @Override
     public void zoomIn()
@@ -155,19 +146,125 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
             _gsGraph.addAttribute("ui.stylesheet", "node { text-visibility-mode: hidden; } sprite { text-visibility-mode: hidden; } edge { text-visibility-mode: hidden; }");
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // GraphListener
+
     @Override
-    public Set<GraphElement> getSelectedElements()
+    public void graphCleared()
     {
-        return _mouseManager.getCurrentSelection();
+        _gsGraph.clear();
+        _spriteManager = new SpriteManager(_gsGraph);
+
+        setInitialAttributes();
     }
 
     @Override
-    public JPanel getView()
+    public void vertexAdded(Vertex vertex)
     {
-        if (!(_view instanceof JPanel))
-            throw new RuntimeException("GraphstreamViewManager not configured properly.");
+        addVertex(vertex);
+    }
 
-        return (JPanel)_view;
+    @Override
+    public void vertexRemoved(Vertex vertex)
+    {
+        removeVertex(vertex);
+    }
+
+    @Override
+    public void edgeAdded(Edge edge)
+    {
+        addEdge(edge);
+    }
+
+    @Override
+    public void edgeRemoved(Edge edge)
+    {
+        removeEdge(edge);
+    }
+
+    @Override
+    public void attachmentAdded(Attachment attachment)
+    {
+        // remove all attachments, then insert new set (required for space calculation)
+        for (Attachment existingAttachment : attachment.getParent().getAttachments())
+        {
+            if (existingAttachment != attachment)
+                removeAttachment(existingAttachment);
+        }
+        addAttachments(attachment.getParent());
+
+        if (attachment.isDynamicLayoutAffected())
+            _layout.compute();
+    }
+
+    @Override
+    public void attachmentRemoved(Attachment attachment)
+    {
+        // remove all attachments, then insert new set (required for space calculation)
+        removeAttachment(attachment);
+        for (Attachment existingAttachment : attachment.getParent().getAttachments())
+        {
+            removeAttachment(existingAttachment);
+        }
+        addAttachments(attachment.getParent());
+
+        if (attachment.isDynamicLayoutAffected())
+            _layout.compute();
+    }
+
+    @Override
+    public void styleChanged(GraphElement element)
+    {
+        Element gsElement = getGraphstreamElement(element);
+
+        if (gsElement == null)
+            return;
+
+        String styleCSS = _styleConverter.getAtciveStyleCSS(element);
+        gsElement.setAttribute("ui.style", styleCSS);
+    }
+
+    @Override
+    public void labelChanged(GraphElement element)
+    {
+        Element gsElement = getGraphstreamElement(element);
+
+        if (gsElement == null)
+            return;
+
+        gsElement.setAttribute("ui.label", element.getLabel());
+    }
+
+    private Element getGraphstreamElement(GraphElement element)
+    {
+        Element gsElement;
+
+        if (element instanceof Vertex)
+        {
+            gsElement = _gsGraph.getNode(element.getId());
+        }
+        else if (element instanceof Edge)
+        {
+            gsElement = _gsGraph.getEdge(element.getId());
+        }
+        else if (element instanceof Attachment)
+        {
+            gsElement = _spriteManager.getSprite(element.getId());
+        }
+        else
+        {
+            throw new IllegalArgumentException("unexpected element type: " + element);
+        }
+
+        return gsElement;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // neded for MPS (creation of hotfixed view)
+
+    public org.graphstream.graph.Graph getGraphstreamGraph()
+    {
+        return _gsGraph;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -291,134 +388,6 @@ public class GraphstreamViewManager implements IGraphListener, IViewManager
     private void removeAttachment(Attachment attachment)
     {
         _spriteManager.removeSprite(attachment.getId());
-    }
-
-
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // GraphListener
-
-    @Override
-    public void graphCleared()
-    {
-        _gsGraph.clear();
-        _spriteManager = new SpriteManager(_gsGraph);
-
-        setInitialAttributes();
-    }
-
-    @Override
-    public void vertexAdded(Vertex vertex)
-    {
-        addVertex(vertex);
-    }
-
-    @Override
-    public void vertexRemoved(Vertex vertex)
-    {
-        removeVertex(vertex);
-    }
-
-    @Override
-    public void edgeAdded(Edge edge)
-    {
-        addEdge(edge);
-    }
-
-    @Override
-    public void edgeRemoved(Edge edge)
-    {
-        removeEdge(edge);
-    }
-
-    @Override
-    public void attachmentAdded(Attachment attachment)
-    {
-        // remove all attachments, then insert new set (required for space calculation)
-        for (Attachment existingAttachment : attachment.getParent().getAttachments())
-        {
-            if (existingAttachment != attachment)
-                removeAttachment(existingAttachment);
-        }
-        addAttachments(attachment.getParent());
-
-        if (attachment.isDynamicLayoutAffected())
-            _layout.compute();
-    }
-
-    @Override
-    public void attachmentRemoved(Attachment attachment)
-    {
-        // remove all attachments, then insert new set (required for space calculation)
-        removeAttachment(attachment);
-        for (Attachment existingAttachment : attachment.getParent().getAttachments())
-        {
-            removeAttachment(existingAttachment);
-        }
-        addAttachments(attachment.getParent());
-
-        if (attachment.isDynamicLayoutAffected())
-            _layout.compute();
-    }
-
-    @Override
-    public void styleChanged(GraphElement element)
-    {
-        Element gsElement = getGraphstreamElement(element);
-
-        if (gsElement == null)
-            return;
-
-        String styleCSS = _styleConverter.getAtciveStyleCSS(element);
-        gsElement.setAttribute("ui.style", styleCSS);
-    }
-
-    @Override
-    public void labelChanged(GraphElement element)
-    {
-        Element gsElement = getGraphstreamElement(element);
-
-        if (gsElement == null)
-            return;
-
-        gsElement.setAttribute("ui.label", element.getLabel());
-    }
-
-    private Element getGraphstreamElement(GraphElement element)
-    {
-        Element gsElement;
-
-        if (element instanceof Vertex)
-        {
-            gsElement = _gsGraph.getNode(element.getId());
-        }
-        else if (element instanceof Edge)
-        {
-            gsElement = _gsGraph.getEdge(element.getId());
-        }
-        else if (element instanceof Attachment)
-        {
-            gsElement = _spriteManager.getSprite(element.getId());
-        }
-        else
-        {
-            throw new IllegalArgumentException("unexpected element type: " + element);
-        }
-
-        return gsElement;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // nice little helpers
-
-    public GraphElement getGraphElement(String id)
-    {
-        return _graph.getElement(id);
-    }
-
-    public org.graphstream.graph.Graph getGraphstreamGraph()
-    {
-        return _gsGraph;
     }
 
     private void setInitialAttributes()

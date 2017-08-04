@@ -1,14 +1,14 @@
-package de.itemis.graphing.listeners;
+package de.itemis.graphing.interactions;
 
 import de.itemis.graphing.model.GraphElement;
-import de.itemis.graphing.listeners.IInteractionListener;
+import de.itemis.graphing.view.IInteractionListener;
 
 import java.util.Set;
 
 public class DebugInteractionListener implements IInteractionListener
 {
     @Override
-    public void clickBegin(GraphElement element)
+    public void clickBegin(GraphElement element, ClickParameters params)
     {
         String id = "";
         if (element != null)
@@ -18,7 +18,7 @@ public class DebugInteractionListener implements IInteractionListener
     }
 
     @Override
-    public void clickEnd(GraphElement element)
+    public void clickEnd(GraphElement element, ClickParameters params)
     {
         String id = "";
         if (element != null)

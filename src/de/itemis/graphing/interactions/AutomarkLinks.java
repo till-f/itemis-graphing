@@ -1,10 +1,8 @@
-package de.itemis.graphing.listeners;
+package de.itemis.graphing.interactions;
 
-import de.itemis.graphing.model.Edge;
-import de.itemis.graphing.model.Graph;
-import de.itemis.graphing.model.GraphElement;
-import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.style.Style;
+import de.itemis.graphing.view.IInteractionListener;
 
 import java.util.Set;
 
@@ -13,7 +11,7 @@ public class AutomarkLinks implements IInteractionListener
     private Vertex _lastMarkedVertex = null;
 
     @Override
-    public void clickBegin(GraphElement element)
+    public void clickBegin(GraphElement element, ClickParameters params)
     {
         if (_lastMarkedVertex != null)
         {
@@ -23,7 +21,7 @@ public class AutomarkLinks implements IInteractionListener
     }
 
     @Override
-    public void clickEnd(GraphElement element)
+    public void clickEnd(GraphElement element, ClickParameters params)
     {
         if (element instanceof Vertex)
         {
