@@ -1,27 +1,26 @@
 package de.itemis.graphing.model;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Vertex extends GraphElement implements ISized
 {
-    private final Size _size;
-
     private final LinkedHashMap<String, Attachment> _attachments = new LinkedHashMap<String, Attachment>();
+    private final HashMap<Integer, Double> _rowHeights = new HashMap<>();
+    private final HashMap<Integer, Double> _colWidths = new HashMap<>();
 
     private LinkedHashSet<Edge> _outgoingEdges = new LinkedHashSet<Edge>();
     private LinkedHashSet<Edge> _incomingEdges = new LinkedHashSet<Edge>();
 
+    private Size _minimalSize;
+    private double _cellSpacing = 0.03;
+
     private Double _x = null;
     private Double _y = null;
 
-    public Vertex(Graph g, String id, Size size)
+    public Vertex(Graph g, String id, Size minimalSize)
     {
         super(g, id);
-        _size = size;
+        _minimalSize = minimalSize;
         setStyle(EStyle.Regular, g.getDefaultVertexStyle(EStyle.Regular));
         setStyle(EStyle.Clicked, g.getDefaultVertexStyle(EStyle.Clicked));
         setStyle(EStyle.Selected, g.getDefaultVertexStyle(EStyle.Selected));
@@ -107,28 +106,35 @@ public class Vertex extends GraphElement implements ISized
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // attachments and calculated size
+    // attachments and size calculation
 
-    public Attachment addAttachment(String id, double width, double height, Attachment.ELocation location)
+    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex)
     {
-        return addAttachment(id, width, height, 0.0, location, false);
+         return addAttachment(id, width, height, rowIndex, colIndex, Attachment.EHAlignment.Center, Attachment.EVAlignment.Middle, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, double padding, Attachment.ELocation location)
+    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EHAlignment hAlign)
     {
-        return addAttachment(id, width, height, padding, location, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, hAlign, Attachment.EVAlignment.Middle, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, Attachment.ELocation location, boolean affectDynamicLayout)
+    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EVAlignment vAlign)
     {
-        return addAttachment(id, width, height, 0.0, location, affectDynamicLayout);
+        return addAttachment(id, width, height, rowIndex, colIndex, Attachment.EHAlignment.Center, vAlign, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, double padding, Attachment.ELocation location, boolean affectDynamicLayout)
+    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EHAlignment hAlign, Attachment.EVAlignment vAlign)
     {
-        Attachment a = new Attachment(this, id, new Size(width, height), padding, location, affectDynamicLayout);
+        return addAttachment(id, width, height, rowIndex, colIndex, hAlign, vAlign, false);
+    }
+
+    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EHAlignment hAlign, Attachment.EVAlignment vAlign, boolean affectDynamicLayout)
+    {
+        Attachment a = new Attachment(this, id, new Size(width, height), rowIndex, colIndex, hAlign, vAlign, affectDynamicLayout);
+
         _attachments.put(id, a);
 
+        updateTableSize_attachmentAdded(rowIndex, colIndex, width, height);
         _graph.attachmentAdded(a);
 
         styleChanged();
@@ -143,10 +149,12 @@ public class Vertex extends GraphElement implements ISized
         if (a != null)
         {
             _attachments.remove(id);
-            _graph.attachmentRemoved(a);
-        }
 
-        styleChanged();
+            updateTableSize_attachmentRemoved(a.getRowIndex(), a.getColIndex());
+            _graph.attachmentRemoved(a);
+
+            styleChanged();
+        }
     }
 
     public List<Attachment> getAttachments()
@@ -160,83 +168,78 @@ public class Vertex extends GraphElement implements ISized
     }
 
     @Override
-    public Size getInnerSize()
+    public Size getSize()
     {
-        return _size;
+        return Size.max(_minimalSize, getAttachmentsSize());
     }
 
-    @Override
-    public Size getOuterSize()
+    public Size getCellSize(int rowIndex, int colIndex)
     {
-        // width
-        double maxWidthEast = 0;
-        double maxWidthWest = 0;
-        for(Attachment a : _attachments.values())
-        {
-            if (a.getLocation() == Attachment.ELocation.East)
-                maxWidthEast = Math.max(maxWidthEast, a.getOuterSize().getWidth());
-            if (a.getLocation() == Attachment.ELocation.West)
-                maxWidthWest = Math.max(maxWidthWest, a.getOuterSize().getWidth());
-        }
-        double maxWidthNorthSouth = Math.max(getAttachmentsStackSpace(Attachment.ELocation.North), getAttachmentsStackSpace(Attachment.ELocation.South));
-        double width = Math.max(maxWidthNorthSouth, _size.getWidth() + maxWidthEast + maxWidthWest);
-
-        // height
-        double maxHeightNorth = 0;
-        double maxHeightSouth = 0;
-        for(Attachment a : _attachments.values())
-        {
-            if (a.getLocation() == Attachment.ELocation.North)
-                maxHeightNorth = Math.max(maxHeightNorth, a.getOuterSize().getHeight());
-            if (a.getLocation() == Attachment.ELocation.South)
-                maxHeightSouth = Math.max(maxHeightSouth, a.getOuterSize().getHeight());
-        }
-        double maxHeightEastWest = Math.max(getAttachmentsStackSpace(Attachment.ELocation.East), getAttachmentsStackSpace(Attachment.ELocation.West));
-        double height = Math.max(maxHeightEastWest, _size.getHeight() + maxHeightNorth + maxHeightSouth);
-
-        return new Size(width, height);
+        return new Size(_colWidths.get(colIndex), _rowHeights.get(rowIndex));
     }
 
-    public double getAttachmentsStackSpace(Attachment.ELocation location)
+    public Size getCellOffset(int rowIndex, int colIndex)
     {
-        double space = 0;
-        for(Attachment attachment : _attachments.values())
+        double rowOffset = 0.0;
+        double colOffset = 0.0;
+        for (int idx=0; idx < ((rowIndex > colIndex) ? rowIndex : colIndex); idx++)
         {
-            if (attachment.getLocation() != location)
-                continue;
-
-            if (location == Attachment.ELocation.North || location == Attachment.ELocation.South)
-            {
-                space += attachment.getOuterSize().getWidth();
-            }
-            else
-            {
-                space += attachment.getOuterSize().getHeight();
-            }
+            if (idx < rowIndex)
+                rowOffset += (_rowHeights.get(idx) != null ? _rowHeights.get(idx) : 0.0) + _cellSpacing;
+            if (idx < colIndex)
+                colOffset += (_colWidths.get(idx) != null ? _colWidths.get(idx) : 0.0) + _cellSpacing;
         }
 
-        return space;
+        return new Size(colOffset, rowOffset);
     }
 
-    public double getAttachmentsFlatSpace(Attachment.ELocation location)
+    public Size getAttachmentsSize()
     {
-        double space = 0;
-        for(Attachment attachment : _attachments.values())
+        double width = 0.0;
+        for(Double colWidth : _colWidths.values())
         {
-            if (attachment.getLocation() != location)
-                continue;
-
-            if (location == Attachment.ELocation.North || location == Attachment.ELocation.South)
-            {
-                space = Math.max(space, attachment.getOuterSize().getHeight());
-            }
-            else
-            {
-                space = Math.max(space, attachment.getOuterSize().getWidth());
-            }
+            width += colWidth + _cellSpacing;
+        }
+        double height = 0.0;
+        for(Double rowHeihgt : _rowHeights.values())
+        {
+            height += rowHeihgt + _cellSpacing;
         }
 
-        return space;
+        return new Size(width - _cellSpacing, height - _cellSpacing);
+    }
+
+    private void updateTableSize_attachmentRemoved(int rowIndex, int colIndex)
+    {
+        _rowHeights.remove(rowIndex);
+        _colWidths.remove(colIndex);
+
+        double maxColWidth = 0.0;
+        double maxRowHeight = 0.0;
+        for (Attachment a : _attachments.values())
+        {
+            if (a.getRowIndex() == rowIndex)
+                maxRowHeight = Math.max(maxRowHeight, a.getSize().getHeight());
+            if (a.getColIndex() == colIndex)
+                maxColWidth = Math.max(maxColWidth, a.getSize().getWidth());
+        }
+
+        if (maxRowHeight > 0.0)
+            _rowHeights.put(rowIndex, maxRowHeight);
+
+        if (maxColWidth > 0.0)
+            _colWidths.put(colIndex, maxColWidth);
+    }
+
+    private void updateTableSize_attachmentAdded(int rowIndex, int colIndex, double width, double height)
+    {
+        Double maxRowHeight = _rowHeights.get(rowIndex);
+        if (maxRowHeight == null) maxRowHeight = 0.0;
+        _rowHeights.put(rowIndex, Math.max(maxRowHeight, height));
+
+        Double maxColWidth = _colWidths.get(colIndex);
+        if (maxColWidth == null) maxColWidth = 0.0;
+        _colWidths.put(colIndex, Math.max(maxColWidth, width));
     }
 
     // -----------------------------------------------------------------------------------------------------------------

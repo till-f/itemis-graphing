@@ -22,8 +22,17 @@ public class Size
         return _height;
     }
 
+    public static Size max(Size a, Size b)
+    {
+        double maxWidth = Math.max(a.getWidth(), b.getWidth());
+        double maxHeight = Math.max(a.getHeight(), b.getHeight());
+        return new Size(maxWidth, maxHeight);
+    }
+
+/*
     public Size addPadding(double padding)
     {
         return new Size(_width + padding*2, _height + padding*2);
     }
+*/
 }

@@ -34,15 +34,21 @@ public class Graph
         _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()] = new VertexStyle();
         _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
         _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
+        _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()].setzIndex(4);
         _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()] = new VertexStyle();
         _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
         _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
+        _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setzIndex(4);
         _defaultVertexStyle[IStyled.EStyle.Highlighted.ordinal()] = new VertexStyle();
         _defaultVertexStyle[IStyled.EStyle.Highlighted.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
         _defaultVertexStyle[IStyled.EStyle.Highlighted.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
+        _defaultVertexStyle[IStyled.EStyle.Highlighted.ordinal()].setzIndex(4);
 
         _defaultEdgeStyle[IStyled.EStyle.Regular.ordinal()] = new EdgeStyle();
         _defaultEdgeStyle[IStyled.EStyle.Clicked.ordinal()] = new EdgeStyle();  // edges cannot b clicked...
+        _defaultEdgeStyle[IStyled.EStyle.Clicked.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS_EDGE);
+        _defaultEdgeStyle[IStyled.EStyle.Clicked.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
+        _defaultEdgeStyle[IStyled.EStyle.Clicked.ordinal()].setzIndex(2);
         _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()] = new EdgeStyle();
         _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS_EDGE);
         _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
@@ -50,17 +56,21 @@ public class Graph
         _defaultEdgeStyle[IStyled.EStyle.Highlighted.ordinal()] = new EdgeStyle();
         _defaultEdgeStyle[IStyled.EStyle.Highlighted.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS_EDGE);
         _defaultEdgeStyle[IStyled.EStyle.Highlighted.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
+        _defaultEdgeStyle[IStyled.EStyle.Highlighted.ordinal()].setzIndex(2);
 
         _defaultAttachmentStyle[IStyled.EStyle.Regular.ordinal()] = new AttachmentStyle();
         _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()] = new AttachmentStyle();
         _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
         _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
+        _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()].setzIndex(6);
         _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()] = new AttachmentStyle();
         _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
         _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
+        _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setzIndex(6);
         _defaultAttachmentStyle[IStyled.EStyle.Highlighted.ordinal()] = new AttachmentStyle();
         _defaultAttachmentStyle[IStyled.EStyle.Highlighted.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
         _defaultAttachmentStyle[IStyled.EStyle.Highlighted.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
+        _defaultAttachmentStyle[IStyled.EStyle.Highlighted.ordinal()].setzIndex(6);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

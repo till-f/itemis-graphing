@@ -25,26 +25,19 @@ public class ExampleGraph {
         operatorStyleSelected.setShape(BlockStyle.EShape.Circle);
         operatorStyleSelected.setFillColor("CCCCCC");
 
-        Vertex vertexA = graph.addVertex("A", 1.0, 0.5);
-        vertexA.setLabel("vertex A");
-        vertexA.addAttachment("AN1", 0.3, 0.2,0.03, Attachment.ELocation.North).setLabel("N1");
-        vertexA.addAttachment("AN2", 0.3, 0.2,0.03, Attachment.ELocation.North).setLabel("N2");
-        vertexA.addAttachment("AN3", 0.3, 0.2,0.03, Attachment.ELocation.North).setLabel("N3");
-        vertexA.addAttachment("AE1", 0.3, 0.2, Attachment.ELocation.East).setLabel("E1");
-        vertexA.addAttachment("AE2", 0.3, 0.2, Attachment.ELocation.East).setLabel("E2");
-        vertexA.addAttachment("AS1", 0.3, 0.2, Attachment.ELocation.South).setLabel("S1");
-        vertexA.addAttachment("AS2", 0.3, 0.2, Attachment.ELocation.South).setLabel("S2");
-        vertexA.addAttachment("AW1", 0.3, 0.2, Attachment.ELocation.West).setLabel("W1");
-        vertexA.addAttachment("AW2", 0.3, 0.2, Attachment.ELocation.West).setLabel("W2");
+        Vertex vertexA = graph.addVertex("A", 0.0, 0.0);
+        vertexA.addAttachment("N1", 0.3, 0.2, 0, 0).setLabel("N1");
+        vertexA.addAttachment("N2", 0.3, 0.2, 0, 1).setLabel("N2");
+        vertexA.addAttachment("N3", 0.3, 0.2, 0, 2).setLabel("N3");
+        vertexA.addAttachment("M1", 0.3, 0.2, 1, 0).setLabel("M1");
+        vertexA.addAttachment("M2", 0.25, 0.15, 1, 1, Attachment.EHAlignment.Center, Attachment.EVAlignment.Middle).setLabel("M2");
+        vertexA.addAttachment("M3", 0.3, 0.2, 1, 2).setLabel("M3");
+        vertexA.addAttachment("S1", 0.3, 0.2, 2, 0).setLabel("S1");
+        vertexA.addAttachment("S2", 0.3, 0.2, 2, 1).setLabel("S2");
+        vertexA.addAttachment("S3", 0.3, 0.2, 2, 2).setLabel("S3");
 
         Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
-        VertexStyle vs = (VertexStyle) vertexB.getStyle();
-        vs.setSizeMode(BlockStyle.EShapeSize.OuterBlockSize);
-        vertexB.setStyle(vs);
         vertexB.setLabel("vertex B");
-        vertexB.addAttachment("BN1", 1.5, 0.2,0.03, Attachment.ELocation.North).setLabel("N1");
-        vertexB.addAttachment("BS1", 0.2, 0.2,0.03, Attachment.ELocation.South).setLabel("S1");
-        vertexB.addAttachment("BS2", 0.2, 0.2,0.03, Attachment.ELocation.South).setLabel("S2");
 
         Vertex vertexC = graph.addVertex("C", 1.0, 0.5);
         vertexC.setLabel("vertex C");

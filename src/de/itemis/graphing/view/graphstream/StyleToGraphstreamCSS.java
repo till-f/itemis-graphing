@@ -15,42 +15,13 @@ public class StyleToGraphstreamCSS
         Style style = element.getActiveStyle();
         if (style instanceof BlockStyle)
         {
+            if (!(element instanceof ISized))
+                throw new RuntimeException("unexpected element for block style: " + element);
+
             BlockStyle blockStyle = (BlockStyle) style;
 
             sb.append("shape: " + getGraphstreamShape(blockStyle.getShape()) + ";");
-
-
-            if (blockStyle.getSizeMode() == BlockStyle.EShapeSize.Undefined)
-            {
-                sb.append("size-mode: fit;");
-                sb.append("padding: 2;");
-            }
-            else
-            {
-                double width;
-                double height;
-                if (blockStyle.getSizeMode() == BlockStyle.EShapeSize.AsDefinedInStyle)
-                {
-                    width = blockStyle.getWidth();
-                    height = blockStyle.getHeight();
-                }
-                else if (blockStyle.getSizeMode() == BlockStyle.EShapeSize.InnerBlockSize)
-                {
-                    width = ((ISized) element).getInnerSize().getWidth();
-                    height = ((ISized) element).getInnerSize().getHeight();
-                }
-                else if (blockStyle.getSizeMode() == BlockStyle.EShapeSize.OuterBlockSize)
-                {
-                    width = ((ISized) element).getOuterSize().getWidth();
-                    height = ((ISized) element).getOuterSize().getHeight();
-                }
-                else
-                {
-                    throw new IllegalArgumentException("invalid size mode: " + blockStyle.getSizeMode());
-                }
-                sb.append("size: " + width + "gu," + height + "gu" + ";");
-            }
-
+            sb.append("size: " + ((ISized) element).getSize().getWidth() + "gu," + ((ISized) element).getSize().getHeight() + "gu" + ";");
             sb.append("fill-mode: plain;");
             sb.append("fill-color: #" + style.getFillColor() + ";");
             sb.append("stroke-color: #" + style.getLineColor() + ";");

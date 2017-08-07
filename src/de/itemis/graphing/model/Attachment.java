@@ -2,23 +2,28 @@ package de.itemis.graphing.model;
 
 public class Attachment extends GraphElement implements ISized
 {
-    public enum ELocation { North, East, South, West }
+    public enum EHAlignment { Left, Center, Right }
+    public enum EVAlignment { Top, Middle, Bottom }
 
     private final Vertex _parent;
-    private final Size _innerSize;
-    private final double _padding;
-    private final ELocation _location;
+    private final Size _size;
+    private final int _rowIndex;
+    private final int _colIndex;
+    private final EHAlignment _hAlign;
+    private final EVAlignment _vAlign;
     private final boolean _affectDynamicLayout;
 
     private boolean _delegateInteractionToParent = false;
 
-    public Attachment(Vertex vertex, String id, Size innerSize, double padding, ELocation location, boolean affectDynamicLayout)
+    public Attachment(Vertex vertex, String id, Size innerSize, int rowIndex, int colIndex, EHAlignment hAlign, EVAlignment vAlign, boolean affectDynamicLayout)
     {
         super(vertex.getGraph(), id);
         _parent = vertex;
-        _innerSize = innerSize;
-        _padding = padding;
-        _location = location;
+        _size = innerSize;
+        _rowIndex = rowIndex;
+        _colIndex = colIndex;
+        _hAlign = hAlign;
+        _vAlign = vAlign;
         _affectDynamicLayout = affectDynamicLayout;
         setSelectable(false);
         setStyle(EStyle.Regular, _graph.getDefaultAttachmentStyle(EStyle.Regular));
@@ -26,31 +31,35 @@ public class Attachment extends GraphElement implements ISized
         setStyle(EStyle.Selected, _graph.getDefaultAttachmentStyle(EStyle.Selected));
     }
 
+    @Override
+    public Size getSize()
+    {
+        return _size;
+    }
+
     public Vertex getParent()
     {
         return _parent;
     }
 
-    @Override
-    public Size getInnerSize()
+    public int getRowIndex()
     {
-        return _innerSize;
+        return _rowIndex;
     }
 
-    @Override
-    public Size getOuterSize()
+    public int getColIndex()
     {
-        return _innerSize.addPadding(_padding);
+        return _colIndex;
     }
 
-    public double getPadding()
+    public EHAlignment getHAlignment()
     {
-        return _padding;
+        return _hAlign;
     }
 
-    public ELocation getLocation()
+    public EVAlignment getVAlignment()
     {
-        return _location;
+        return _vAlign;
     }
 
     public boolean isDynamicLayoutAffected()

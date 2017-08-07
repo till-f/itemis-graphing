@@ -1,13 +1,7 @@
 package de.itemis.graphing.view.graphstream;
 
+import de.itemis.graphing.model.*;
 import de.itemis.graphing.view.AbstractViewManager;
-import de.itemis.graphing.view.IInteractionListener;
-import de.itemis.graphing.model.Attachment;
-import de.itemis.graphing.model.Edge;
-import de.itemis.graphing.model.Graph;
-import de.itemis.graphing.model.GraphElement;
-import de.itemis.graphing.model.IGraphListener;
-import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.BlockStyle;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
@@ -311,17 +305,13 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
     private void addAttachments(Vertex vertex)
     {
-        double[] consumed = new double[4];
-        Attachment previousAttachment = null;
         for(Attachment attachment : vertex.getAttachments())
         {
-            int ordinal = attachment.getLocation().ordinal();
-            consumed[ordinal] += addAttachment(attachment, consumed[ordinal], previousAttachment);
-            previousAttachment = attachment;
+            addAttachment(attachment);
         }
     }
 
-    private double addAttachment(Attachment attachment, double alreadyConsumedSpace, Attachment previousAttachment)
+    private void addAttachment(Attachment attachment)
     {
         Vertex vertex = attachment.getParent();
 
@@ -338,42 +328,40 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         // calculate rendering position for the attachment
         // -------------------------------------------------------------------------------------------------------------
 
-        double availableSpace = vertex.getAttachmentsStackSpace(attachment.getLocation());
-        double neededSpace;
-        if (attachment.getLocation() == Attachment.ELocation.South || attachment.getLocation() == Attachment.ELocation.North)
-            neededSpace = attachment.getOuterSize().getWidth();
-        else
-            neededSpace = attachment.getOuterSize().getHeight();
+        Size cellOffset = vertex.getCellOffset(attachment.getRowIndex(), attachment.getColIndex());
+        Size cellSize = vertex.getCellSize(attachment.getRowIndex(), attachment.getColIndex());
+        Size containerSize = vertex.getAttachmentsSize();
 
-        final double spaceOffset = alreadyConsumedSpace - availableSpace/2 + neededSpace/2;
-
-        double x = 0;
-        double y = 0;
-        if (((BlockStyle)vertex.getStyle()).getSizeMode() == BlockStyle.EShapeSize.OuterBlockSize)
+        double x;
+        switch (attachment.getHAlignment())
         {
-            x = (vertex.getAttachmentsFlatSpace(Attachment.ELocation.West) - vertex.getAttachmentsFlatSpace(Attachment.ELocation.East))/2;
-            y = (vertex.getAttachmentsFlatSpace(Attachment.ELocation.South) - vertex.getAttachmentsFlatSpace(Attachment.ELocation.North))/2;
-        }
-        switch (attachment.getLocation())
-        {
-            case North:
-                x += spaceOffset;
-                y += 0.5 * (vertex.getInnerSize().getHeight() + attachment.getOuterSize().getHeight());
+            case Left:
+                x = cellOffset.getWidth() + attachment.getSize().getWidth()/2 - containerSize.getWidth()/2;
                 break;
-            case East:
-                x += 0.5 * (vertex.getInnerSize().getWidth() + attachment.getOuterSize().getWidth());
-                y += -spaceOffset;
+            case Center:
+                x = cellOffset.getWidth() + cellSize.getWidth()/2 - containerSize.getWidth()/2;
                 break;
-            case South:
-                x += spaceOffset;
-                y += -0.5 * (vertex.getInnerSize().getHeight() + attachment.getOuterSize().getHeight());
-                break;
-            case West:
-                x += -0.5 * (vertex.getInnerSize().getWidth() + attachment.getOuterSize().getWidth());
-                y += -spaceOffset;
+            case Right:
+                x = cellOffset.getWidth() + cellSize.getWidth() - attachment.getSize().getWidth()/2 - containerSize.getWidth()/2;
                 break;
             default:
-                throw new IllegalArgumentException("invalid location: " + attachment.getLocation());
+                throw new RuntimeException("unexpected alignment: " + attachment.getHAlignment());
+        }
+
+        double y;
+        switch (attachment.getVAlignment())
+        {
+            case Top:
+                y = containerSize.getHeight()/2 - (cellOffset.getHeight() + attachment.getSize().getHeight()/2);
+                break;
+            case Middle:
+                y = containerSize.getHeight()/2 - (cellOffset.getHeight() + cellSize.getHeight()/2);
+                break;
+            case Bottom:
+                y = containerSize.getHeight()/2 - (cellOffset.getHeight() + cellSize.getHeight() - attachment.getSize().getHeight()/2);
+                break;
+            default:
+                throw new RuntimeException("unexpected alignment: " + attachment.getVAlignment());
         }
 
         double distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
@@ -381,8 +369,6 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         double degree = 360 / (2 * Math.PI) * radian;
 
         sprite.setPosition(distance, 0.0, degree);
-
-        return neededSpace;
     }
 
     private void removeAttachment(Attachment attachment)
