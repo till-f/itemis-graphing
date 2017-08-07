@@ -11,16 +11,19 @@ public class Vertex extends GraphElement implements ISized
     private LinkedHashSet<Edge> _outgoingEdges = new LinkedHashSet<Edge>();
     private LinkedHashSet<Edge> _incomingEdges = new LinkedHashSet<Edge>();
 
-    private Size _minimalSize;
-    private double _cellSpacing = 0.03;
+    private final Size _minimalSize;
+    private final double _cellSpacing;
+
+    private boolean _isTableSizeDirty = true;
 
     private Double _x = null;
     private Double _y = null;
 
-    public Vertex(Graph g, String id, Size minimalSize)
+    public Vertex(Graph g, String id, Size minimalSize, double cellSpacing)
     {
         super(g, id);
         _minimalSize = minimalSize;
+        _cellSpacing = cellSpacing;
         setStyle(EStyle.Regular, g.getDefaultVertexStyle(EStyle.Regular));
         setStyle(EStyle.Clicked, g.getDefaultVertexStyle(EStyle.Clicked));
         setStyle(EStyle.Selected, g.getDefaultVertexStyle(EStyle.Selected));
@@ -110,31 +113,51 @@ public class Vertex extends GraphElement implements ISized
 
     public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex)
     {
-         return addAttachment(id, width, height, rowIndex, colIndex, Attachment.EHAlignment.Center, Attachment.EVAlignment.Middle, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, Attachment.EHAlignment.Center, Attachment.EVAlignment.Middle, false);
+    }
+
+    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan)
+    {
+        return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, Attachment.EHAlignment.Center, Attachment.EVAlignment.Middle, false);
     }
 
     public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EHAlignment hAlign)
     {
-        return addAttachment(id, width, height, rowIndex, colIndex, hAlign, Attachment.EVAlignment.Middle, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, hAlign, Attachment.EVAlignment.Middle, false);
+    }
+
+    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, Attachment.EHAlignment hAlign)
+    {
+        return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, hAlign, Attachment.EVAlignment.Middle, false);
     }
 
     public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EVAlignment vAlign)
     {
-        return addAttachment(id, width, height, rowIndex, colIndex, Attachment.EHAlignment.Center, vAlign, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, Attachment.EHAlignment.Center, vAlign, false);
+    }
+
+    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, Attachment.EVAlignment vAlign)
+    {
+        return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, Attachment.EHAlignment.Center, vAlign, false);
     }
 
     public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EHAlignment hAlign, Attachment.EVAlignment vAlign)
     {
-        return addAttachment(id, width, height, rowIndex, colIndex, hAlign, vAlign, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, hAlign, vAlign, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EHAlignment hAlign, Attachment.EVAlignment vAlign, boolean affectDynamicLayout)
+    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, Attachment.EHAlignment hAlign, Attachment.EVAlignment vAlign)
     {
-        Attachment a = new Attachment(this, id, new Size(width, height), rowIndex, colIndex, hAlign, vAlign, affectDynamicLayout);
+        return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, hAlign, vAlign, false);
+    }
+
+    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, Attachment.EHAlignment hAlign, Attachment.EVAlignment vAlign, boolean affectDynamicLayout)
+    {
+        Attachment a = new Attachment(this, id, new Size(width, height), rowIndex, colIndex, colSpan, rowSpan, hAlign, vAlign, affectDynamicLayout);
+
+        clearTableSize();
 
         _attachments.put(id, a);
-
-        updateTableSize_attachmentAdded(rowIndex, colIndex, width, height);
         _graph.attachmentAdded(a);
 
         styleChanged();
@@ -148,9 +171,9 @@ public class Vertex extends GraphElement implements ISized
 
         if (a != null)
         {
-            _attachments.remove(id);
+            clearTableSize();
 
-            updateTableSize_attachmentRemoved(a.getRowIndex(), a.getColIndex());
+            _attachments.remove(id);
             _graph.attachmentRemoved(a);
 
             styleChanged();
@@ -170,16 +193,34 @@ public class Vertex extends GraphElement implements ISized
     @Override
     public Size getSize()
     {
+        if(_isTableSizeDirty) updateTableSize();
+
         return Size.max(_minimalSize, getAttachmentsSize());
     }
 
-    public Size getCellSize(int rowIndex, int colIndex)
+    public Size getCellSize(int rowIndex, int colIndex, int colSpan, int rowSpan)
     {
-        return new Size(_colWidths.get(colIndex), _rowHeights.get(rowIndex));
+        if(_isTableSizeDirty) updateTableSize();
+
+        double width=0;
+        double height=0;
+        for (int idx=colIndex; idx<colIndex+colSpan; idx++)
+        {
+            width += _colWidths.get(idx);
+            if (idx>colIndex) width+= _cellSpacing;
+        }
+        for (int idx=rowIndex; idx<rowIndex+rowSpan; idx++)
+        {
+            height += _rowHeights.get(idx);
+            if (idx>rowIndex) height+= _cellSpacing;
+        }
+        return new Size(width, height);
     }
 
     public Size getCellOffset(int rowIndex, int colIndex)
     {
+        if(_isTableSizeDirty) updateTableSize();
+
         double rowOffset = 0.0;
         double colOffset = 0.0;
         for (int idx=0; idx < ((rowIndex > colIndex) ? rowIndex : colIndex); idx++)
@@ -195,6 +236,8 @@ public class Vertex extends GraphElement implements ISized
 
     public Size getAttachmentsSize()
     {
+        if(_isTableSizeDirty) updateTableSize();
+
         double width = 0.0;
         for(Double colWidth : _colWidths.values())
         {
@@ -209,37 +252,79 @@ public class Vertex extends GraphElement implements ISized
         return new Size(width - _cellSpacing, height - _cellSpacing);
     }
 
-    private void updateTableSize_attachmentRemoved(int rowIndex, int colIndex)
+    private void clearTableSize()
     {
-        _rowHeights.remove(rowIndex);
-        _colWidths.remove(colIndex);
+        if (_isTableSizeDirty)
+            return;
 
-        double maxColWidth = 0.0;
-        double maxRowHeight = 0.0;
-        for (Attachment a : _attachments.values())
-        {
-            if (a.getRowIndex() == rowIndex)
-                maxRowHeight = Math.max(maxRowHeight, a.getSize().getHeight());
-            if (a.getColIndex() == colIndex)
-                maxColWidth = Math.max(maxColWidth, a.getSize().getWidth());
-        }
-
-        if (maxRowHeight > 0.0)
-            _rowHeights.put(rowIndex, maxRowHeight);
-
-        if (maxColWidth > 0.0)
-            _colWidths.put(colIndex, maxColWidth);
+        _isTableSizeDirty = true;
+        _rowHeights.clear();
+        _colWidths.clear();
     }
 
-    private void updateTableSize_attachmentAdded(int rowIndex, int colIndex, double width, double height)
+    private void updateTableSize()
     {
-        Double maxRowHeight = _rowHeights.get(rowIndex);
-        if (maxRowHeight == null) maxRowHeight = 0.0;
-        _rowHeights.put(rowIndex, Math.max(maxRowHeight, height));
+        for (Attachment a : _attachments.values())
+        {
+            if (a.getColSpan() == 1)
+            {
+                updateTableSize_step(_colWidths, a.getColIndex(), a.getColSpan(), a.getSize().getWidth());
+            }
+            if (a.getRowSpan() == 1)
+            {
+                updateTableSize_step(_rowHeights, a.getRowIndex(), a.getRowSpan(), a.getSize().getHeight());
+            }
+        }
+        for (Attachment a : _attachments.values())
+        {
+            if (a.getColSpan() > 1)
+            {
+                updateTableSize_step(_colWidths, a.getColIndex(), a.getColSpan(), a.getSize().getWidth());
+            }
+            if (a.getRowSpan() > 1)
+            {
+                updateTableSize_step(_rowHeights, a.getRowIndex(), a.getRowSpan(), a.getSize().getHeight());
+            }
+        }
 
-        Double maxColWidth = _colWidths.get(colIndex);
-        if (maxColWidth == null) maxColWidth = 0.0;
-        _colWidths.put(colIndex, Math.max(maxColWidth, width));
+        _isTableSizeDirty = false;
+    }
+
+    private void updateTableSize_step(HashMap<Integer, Double> sizes, int idx, int span, double size)
+    {
+        if (span < 1)
+        {
+            throw new RuntimeException("colSpan and rowSpan must be greater than 0");
+        }
+        else if (span == 1)
+        {
+            Double maxSize = sizes.get(idx);
+            if (maxSize == null) maxSize = 0.0;
+            sizes.put(idx, Math.max(maxSize, size));
+        }
+        else
+        {
+            double existingSize = 0;
+            double existingSizeWithoutSpacing = 0;
+            for (int subIdx = idx; subIdx < idx + span; subIdx++)
+            {
+                double subSize = sizes.get(subIdx) != null ? sizes.get(subIdx) : 0.0;
+                existingSizeWithoutSpacing += subSize;
+                existingSize += subSize + _cellSpacing;
+            }
+            existingSize -= _cellSpacing;
+
+            double extraNeeded = size - existingSize;
+            if (extraNeeded <= 0)
+                return;
+
+            for (int subIdx = idx; subIdx < idx + span; subIdx++)
+            {
+                double subSize = sizes.get(subIdx) != null ? sizes.get(subIdx) : 0.0;
+                double subExtra = subSize / existingSizeWithoutSpacing * extraNeeded;
+                sizes.put(subIdx, subSize + subExtra);
+            }
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

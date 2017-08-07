@@ -2,7 +2,6 @@ package de.itemis.graphing.view.graphstream;
 
 import de.itemis.graphing.model.*;
 import de.itemis.graphing.view.AbstractViewManager;
-import de.itemis.graphing.model.style.BlockStyle;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -329,7 +328,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         // -------------------------------------------------------------------------------------------------------------
 
         Size cellOffset = vertex.getCellOffset(attachment.getRowIndex(), attachment.getColIndex());
-        Size cellSize = vertex.getCellSize(attachment.getRowIndex(), attachment.getColIndex());
+        Size cellSize = vertex.getCellSize(attachment.getRowIndex(), attachment.getColIndex(), attachment.getColSpan(), attachment.getRowSpan());
         Size containerSize = vertex.getAttachmentsSize();
 
         double x;

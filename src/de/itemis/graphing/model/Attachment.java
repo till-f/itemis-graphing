@@ -9,19 +9,23 @@ public class Attachment extends GraphElement implements ISized
     private final Size _size;
     private final int _rowIndex;
     private final int _colIndex;
+    private final int _colSpan;
+    private final int _rowSpan;
     private final EHAlignment _hAlign;
     private final EVAlignment _vAlign;
     private final boolean _affectDynamicLayout;
 
     private boolean _delegateInteractionToParent = false;
 
-    public Attachment(Vertex vertex, String id, Size innerSize, int rowIndex, int colIndex, EHAlignment hAlign, EVAlignment vAlign, boolean affectDynamicLayout)
+    public Attachment(Vertex vertex, String id, Size innerSize, int rowIndex, int colIndex, int colSpan, int rowSpan, EHAlignment hAlign, EVAlignment vAlign, boolean affectDynamicLayout)
     {
         super(vertex.getGraph(), id);
         _parent = vertex;
         _size = innerSize;
         _rowIndex = rowIndex;
         _colIndex = colIndex;
+        _colSpan = colSpan;
+        _rowSpan = rowSpan;
         _hAlign = hAlign;
         _vAlign = vAlign;
         _affectDynamicLayout = affectDynamicLayout;
@@ -50,6 +54,16 @@ public class Attachment extends GraphElement implements ISized
     public int getColIndex()
     {
         return _colIndex;
+    }
+
+    public int getColSpan()
+    {
+        return _colSpan;
+    }
+
+    public int getRowSpan()
+    {
+        return _rowSpan;
     }
 
     public EHAlignment getHAlignment()

@@ -27,14 +27,13 @@ public class ExampleGraph {
 
         Vertex vertexA = graph.addVertex("A", 0.0, 0.0);
         vertexA.addAttachment("N1", 0.3, 0.2, 0, 0).setLabel("N1");
-        vertexA.addAttachment("N2", 0.3, 0.2, 0, 1).setLabel("N2");
-        vertexA.addAttachment("N3", 0.3, 0.2, 0, 2).setLabel("N3");
+        vertexA.addAttachment("N2", 0.85, 0.2, 0, 1, 2, 1).setLabel("N2");
         vertexA.addAttachment("M1", 0.3, 0.2, 1, 0).setLabel("M1");
         vertexA.addAttachment("M2", 0.25, 0.15, 1, 1, Attachment.EHAlignment.Center, Attachment.EVAlignment.Middle).setLabel("M2");
-        vertexA.addAttachment("M3", 0.3, 0.2, 1, 2).setLabel("M3");
+        vertexA.addAttachment("M3", 0.3, 0.8, 1, 2, 1, 2).setLabel("M3");
         vertexA.addAttachment("S1", 0.3, 0.2, 2, 0).setLabel("S1");
         vertexA.addAttachment("S2", 0.3, 0.2, 2, 1).setLabel("S2");
-        vertexA.addAttachment("S3", 0.3, 0.2, 2, 2).setLabel("S3");
+        //vertexA.addAttachment("S3", 0.3, 0.2, 2, 2).setLabel("S3");
 
         Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
         vertexB.setLabel("vertex B");
