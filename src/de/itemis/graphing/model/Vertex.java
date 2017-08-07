@@ -208,12 +208,12 @@ public class Vertex extends GraphElement implements ISized
         double height=0;
         for (int idx=colIndex; idx<colIndex+colSpan; idx++)
         {
-            width += _colWidths.get(idx);
+            width += getSizeFromMap(_colWidths, idx);
             if (idx>colIndex) width+= _cellSpacing;
         }
         for (int idx=rowIndex; idx<rowIndex+rowSpan; idx++)
         {
-            height += _rowHeights.get(idx);
+            height += getSizeFromMap(_rowHeights, idx);
             if (idx>rowIndex) height+= _cellSpacing;
         }
         return new Size(width, height);
@@ -228,9 +228,9 @@ public class Vertex extends GraphElement implements ISized
         for (int idx=0; idx < ((rowIndex > colIndex) ? rowIndex : colIndex); idx++)
         {
             if (idx < rowIndex)
-                rowOffset += (_rowHeights.get(idx) != null ? _rowHeights.get(idx) : 0.0) + _cellSpacing;
+                rowOffset += getSizeFromMap(_rowHeights, idx) + _cellSpacing;
             if (idx < colIndex)
-                colOffset += (_colWidths.get(idx) != null ? _colWidths.get(idx) : 0.0) + _cellSpacing;
+                colOffset += getSizeFromMap(_colWidths, idx) + _cellSpacing;
         }
 
         return new Size(colOffset, rowOffset);
@@ -300,8 +300,7 @@ public class Vertex extends GraphElement implements ISized
         }
         else if (span == 1)
         {
-            Double maxSize = sizes.get(idx);
-            if (maxSize == null) maxSize = 0.0;
+            double maxSize = getSizeFromMap(sizes, idx);
             sizes.put(idx, Math.max(maxSize, size));
         }
         else
@@ -310,7 +309,7 @@ public class Vertex extends GraphElement implements ISized
             double existingSizeWithoutSpacing = 0;
             for (int subIdx = idx; subIdx < idx + span; subIdx++)
             {
-                double subSize = sizes.get(subIdx) != null ? sizes.get(subIdx) : 0.0;
+                double subSize = getSizeFromMap(sizes, subIdx);
                 existingSizeWithoutSpacing += subSize;
                 existingSize += subSize + _cellSpacing;
             }
@@ -322,11 +321,22 @@ public class Vertex extends GraphElement implements ISized
 
             for (int subIdx = idx; subIdx < idx + span; subIdx++)
             {
-                double subSize = sizes.get(subIdx) != null ? sizes.get(subIdx) : 0.0;
-                double subExtra = subSize / existingSizeWithoutSpacing * extraNeeded;
+                double subSize = getSizeFromMap(sizes, subIdx);
+                double subExtra;                                    // proportional extra size needed for the column/row
+                if (existingSizeWithoutSpacing == 0)
+                    subExtra = (1.0 / span) * extraNeeded;          // special case if current row/column has zero size. in this case proportion would be infinite, thus we use proportion-of-span
+                else
+                    subExtra = (subSize / existingSizeWithoutSpacing) * extraNeeded;
+
                 sizes.put(subIdx, subSize + subExtra);
             }
         }
+    }
+
+    private double getSizeFromMap(HashMap<Integer, Double> map, int idx)
+    {
+        Double value = map.get(idx);
+        return value != null ? value : 0.0;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

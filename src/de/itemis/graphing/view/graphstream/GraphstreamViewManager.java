@@ -367,6 +367,9 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         double radian = Math.atan2(y, x);
         double degree = 360 / (2 * Math.PI) * radian;
 
+        if (attachment.getId().equals("BAtt"))
+            System.out.println("BLUBB");
+
         sprite.setPosition(distance, 0.0, degree);
     }
 

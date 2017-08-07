@@ -33,7 +33,6 @@ public class ExampleGraph {
         vertexA.addAttachment("M3", 0.3, 0.8, 1, 2, 1, 2).setLabel("M3");
         vertexA.addAttachment("S1", 0.3, 0.2, 2, 0).setLabel("S1");
         vertexA.addAttachment("S2", 0.3, 0.2, 2, 1).setLabel("S2");
-        //vertexA.addAttachment("S3", 0.3, 0.2, 2, 2).setLabel("S3");
 
         Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
         vertexB.setLabel("vertex B");
