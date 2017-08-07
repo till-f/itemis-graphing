@@ -128,15 +128,25 @@ public class Graph
 
     public Vertex addVertex(String id, double width, double height)
     {
-        return addVertex(id, width, height, 0.0);
+        return addVertex(id, width, height, 0.0, new Padding(0.0));
     }
 
     public Vertex addVertex(String id, double width, double height, double cellSpacing)
     {
+        return addVertex(id, width, height, cellSpacing, new Padding(0.0));
+    }
+
+    public Vertex addVertex(String id, double width, double height, Padding padding)
+    {
+        return addVertex(id, width, height, 0.0, padding);
+    }
+
+    public Vertex addVertex(String id, double width, double height, double cellSpacing, Padding padding)
+    {
         if (_vertexes.containsKey(id))
             return null;
 
-        Vertex vertex = new Vertex(this, id, new Size(width, height), cellSpacing);
+        Vertex vertex = new Vertex(this, id, new Size(width, height), cellSpacing, padding);
         _vertexes.put(id, vertex);
 
         for(IGraphListener listener : _graphListeners)

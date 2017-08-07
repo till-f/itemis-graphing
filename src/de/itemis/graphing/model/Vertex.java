@@ -12,6 +12,7 @@ public class Vertex extends GraphElement implements ISized
     private LinkedHashSet<Edge> _incomingEdges = new LinkedHashSet<Edge>();
 
     private final Size _minimalSize;
+    private final Padding _padding;
     private final double _cellSpacing;
 
     private boolean _isTableSizeDirty = true;
@@ -19,11 +20,12 @@ public class Vertex extends GraphElement implements ISized
     private Double _x = null;
     private Double _y = null;
 
-    public Vertex(Graph g, String id, Size minimalSize, double cellSpacing)
+    public Vertex(Graph g, String id, Size minimalSize, double cellSpacing, Padding padding)
     {
         super(g, id);
         _minimalSize = minimalSize;
         _cellSpacing = cellSpacing;
+        _padding = padding;
         setStyle(EStyle.Regular, g.getDefaultVertexStyle(EStyle.Regular));
         setStyle(EStyle.Clicked, g.getDefaultVertexStyle(EStyle.Clicked));
         setStyle(EStyle.Selected, g.getDefaultVertexStyle(EStyle.Selected));
@@ -195,7 +197,7 @@ public class Vertex extends GraphElement implements ISized
     {
         if(_isTableSizeDirty) updateTableSize();
 
-        return Size.max(_minimalSize, getAttachmentsSize());
+        return Size.max(_minimalSize, getAttachmentsSize().addPadding(_padding));
     }
 
     public Size getCellSize(int rowIndex, int colIndex, int colSpan, int rowSpan)
@@ -221,8 +223,8 @@ public class Vertex extends GraphElement implements ISized
     {
         if(_isTableSizeDirty) updateTableSize();
 
-        double rowOffset = 0.0;
-        double colOffset = 0.0;
+        double rowOffset = 0.5 * (_padding.getNorth() - _padding.getSouth());
+        double colOffset = 0.5 * (_padding.getWest() -_padding.getEast());
         for (int idx=0; idx < ((rowIndex > colIndex) ? rowIndex : colIndex); idx++)
         {
             if (idx < rowIndex)
