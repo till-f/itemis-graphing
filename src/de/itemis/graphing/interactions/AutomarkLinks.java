@@ -61,7 +61,7 @@ public class AutomarkLinks implements IInteractionListener
             s.setLineColor("FF0000");
             if (e instanceof Edge)
             {
-                s.setzIndex(2);
+                s.setIsInLevelForeground(true);
             }
             e.beginHighlight(s);
         }

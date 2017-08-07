@@ -4,6 +4,6 @@ public class VertexStyle extends BlockStyle
 {
     public VertexStyle()
     {
-        setzIndex(3);
+        zIndex = 3;
     }
 }

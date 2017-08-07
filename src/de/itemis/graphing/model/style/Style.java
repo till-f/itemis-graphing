@@ -18,6 +18,7 @@ public abstract class Style implements Cloneable
     protected Double fontSize = 12.0;
     protected ELabelAlignment labelAlignment = ELabelAlignment.Center;
     protected Integer zIndex = 1;
+    protected Boolean isInLevelForeground = false;
 
     public Style getCopy()
     {
@@ -55,7 +56,8 @@ public abstract class Style implements Cloneable
         return lineThickness;
     }
 
-    public ELineMode getLineMode() {
+    public ELineMode getLineMode()
+    {
         return lineMode;
     }
 
@@ -69,9 +71,14 @@ public abstract class Style implements Cloneable
         return labelAlignment;
     }
 
+    public Boolean isInLevelForeground()
+    {
+        return isInLevelForeground;
+    }
+
     public Integer getzIndex()
     {
-        return zIndex;
+        return zIndex + (isInLevelForeground ? 1 : 0);
     }
 
     public void setLineColor(String lineColor)
@@ -116,10 +123,9 @@ public abstract class Style implements Cloneable
         updated();
     }
 
-    public void setzIndex(Integer zIndex)
+    public void setIsInLevelForeground(boolean isInLevelForeground)
     {
-        this.zIndex = zIndex;
-        updated();
+        this.isInLevelForeground = isInLevelForeground;
     }
 
     protected void updated()

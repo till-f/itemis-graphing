@@ -6,8 +6,12 @@ public class EdgeStyle extends Style
     public enum EEdgeRouting { Direct, Cubic, Routed }
 
     protected EShape shape = EShape.Arrow;
-
     protected EEdgeRouting edgeRouting = EEdgeRouting.Direct;
+
+    public EdgeStyle()
+    {
+        zIndex = 1;
+    }
 
     public EShape getShape()
     {
