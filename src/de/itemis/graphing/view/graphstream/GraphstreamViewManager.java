@@ -20,10 +20,12 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 
 import javax.swing.JPanel;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener, MouseWheelListener
+public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener, MouseWheelListener, AncestorListener
 {
     private final org.graphstream.graph.Graph _gsGraph;
     private final StyleToGraphstreamCSS _styleConverter;
@@ -88,6 +90,8 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         view.setMouseManager(mouseManager);
         view.addMouseWheelListener(this);
 
+        view.addAncestorListener(this);
+
         _view = view;
         _viewer = viewer;
         _layout = layout;
@@ -129,7 +133,6 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     public void fitView()
     {
         _view.getCamera().resetView();
-        _view.getCamera().setAutoFitView(true);
     }
 
     @Override
@@ -175,6 +178,21 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         double currentZoom = _view.getCamera().getViewPercent();
         double zoomOffset = 0.1 * rotation * currentZoom;
         _view.getCamera().setViewPercent(currentZoom + zoomOffset);
+    }
+
+    @Override
+    public void ancestorAdded(AncestorEvent event) {
+        _view.getCamera().resetView();
+    }
+
+    @Override
+    public void ancestorRemoved(AncestorEvent event) {
+
+    }
+
+    @Override
+    public void ancestorMoved(AncestorEvent event) {
+
     }
 
     // -----------------------------------------------------------------------------------------------------------------
