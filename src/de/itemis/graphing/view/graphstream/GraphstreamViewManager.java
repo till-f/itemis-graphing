@@ -1,27 +1,35 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.Attachment;
+import de.itemis.graphing.model.Edge;
+import de.itemis.graphing.model.Graph;
+import de.itemis.graphing.model.GraphElement;
+import de.itemis.graphing.model.IGraphListener;
+import de.itemis.graphing.model.Size;
+import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.view.AbstractViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
 import org.graphstream.ui.swingViewer.DefaultView;
-import org.graphstream.ui.view.View;
+import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 
 import javax.swing.JPanel;
-import java.awt.Component;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
-public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener
+public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener, MouseWheelListener
 {
     private final org.graphstream.graph.Graph _gsGraph;
     private final StyleToGraphstreamCSS _styleConverter;
     private SpriteManager _spriteManager;                   // cannot be final due to bug in graphstream (reset of SpriteManager does not work properly)
 
-    private View _view = null;
+    private ViewPanel _view = null;
     private Viewer _viewer = null;
     private Layout _layout = null;
 
@@ -66,7 +74,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
             viewer = new Viewer(_gsGraph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         }
 
-        View view;
+        final ViewPanel view;
         if (viewID == null)
         {
             view = new DefaultView(viewer, "DefaultView", new org.graphstream.ui.j2dviewer.J2DGraphRenderer());
@@ -74,14 +82,11 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         }
         else
         {
-            view = viewer.getView(viewID);
+            view = (ViewPanel)viewer.getView(viewID);
         }
 
         view.setMouseManager(mouseManager);
-        if (view instanceof Component)
-        {
-            ((Component)view).addMouseWheelListener(mouseManager);
-        }
+        view.addMouseWheelListener(this);
 
         _view = view;
         _viewer = viewer;
@@ -103,10 +108,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     @Override
     public JPanel getView()
     {
-        if (!(_view instanceof JPanel))
-            throw new RuntimeException("GraphstreamViewManager not configured properly, viewer must provide a JPanel as view instance.");
-
-        return (JPanel)_view;
+        return _view;
     }
 
     @Override
@@ -133,10 +135,46 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     @Override
     public void setShowLabels(boolean show)
     {
+        String textVisibility;
         if (show)
-            _gsGraph.addAttribute("ui.stylesheet", "node { text-visibility-mode: normal; } sprite { text-visibility-mode: normal; } edge { text-visibility-mode: normal; }");
+            textVisibility = "text-visibility-mode: normal;";
         else
-            _gsGraph.addAttribute("ui.stylesheet", "node { text-visibility-mode: hidden; } sprite { text-visibility-mode: hidden; } edge { text-visibility-mode: hidden; }");
+            textVisibility = "text-visibility-mode: hidden;";
+
+        _gsGraph.addAttribute("ui.stylesheet", "graph { padding: 1.0gu; } node { " + textVisibility + " } sprite { " + textVisibility + " } edge { " + textVisibility + " arrow-size: 0.1gu,0.04gu; }");
+    }
+
+    public void close()
+    {
+        _view.removeMouseWheelListener(this);
+        _viewer.close();
+    }
+
+    public void updateLabelState()
+    {
+        // dummy stuff (might be used to show/hide text in the future...)
+        double distancePX = 5;
+        Point3 p1 = _view.getCamera().transformPxToGu(0, 0);
+        Point3 p2 = _view.getCamera().transformPxToGu(0, distancePX);
+        double distanceGU = Math.abs(p2.y - p1.y);
+        double relationPXGU = distancePX / distanceGU;
+        System.out.println("distance PX : " + distancePX);
+        System.out.println("distance GU : " + distanceGU);
+        System.out.println("relationPXGU: " + relationPXGU); // if this value gets below a threshold, text should not be rendered anymore
+        System.out.println("current zoom: " +  _view.getCamera().getViewPercent());
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // MouseWheelListener
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e)
+    {
+        int rotation =  e.getWheelRotation();
+        double currentZoom = _view.getCamera().getViewPercent();
+        double zoomOffset = 0.1 * rotation * currentZoom;
+        _view.getCamera().setViewPercent(currentZoom + zoomOffset);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -379,7 +417,6 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     {
         _gsGraph.addAttribute("ui.quality");
         _gsGraph.addAttribute("ui.antialias");
-        _gsGraph.addAttribute("ui.stylesheet", "edge { arrow-size: 0.1gu,0.04gu; }");
     }
 
 }

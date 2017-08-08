@@ -8,6 +8,9 @@ import java.util.Set;
 
 public interface IViewManager
 {
+    // -----------------------------------------------------------------------------------------------------------------
+    // rendering technology specific
+
     JPanel getView();
 
     void zoomIn();
@@ -17,6 +20,11 @@ public interface IViewManager
     void fitView();
 
     void setShowLabels(boolean show);
+
+    void close();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // not technology specific
 
     Set<GraphElement> getSelectedElements();
 

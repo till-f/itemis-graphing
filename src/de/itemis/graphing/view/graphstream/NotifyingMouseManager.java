@@ -12,11 +12,12 @@ import org.graphstream.ui.view.Camera;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.util.MouseManager;
 
+import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-public class NotifyingMouseManager implements MouseManager, MouseWheelListener
+public class NotifyingMouseManager implements MouseManager
 {
     public class MousePan
     {
@@ -82,12 +83,8 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     @Override
     public void init(GraphicGraph gsGraph, View view)
     {
-        if (view instanceof ViewPanel)
-            _view = (ViewPanel)view;
-        else
-            throw new IllegalArgumentException("NotifyingMouseManager requires ViewPanel instance for 'view'");
-
         _gsGraph = gsGraph;
+        _view = (ViewPanel) view;
         _mousePan = new MousePan(view.getCamera());
         _camera = view.getCamera();
 
@@ -211,7 +208,14 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
     @Override
     public void mouseMoved(MouseEvent e)
     {
-        // NOP
+        if (!_view.hasFocus())
+        {
+            // this is a hotfix for MPS: they seem to do something totally strange things to update/redraw the UI.
+            // the camera does not seem to be in synch after the view lost the focus in MPS.
+            // (pixels are not transformed into graphical units correctly or something...)
+            // it did not work out to add a focus listener, so this is the hacky solution. love you, MPS.
+            _view.getCamera().setViewPercent(_view.getCamera().getViewPercent());
+        }
     }
 
     @Override
@@ -284,14 +288,5 @@ public class NotifyingMouseManager implements MouseManager, MouseWheelListener
         {
             _mousePan.endPan();
         }
-    }
-
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e)
-    {
-        int rotation =  e.getWheelRotation();
-        double currentZoom = _camera.getViewPercent();
-        double zoomOffset = 0.1 * rotation * currentZoom;
-        _camera.setViewPercent(currentZoom + zoomOffset);
     }
 }
