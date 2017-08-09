@@ -20,12 +20,10 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 
 import javax.swing.JPanel;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener, MouseWheelListener, AncestorListener
+public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener, MouseWheelListener
 {
     private final org.graphstream.graph.Graph _gsGraph;
     private final StyleToGraphstreamCSS _styleConverter;
@@ -90,8 +88,6 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         view.setMouseManager(mouseManager);
         view.addMouseWheelListener(this);
 
-        view.addAncestorListener(this);
-
         _view = view;
         _viewer = viewer;
         _layout = layout;
@@ -155,7 +151,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
     public void updateLabelState()
     {
-        // dummy stuff (might be used to show/hide text in the future...)
+        // not used atm. might be used to show/hide text in the future...
         double distancePX = 5;
         Point3 p1 = _view.getCamera().transformPxToGu(0, 0);
         Point3 p2 = _view.getCamera().transformPxToGu(0, distancePX);
@@ -178,23 +174,6 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         double currentZoom = _view.getCamera().getViewPercent();
         double zoomOffset = 0.1 * rotation * currentZoom;
         _view.getCamera().setViewPercent(currentZoom + zoomOffset);
-    }
-
-    @Override
-    public void ancestorAdded(AncestorEvent event)
-    {
-        _view.getCamera().resetView();
-    }
-
-    @Override
-    public void ancestorRemoved(AncestorEvent event)
-    {
-    }
-
-    @Override
-    public void ancestorMoved(AncestorEvent event)
-    {
-        _view.getCamera().resetView();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

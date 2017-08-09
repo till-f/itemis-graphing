@@ -208,14 +208,7 @@ public class NotifyingMouseManager implements MouseManager
     @Override
     public void mouseMoved(MouseEvent e)
     {
-        if (!_view.hasFocus())
-        {
-            // this is a hotfix for MPS: they seem to do something totally strange things to update/redraw the UI.
-            // the camera does not seem to be in synch after the view lost the focus in MPS.
-            // (pixels are not transformed into graphical units correctly or something...)
-            // it did not work out to add a focus listener, so this is the hacky solution. love you, MPS.
-            _view.getCamera().setViewPercent(_view.getCamera().getViewPercent());
-        }
+        // NOP
     }
 
     @Override
