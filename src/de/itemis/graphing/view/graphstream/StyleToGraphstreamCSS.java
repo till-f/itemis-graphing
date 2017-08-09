@@ -64,7 +64,7 @@ public class StyleToGraphstreamCSS
 
         sb.append("text-color: #" + style.getTextColor() + ";");
         sb.append("text-size: " + style.getFontSize() + ";");
-        sb.append("text-padding: 0px;");
+        sb.append("text-padding: 3.0,0.0px;");
         sb.append("text-background-mode: plain;");
         sb.append("text-background-color: #" + style.getFillColor() + ";");
         sb.append("text-alignment: " + getGraphstreamTextAlignment(style.getLabelAlignment()) + ";");
