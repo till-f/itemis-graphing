@@ -140,7 +140,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         else
             textVisibility = "text-visibility-mode: hidden;";
 
-        _gsGraph.addAttribute("ui.stylesheet", "graph { padding: 1.0gu; } node { " + textVisibility + " } sprite { " + textVisibility + " } edge { " + textVisibility + " arrow-size: 0.1gu,0.04gu; }");
+        _gsGraph.addAttribute("ui.stylesheet", "graph { padding: 0.7gu; } node { " + textVisibility + " } sprite { " + textVisibility + " } edge { " + textVisibility + " arrow-size: 0.1gu,0.04gu; }");
     }
 
     public void close()
