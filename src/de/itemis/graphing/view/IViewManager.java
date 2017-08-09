@@ -19,8 +19,6 @@ public interface IViewManager
 
     void fitView();
 
-    void setShowLabels(boolean show);
-
     void close();
 
     // -----------------------------------------------------------------------------------------------------------------

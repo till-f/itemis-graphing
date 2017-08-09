@@ -20,10 +20,12 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 
 import javax.swing.JPanel;
+import java.awt.event.HierarchyBoundsListener;
+import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener, MouseWheelListener
+public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener, MouseWheelListener, HierarchyBoundsListener
 {
     private final org.graphstream.graph.Graph _gsGraph;
     private final StyleToGraphstreamCSS _styleConverter;
@@ -33,7 +35,15 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     private Viewer _viewer = null;
     private Layout _layout = null;
 
+    private final double _textThresholdMainText;
+    private final double _textThresholdLowPrioText;
+
     public GraphstreamViewManager(Graph graph)
+    {
+        this(graph, 25, 55);
+    }
+
+    public GraphstreamViewManager(Graph graph, double textThresholdMainText, double textThresholdLowPrioText)
     {
         super(graph);
 
@@ -41,8 +51,11 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         _spriteManager = new SpriteManager(_gsGraph);
         _styleConverter = new StyleToGraphstreamCSS();
 
+        _textThresholdMainText = textThresholdMainText;
+        _textThresholdLowPrioText = textThresholdLowPrioText;
+
         setInitialAttributes();
-        setShowLabels(true);
+        setLabelState(true, true);
 
         for(Vertex vertex : graph.getVertexes())
         {
@@ -87,6 +100,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
         view.setMouseManager(mouseManager);
         view.addMouseWheelListener(this);
+        view.addHierarchyBoundsListener(this);
 
         _view = view;
         _viewer = viewer;
@@ -116,6 +130,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     {
         double currentZoom =  _view.getCamera().getViewPercent();
         _view.getCamera().setViewPercent(currentZoom - 0.1 * currentZoom);
+        updateLabelState();
     }
 
     @Override
@@ -123,6 +138,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     {
         double currentZoom = _view.getCamera().getViewPercent();
         _view.getCamera().setViewPercent(currentZoom + 0.1 * currentZoom);
+        updateLabelState();
     }
 
     @Override
@@ -131,41 +147,14 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         _view.getCamera().resetView();
     }
 
-    @Override
-    public void setShowLabels(boolean show)
-    {
-        String textVisibility;
-        if (show)
-            textVisibility = "text-visibility-mode: normal;";
-        else
-            textVisibility = "text-visibility-mode: hidden;";
-
-        _gsGraph.addAttribute("ui.stylesheet", "graph { padding: 0.7gu; } node { " + textVisibility + " } sprite { " + textVisibility + " } edge { " + textVisibility + " arrow-size: 0.1gu,0.04gu; }");
-    }
-
     public void close()
     {
         _view.removeMouseWheelListener(this);
         _viewer.close();
     }
 
-    public void updateLabelState()
-    {
-        // not used atm. might be used to show/hide text in the future...
-        double distancePX = 5;
-        Point3 p1 = _view.getCamera().transformPxToGu(0, 0);
-        Point3 p2 = _view.getCamera().transformPxToGu(0, distancePX);
-        double distanceGU = Math.abs(p2.y - p1.y);
-        double relationPXGU = distancePX / distanceGU;
-        System.out.println("distance PX : " + distancePX);
-        System.out.println("distance GU : " + distanceGU);
-        System.out.println("relationPXGU: " + relationPXGU); // if this value gets below a threshold, text should not be rendered anymore
-        System.out.println("current zoom: " +  _view.getCamera().getViewPercent());
-    }
-
-
     // -----------------------------------------------------------------------------------------------------------------
-    // MouseWheelListener
+    // MouseWheelListener and HierarchyBoundsListener (size and zoom changing)
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e)
@@ -174,6 +163,61 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         double currentZoom = _view.getCamera().getViewPercent();
         double zoomOffset = 0.1 * rotation * currentZoom;
         _view.getCamera().setViewPercent(currentZoom + zoomOffset);
+
+        updateLabelState();
+    }
+
+    @Override
+    public void ancestorMoved(HierarchyEvent e)
+    {
+
+    }
+
+    @Override
+    public void ancestorResized(HierarchyEvent e)
+    {
+        updateLabelState();
+    }
+
+    private boolean _showMainText = true;
+    private boolean _showLowPrioText = true;
+    private void updateLabelState()
+    {
+        if (_view.getWidth() < 10)
+            return;
+
+        try
+        {
+            // quick distance calculation, relies on 2-dimensional, not rotated rendering
+            double distancePX = 5;
+            Point3 p1 = _view.getCamera().transformPxToGu(0, 0);
+            Point3 p2 = _view.getCamera().transformPxToGu(0, distancePX);
+            double distanceGU = Math.abs(p2.y - p1.y);
+            double relationPXGU = distancePX / distanceGU;
+
+            boolean showMainText = relationPXGU > _textThresholdMainText;
+            boolean showLowPrioText = relationPXGU > _textThresholdLowPrioText;
+
+            if (showMainText != _showMainText || showLowPrioText != _showLowPrioText)
+            {
+                setLabelState(showMainText, showLowPrioText);
+            }
+        }
+        catch (NullPointerException e)
+        {
+            // at the very beginning camera might fail to translate pixels. as there is no way to know this in advance we need a catch...
+        }
+    }
+
+    private void setLabelState(boolean showMainText, boolean showLowPrioText)
+    {
+        _showMainText = showMainText;
+        _showLowPrioText = showLowPrioText;
+
+        String visMain = showMainText ? "text-visibility-mode: normal;" : "text-visibility-mode: hidden;" ;
+        String visLowPrio = showLowPrioText ? "text-visibility-mode: normal;" : "text-visibility-mode: hidden;" ;
+
+        _gsGraph.addAttribute("ui.stylesheet", "graph { padding: 0.7gu; } node { " + visMain + " } edge { " + visMain + " arrow-size: 0.1gu,0.04gu; } sprite { " + visMain + " } node.lowpriotxt { " + visLowPrio + " } edge.lowpriotxt { " + visLowPrio + " } sprite.lowpriotxt { " + visLowPrio + " }");
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -252,6 +296,11 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
         String styleCSS = _styleConverter.getAtciveStyleCSS(element);
         gsElement.setAttribute("ui.style", styleCSS);
+
+        if (element.getStyle().isLowPrioText())
+            gsElement.setAttribute("ui.class", "lowpriotxt");
+        else
+            gsElement.removeAttribute("ui.class");
     }
 
     @Override
@@ -307,8 +356,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         if (vertex.getLabel() != null)
             gsNode.setAttribute("ui.label", vertex.getLabel());
 
-        String styleCSS = _styleConverter.getAtciveStyleCSS(vertex);
-        gsNode.setAttribute("ui.style", styleCSS);
+        styleChanged(vertex);
 
         addAttachments(vertex);
     }
@@ -330,8 +378,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         if (edge.getLabel() != null)
             gsEdge.setAttribute("ui.label", edge.getLabel());
 
-        String styleCSS = _styleConverter.getAtciveStyleCSS(edge);
-        gsEdge.setAttribute("ui.style", styleCSS);
+        styleChanged(edge);
     }
 
     private void removeEdge(Edge edge)
@@ -356,8 +403,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         if (attachment.getLabel() != null)
             sprite.setAttribute("ui.label", attachment.getLabel());
 
-        String styleCSS = _styleConverter.getAtciveStyleCSS(attachment);
-        sprite.setAttribute("ui.style", styleCSS);
+        styleChanged(attachment);
 
         sprite.attachToNode(vertex.getId());
 
