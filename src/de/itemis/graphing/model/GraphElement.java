@@ -9,6 +9,7 @@ public abstract class GraphElement implements IStyled
 
     private Object _userObject = null;
     private String _label = null;
+    private boolean _isLowPioLabel = false;
 
     private Style[] _styles = new Style[EStyle.values().length];
     private boolean _isSelectable = true;
@@ -50,6 +51,17 @@ public abstract class GraphElement implements IStyled
         _label = label;
         _graph.labelChanged(this);
 
+    }
+
+    public boolean isLowPrioLabel()
+    {
+        return _isLowPioLabel;
+    }
+
+    public void setIsLowPrioLabel(boolean isLowPrio)
+    {
+        _isLowPioLabel = isLowPrio;
+        _graph.labelPriorityChanged(this);
     }
 
     public boolean isSelectable()

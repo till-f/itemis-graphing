@@ -325,6 +325,14 @@ public class Graph
         }
     }
 
+    public void labelPriorityChanged(GraphElement element)
+    {
+        for(IGraphListener listener : _graphListeners)
+        {
+            listener.labelPriorityChanged(element);
+        }
+    }
+
     public void attachmentAdded(Attachment attachment)
     {
         _attachments.put(attachment.getId(), attachment);

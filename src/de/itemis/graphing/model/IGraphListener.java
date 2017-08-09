@@ -11,4 +11,5 @@ public interface IGraphListener
     void attachmentRemoved(Attachment attachment);
     void styleChanged(GraphElement element);
     void labelChanged(GraphElement element);
+    void labelPriorityChanged(GraphElement element);
 }

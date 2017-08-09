@@ -296,11 +296,6 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
         String styleCSS = _styleConverter.getAtciveStyleCSS(element);
         gsElement.setAttribute("ui.style", styleCSS);
-
-        if (element.getStyle().isLowPrioText())
-            gsElement.setAttribute("ui.class", "lowpriotxt");
-        else
-            gsElement.removeAttribute("ui.class");
     }
 
     @Override
@@ -312,6 +307,20 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
             return;
 
         gsElement.setAttribute("ui.label", element.getLabel());
+    }
+
+    @Override
+    public void labelPriorityChanged(GraphElement element)
+    {
+        Element gsElement = getGraphstreamElement(element);
+
+        if (gsElement == null)
+            return;
+
+        if (element.isLowPrioLabel())
+            gsElement.setAttribute("ui.class", "lowpriotxt");
+        else
+            gsElement.setAttribute("ui.class", "");
     }
 
     private Element getGraphstreamElement(GraphElement element)
@@ -353,9 +362,8 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     {
         Node gsNode = _gsGraph.addNode(vertex.getId());
 
-        if (vertex.getLabel() != null)
-            gsNode.setAttribute("ui.label", vertex.getLabel());
-
+        labelChanged(vertex);
+        labelPriorityChanged(vertex);
         styleChanged(vertex);
 
         addAttachments(vertex);
@@ -375,9 +383,8 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     {
         org.graphstream.graph.Edge gsEdge = _gsGraph.addEdge(edge.getId(), edge.getFrom().getId(), edge.getTo().getId(), true);
 
-        if (edge.getLabel() != null)
-            gsEdge.setAttribute("ui.label", edge.getLabel());
-
+        labelChanged(edge);
+        labelPriorityChanged(edge);
         styleChanged(edge);
     }
 
@@ -400,9 +407,8 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
         Sprite sprite = _spriteManager.addSprite(attachment.getId());
 
-        if (attachment.getLabel() != null)
-            sprite.setAttribute("ui.label", attachment.getLabel());
-
+        labelChanged(attachment);
+        labelPriorityChanged(attachment);
         styleChanged(attachment);
 
         sprite.attachToNode(vertex.getId());

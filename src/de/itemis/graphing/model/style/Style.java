@@ -19,7 +19,6 @@ public abstract class Style implements Cloneable
     protected ELabelAlignment labelAlignment = ELabelAlignment.Center;
     protected Integer zIndex = 1;
     protected Boolean isInLevelForeground = false;
-    protected Boolean isLowPrioText = false;
 
     public Style getCopy()
     {
@@ -77,11 +76,6 @@ public abstract class Style implements Cloneable
         return isInLevelForeground;
     }
 
-    public Boolean isLowPrioText()
-    {
-        return isLowPrioText;
-    }
-
     public Integer getzIndex()
     {
         return zIndex + (isInLevelForeground ? 1 : 0);
@@ -132,11 +126,6 @@ public abstract class Style implements Cloneable
     public void setIsInLevelForeground(boolean isInLevelForeground)
     {
         this.isInLevelForeground = isInLevelForeground;
-    }
-
-    public void setIsLowPrioText(Boolean isLowPrioText)
-    {
-        this.isLowPrioText = isLowPrioText;
     }
 
     protected void updated()

@@ -18,15 +18,12 @@ public class ExampleGraph {
         VertexStyle operatorStyle = graph.getDefaultVertexStyle(IStyled.EStyle.Regular);
         operatorStyle.setShape(BlockStyle.EShape.Circle);
         operatorStyle.setFillColor("CCCCCC");
-        operatorStyle.setIsLowPrioText(true);
         VertexStyle operatorStyleClicked = graph.getDefaultVertexStyle(IStyled.EStyle.Clicked);
         operatorStyleClicked.setShape(BlockStyle.EShape.Circle);
         operatorStyleClicked.setFillColor("CCCCCC");
-        operatorStyleClicked.setIsLowPrioText(true);
         VertexStyle operatorStyleSelected = graph.getDefaultVertexStyle(IStyled.EStyle.Selected);
         operatorStyleSelected.setShape(BlockStyle.EShape.Circle);
         operatorStyleSelected.setFillColor("CCCCCC");
-        operatorStyleSelected.setIsLowPrioText(true);
 
         Vertex vertexA = graph.addVertex("A", 0.0, 0.0);
         vertexA.addAttachment("N1", 0.3, 0.2, 0, 0).setLabel("N1");
@@ -39,6 +36,7 @@ public class ExampleGraph {
 
         Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
         vertexB.setLabel("vertex B");
+        vertexB.setIsLowPrioLabel(true);
 
         Vertex vertexC = graph.addVertex("C", 1.0, 0.5);
         vertexC.setLabel("vertex C");
