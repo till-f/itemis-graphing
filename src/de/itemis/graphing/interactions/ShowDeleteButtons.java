@@ -44,7 +44,7 @@
 //        if (element instanceof Vertex)
 //        {
 //            Vertex vertex = (Vertex) element;
-//            _deleteAttachment = vertex.addAttachment("DELETE_BUTTON", _size.getWidth(), _size.getHeight(), _padding, _location);
+//            _deleteAttachment = vertex.addAttachment("DELETE_BUTTON", _size.getX(), _size.getY(), _padding, _location);
 //            _deleteAttachment.setLabel("-");
 //            _deleteAttachment.setStyle(IStyled.EStyle.Regular, regularStyle);
 //            _deleteAttachment.setStyle(IStyled.EStyle.Clicked, clickedStyle);

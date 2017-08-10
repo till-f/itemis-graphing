@@ -373,19 +373,12 @@ public class Vertex extends GraphElement implements ISized
         _y = y;
     }
 
-    public boolean isPlaced()
+    public Coordinates getCoordinates()
     {
-        return _x != null && _y != null;
-    }
+        Double x = _x;
+        Double y = _y;
+        if (x == null || y == null) return null;
 
-    public double getX()
-    {
-        return _x;
+        return new Coordinates(x, y);
     }
-
-    public double getY()
-    {
-        return _y;
-    }
-
 }

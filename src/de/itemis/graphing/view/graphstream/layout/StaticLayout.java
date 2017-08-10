@@ -1,6 +1,7 @@
 package de.itemis.graphing.view.graphstream.layout;
 
 import de.itemis.graphing.layout.ILayout;
+import de.itemis.graphing.model.Coordinates;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.Vertex;
 import org.graphstream.stream.PipeBase;
@@ -55,9 +56,10 @@ public class StaticLayout extends PipeBase implements Layout
 
         computeLayout();
 
-        publishLayout();
+        boolean success = publishLayout();
 
-        _relayoutCount++;
+        if (success)
+            _relayoutCount++;
     }
 
     @Override
@@ -181,19 +183,21 @@ public class StaticLayout extends PipeBase implements Layout
         }
     }
 
-    protected void publishLayout()
+    protected boolean publishLayout()
     {
         for (Vertex n : _graph.getVertexes())
         {
-            if (!n.isPlaced())
+            Coordinates c = n.getCoordinates();
+            if (c == null)
             {
-                _relayoutCount--;
-                continue;
+                return false;
             }
 
             sendNodeAttributeChanged(sourceId, n.getId(), "xyz", null,
-                    new double[] { n.getX(), n.getY(), 0 });
+                    new double[] { c.getX(), c.getY(), 0 });
         }
+
+        return true;
     }
 
     protected void computeLayout()
