@@ -35,34 +35,31 @@ public class AutomarkLinks implements IInteractionListener
     {
     }
 
-    private void selectStyle(Vertex vertex, boolean isCustomStyleActive)
+    private void selectStyle(Vertex vertex, boolean setHighlighted)
     {
-        switchStyle(vertex, isCustomStyleActive);
+        switchStyle(vertex, setHighlighted);
 
         for(Edge edge : vertex.getIncomingEdges())
         {
-            switchStyle(edge, isCustomStyleActive);
-            switchStyle(edge.getFrom(), isCustomStyleActive);
+            switchStyle(edge, setHighlighted);
+            switchStyle(edge.getFrom(), setHighlighted);
         }
 
         for(Edge edge : vertex.getOutgoingEdges())
         {
-            switchStyle(edge, isCustomStyleActive);
-            switchStyle(edge.getTo(), isCustomStyleActive);
+            switchStyle(edge, setHighlighted);
+            switchStyle(edge.getTo(), setHighlighted);
         }
     }
 
-    private void switchStyle(GraphElement e, boolean isCustomStyleActive)
+    private void switchStyle(GraphElement e, boolean setHighlighted)
     {
-        if (isCustomStyleActive)
+        if (setHighlighted)
         {
             Style s = e.getStyleRegular();
             s.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
             s.setLineColor("FF0000");
-            if (e instanceof Edge)
-            {
-                s.setIsInLevelForeground(true);
-            }
+            s.setIsInLevelForeground(true);
             e.pushHighlighting(s);
         }
         else
@@ -70,5 +67,4 @@ public class AutomarkLinks implements IInteractionListener
             e.popHighlighting();
         }
     }
-
 }
