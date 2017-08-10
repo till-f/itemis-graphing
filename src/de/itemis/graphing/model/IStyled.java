@@ -4,32 +4,45 @@ import de.itemis.graphing.model.style.Style;
 
 public interface IStyled
 {
-    public enum EStyle { Regular, Clicked, Selected, Highlighted }
+    /**
+     * returns a copy of the current style for REGULAR
+     */
+    Style getStyleRegular();
 
     /**
-     * returns a copy of the current regular style
+     * returns a copy of the current style for CLICKED
      */
-    Style getStyle();
+    Style getStyleClicked();
 
     /**
-     * convenience function, identical to setStyle(EStyle.Regular, newStyle)
+     * returns a copy of the current style for SELECTED
      */
-    void setStyle(Style newStyle);
+    Style getStyleSelected();
 
     /**
-     * copies the given style and sets it for the given type
+     * sets a copy of the given style for REGULAR
      */
-    void setStyle(EStyle styleSelector, Style newStyle);
+    void setStyleRegular(Style newStyle);
+
+    /**
+     * sets a copy of the given style for CLICKED
+     */
+    void setStyleClicked(Style newStyle);
+
+    /**
+     * sets a copy of the given style for SELECTED
+     */
+    void setStyleSelected(Style newStyle);
 
     /**
      * applies highlighting with a given style
      */
-    void beginHighlight(Style hightlightingStyle);
+    void pushHighlighting(Style hightlightingStyle);
 
     /**
      * removes highlighting
      */
-    void endHighlight();
+    void popHighlighting();
 
     /**
      * returns a copy of the current active style (should be used by view only)

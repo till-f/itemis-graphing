@@ -1,5 +1,9 @@
 package de.itemis.graphing.model;
 
+import de.itemis.graphing.model.style.AttachmentStyle;
+import de.itemis.graphing.model.style.Style;
+import de.itemis.graphing.model.style.VertexStyle;
+
 public class Attachment extends GraphElement implements ISized
 {
     public enum EHAlignment { Left, Center, Right }
@@ -29,10 +33,21 @@ public class Attachment extends GraphElement implements ISized
         _hAlign = hAlign;
         _vAlign = vAlign;
         _affectDynamicLayout = affectDynamicLayout;
-        setSelectable(false);
-        setStyle(EStyle.Regular, _graph.getDefaultAttachmentStyle(EStyle.Regular));
-        setStyle(EStyle.Clicked, _graph.getDefaultAttachmentStyle(EStyle.Clicked));
-        setStyle(EStyle.Selected, _graph.getDefaultAttachmentStyle(EStyle.Selected));
+        setIsSelectable(false);
+    }
+
+    @Override
+    protected void setInitialStyles()
+    {
+        _styleRegular = new AttachmentStyle();
+        _styleClicked = new AttachmentStyle();
+        _styleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
+        _styleClicked.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
+        _styleClicked.setIsInLevelForeground(true);
+        _styleSelected = new AttachmentStyle();
+        _styleSelected.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
+        _styleSelected.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
+        _styleSelected.setIsInLevelForeground(true);
     }
 
     @Override

@@ -2,6 +2,8 @@ package de.itemis.graphing.model;
 
 import de.itemis.graphing.model.style.Style;
 
+import java.util.Stack;
+
 public abstract class GraphElement implements IStyled
 {
     protected final Graph _graph;
@@ -11,28 +13,37 @@ public abstract class GraphElement implements IStyled
     private String _label = null;
     private boolean _isLowPioLabel = false;
 
-    private Style[] _styles = new Style[EStyle.values().length];
+    private Stack<Style> _highlightStyles = new Stack<>();
     private boolean _isSelectable = true;
     private boolean _isSelected = false;
     private boolean _isClicked = false;
-    private boolean _isHighlighted = false;
+
+    // must be set in constructors of concrete graph elements
+    protected Style _styleRegular;
+    protected Style _styleClicked;
+    protected Style _styleSelected;
 
     public GraphElement(Graph g, String id)
     {
         _graph = g;
         _id = id;
+        setInitialStyles();
     }
+
+    protected abstract void setInitialStyles();
 
     public Graph getGraph()
     {
         return _graph;
     }
 
-    public String getId() {
+    public String getId()
+    {
         return _id;
     }
 
-    public Object getUserObject() {
+    public Object getUserObject()
+    {
         return _userObject;
     }
 
@@ -64,12 +75,15 @@ public abstract class GraphElement implements IStyled
         _graph.labelPriorityChanged(this);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // click and selection state handling
+
     public boolean isSelectable()
     {
         return _isSelectable;
     }
 
-    public void setSelectable(boolean selectable)
+    public void setIsSelectable(boolean selectable)
     {
         _isSelectable = selectable;
     }
@@ -100,44 +114,64 @@ public abstract class GraphElement implements IStyled
         styleChanged();
     }
 
-    public void styleChanged()
+    protected void styleChanged()
     {
         _graph.styleChanged(this);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // IStyle
 
     @Override
-    public Style getStyle()
+    public Style getStyleRegular()
     {
-        return _styles[EStyle.Regular.ordinal()].getCopy();
+        return _styleRegular.getCopy();
     }
 
     @Override
-    public void setStyle(Style newStyle)
+    public Style getStyleClicked()
     {
-        setStyle(EStyle.Regular, newStyle);
+        return _styleClicked.getCopy();
     }
 
     @Override
-    public void setStyle(EStyle styleSelector, Style newStyle)
+    public Style getStyleSelected()
     {
-        _styles[styleSelector.ordinal()] = newStyle.getCopy();
-        _styles[styleSelector.ordinal()].setParent(this);
+        return _styleSelected.getCopy();
+    }
 
+    @Override
+    public void setStyleRegular(Style newStyle)
+    {
+        _styleRegular = newStyle.getCopy();
         styleChanged();
     }
 
     @Override
-    public void beginHighlight(Style hightlightingStyle)
+    public void setStyleClicked(Style newStyle)
     {
-        _isHighlighted = true;
-        setStyle(EStyle.Highlighted, hightlightingStyle);
+        _styleClicked = newStyle.getCopy();
+        styleChanged();
     }
 
     @Override
-    public void endHighlight()
+    public void setStyleSelected(Style newStyle)
     {
-        _isHighlighted = false;
+        _styleSelected = newStyle.getCopy();
+        styleChanged();
+    }
+
+    @Override
+    public void pushHighlighting(Style hightlightingStyle)
+    {
+        _highlightStyles.push(hightlightingStyle);
+        styleChanged();
+    }
+
+    @Override
+    public void popHighlighting()
+    {
+        _highlightStyles.pop();
         styleChanged();
     }
 
@@ -145,13 +179,13 @@ public abstract class GraphElement implements IStyled
     public Style getActiveStyle()
     {
         if (_isClicked)
-            return _styles[EStyle.Clicked.ordinal()].getCopy();
+            return _styleClicked.getCopy();
         else if (_isSelected)
-            return _styles[EStyle.Selected.ordinal()].getCopy();
-        else if (_isHighlighted)
-            return _styles[EStyle.Highlighted.ordinal()].getCopy();
+            return _styleSelected.getCopy();
+        else if (_highlightStyles.size() > 0)
+            return _highlightStyles.peek().getCopy();
         else
-            return _styles[EStyle.Regular.ordinal()].getCopy();
+            return _styleRegular.getCopy();
     }
 
     @Override

@@ -1,5 +1,8 @@
 package de.itemis.graphing.model;
 
+import de.itemis.graphing.model.style.Style;
+import de.itemis.graphing.model.style.VertexStyle;
+
 import java.util.*;
 
 public class Vertex extends GraphElement implements ISized
@@ -26,9 +29,20 @@ public class Vertex extends GraphElement implements ISized
         _minimalSize = minimalSize;
         _cellSpacing = cellSpacing;
         _padding = padding;
-        setStyle(EStyle.Regular, g.getDefaultVertexStyle(EStyle.Regular));
-        setStyle(EStyle.Clicked, g.getDefaultVertexStyle(EStyle.Clicked));
-        setStyle(EStyle.Selected, g.getDefaultVertexStyle(EStyle.Selected));
+    }
+
+    @Override
+    protected void setInitialStyles()
+    {
+        _styleRegular = new VertexStyle();
+        _styleClicked = new VertexStyle();
+        _styleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
+        _styleClicked.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
+        _styleClicked.setIsInLevelForeground(true);
+        _styleSelected = new VertexStyle();
+        _styleSelected.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
+        _styleSelected.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
+        _styleSelected.setIsInLevelForeground(true);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

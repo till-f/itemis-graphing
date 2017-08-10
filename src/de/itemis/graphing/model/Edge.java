@@ -1,5 +1,9 @@
 package de.itemis.graphing.model;
 
+import de.itemis.graphing.model.style.EdgeStyle;
+import de.itemis.graphing.model.style.Style;
+import de.itemis.graphing.model.style.VertexStyle;
+
 import java.util.LinkedList;
 
 public class Edge extends GraphElement
@@ -17,10 +21,7 @@ public class Edge extends GraphElement
         super(g, id);
         _from = from;
         _to = to;
-        setSelectable(false);
-        setStyle(EStyle.Regular, g.getDefaultEdgeStyle(EStyle.Regular));
-        setStyle(EStyle.Clicked, g.getDefaultEdgeStyle(EStyle.Clicked));
-        setStyle(EStyle.Selected, g.getDefaultEdgeStyle(EStyle.Selected));
+        setIsSelectable(false);
     }
 
     public Edge(Graph g, String id, String fromId, String toId)
@@ -28,10 +29,22 @@ public class Edge extends GraphElement
         super(g, id);
         _fromId = fromId;
         _toId = toId;
-        setSelectable(false);
-        setStyle(EStyle.Regular, g.getDefaultEdgeStyle(EStyle.Regular));
-        setStyle(EStyle.Clicked, g.getDefaultEdgeStyle(EStyle.Clicked));
-        setStyle(EStyle.Selected, g.getDefaultEdgeStyle(EStyle.Selected));
+        setIsSelectable(false);
+    }
+
+    @Override
+    protected void setInitialStyles()
+    {
+        _styleRegular = new EdgeStyle();
+        _styleClicked = new EdgeStyle();
+        _styleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HLEDGE);
+        _styleClicked.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
+        _styleClicked.setIsInLevelForeground(true);
+        _styleSelected = new EdgeStyle();
+        _styleSelected.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HLEDGE);
+        _styleSelected.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
+        _styleSelected.setIsInLevelForeground(true);
+
     }
 
     public Vertex getFrom() {

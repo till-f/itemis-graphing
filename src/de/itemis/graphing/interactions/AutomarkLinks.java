@@ -56,18 +56,18 @@ public class AutomarkLinks implements IInteractionListener
     {
         if (isCustomStyleActive)
         {
-            Style s = e.getStyle();
-            s.setLineThickness(Graph.DEFAULT_HL_LINE_THICKNESS);
+            Style s = e.getStyleRegular();
+            s.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
             s.setLineColor("FF0000");
             if (e instanceof Edge)
             {
                 s.setIsInLevelForeground(true);
             }
-            e.beginHighlight(s);
+            e.pushHighlighting(s);
         }
         else
         {
-            e.endHighlight();
+            e.popHighlighting();
         }
     }
 

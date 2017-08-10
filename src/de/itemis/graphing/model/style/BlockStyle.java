@@ -14,6 +14,5 @@ public abstract class BlockStyle extends Style
     public void setShape(EShape shape)
     {
         this.shape = shape;
-        updated();
     }
 }

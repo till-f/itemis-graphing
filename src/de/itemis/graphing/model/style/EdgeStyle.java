@@ -26,7 +26,6 @@ public class EdgeStyle extends Style
     public void setShape(EShape shape)
     {
         this.shape = shape;
-        updated();
     }
 
     public void setEdgeRouting(EEdgeRouting edgeRouting)

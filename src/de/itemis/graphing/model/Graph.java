@@ -9,69 +9,13 @@ import java.util.*;
 
 public class Graph
 {
-    public static final String DEFAULT_HL_LINE_COLOR = "0099FF";
-    public static final Double DEFAULT_HL_LINE_THICKNESS = 3.0;
-    public static final Double DEFAULT_HL_LINE_THICKNESS_EDGE = 5.0;
-
     private final LinkedHashMap<String, Edge> _uninsertedEdges = new LinkedHashMap<String, Edge>();
 
     private final LinkedHashMap<String, Vertex> _vertexes = new LinkedHashMap<String, Vertex>();
     private final LinkedHashMap<String, Edge> _edges = new LinkedHashMap<String, Edge>();
     private final LinkedHashMap<String, Attachment> _attachments = new LinkedHashMap<String, Attachment>();
 
-    private VertexStyle[] _defaultVertexStyle = new VertexStyle[IStyled.EStyle.values().length];
-    private EdgeStyle[] _defaultEdgeStyle = new EdgeStyle[IStyled.EStyle.values().length];
-    private AttachmentStyle[] _defaultAttachmentStyle = new AttachmentStyle[IStyled.EStyle.values().length];
-
     private final LinkedHashSet<IGraphListener> _graphListeners = new LinkedHashSet<IGraphListener>();
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // constructor
-
-    public Graph()
-    {
-        _defaultVertexStyle[IStyled.EStyle.Regular.ordinal()] = new VertexStyle();
-        _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()] = new VertexStyle();
-        _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
-        _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
-        _defaultVertexStyle[IStyled.EStyle.Clicked.ordinal()].setIsInLevelForeground(true);
-        _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()] = new VertexStyle();
-        _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
-        _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
-        _defaultVertexStyle[IStyled.EStyle.Selected.ordinal()].setIsInLevelForeground(true);
-        _defaultVertexStyle[IStyled.EStyle.Highlighted.ordinal()] = new VertexStyle();
-        _defaultVertexStyle[IStyled.EStyle.Highlighted.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
-        _defaultVertexStyle[IStyled.EStyle.Highlighted.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
-        _defaultVertexStyle[IStyled.EStyle.Highlighted.ordinal()].setIsInLevelForeground(true);
-
-        _defaultEdgeStyle[IStyled.EStyle.Regular.ordinal()] = new EdgeStyle();
-        _defaultEdgeStyle[IStyled.EStyle.Clicked.ordinal()] = new EdgeStyle();  // edges cannot b clicked...
-        _defaultEdgeStyle[IStyled.EStyle.Clicked.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS_EDGE);
-        _defaultEdgeStyle[IStyled.EStyle.Clicked.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
-        _defaultEdgeStyle[IStyled.EStyle.Clicked.ordinal()].setIsInLevelForeground(true);
-        _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()] = new EdgeStyle();
-        _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS_EDGE);
-        _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
-        _defaultEdgeStyle[IStyled.EStyle.Selected.ordinal()].setIsInLevelForeground(true);
-        _defaultEdgeStyle[IStyled.EStyle.Highlighted.ordinal()] = new EdgeStyle();
-        _defaultEdgeStyle[IStyled.EStyle.Highlighted.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS_EDGE);
-        _defaultEdgeStyle[IStyled.EStyle.Highlighted.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
-        _defaultEdgeStyle[IStyled.EStyle.Highlighted.ordinal()].setIsInLevelForeground(true);
-
-        _defaultAttachmentStyle[IStyled.EStyle.Regular.ordinal()] = new AttachmentStyle();
-        _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()] = new AttachmentStyle();
-        _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
-        _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
-        _defaultAttachmentStyle[IStyled.EStyle.Clicked.ordinal()].setIsInLevelForeground(true);
-        _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()] = new AttachmentStyle();
-        _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
-        _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
-        _defaultAttachmentStyle[IStyled.EStyle.Selected.ordinal()].setIsInLevelForeground(true);
-        _defaultAttachmentStyle[IStyled.EStyle.Highlighted.ordinal()] = new AttachmentStyle();
-        _defaultAttachmentStyle[IStyled.EStyle.Highlighted.ordinal()].setLineThickness(DEFAULT_HL_LINE_THICKNESS);
-        _defaultAttachmentStyle[IStyled.EStyle.Highlighted.ordinal()].setLineColor(DEFAULT_HL_LINE_COLOR);
-        _defaultAttachmentStyle[IStyled.EStyle.Highlighted.ordinal()].setIsInLevelForeground(true);
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // base graph elements
@@ -114,15 +58,15 @@ public class Graph
     {
         for(Vertex v : _vertexes.values())
         {
-            v.endHighlight();
+            v.popHighlighting();
         }
         for(Edge e : _edges.values())
         {
-            e.endHighlight();
+            e.popHighlighting();
         }
         for(Attachment a : _attachments.values())
         {
-            a.endHighlight();
+            a.popHighlighting();
         }
     }
 
@@ -271,39 +215,6 @@ public class Graph
     public void removeGraphListener(IGraphListener listener)
     {
         _graphListeners.remove(listener);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // default styles
-
-    public VertexStyle getDefaultVertexStyle(IStyled.EStyle styleSelector)
-    {
-        return (VertexStyle)_defaultVertexStyle[styleSelector.ordinal()].getCopy();
-    }
-
-    public EdgeStyle getDefaultEdgeStyle(IStyled.EStyle styleSelector)
-    {
-        return (EdgeStyle) _defaultEdgeStyle[styleSelector.ordinal()].getCopy();
-    }
-
-    public AttachmentStyle getDefaultAttachmentStyle(IStyled.EStyle styleSelector)
-    {
-        return (AttachmentStyle) _defaultAttachmentStyle[styleSelector.ordinal()].getCopy();
-    }
-
-    public void setDefaultVertexStyle(IStyled.EStyle styleSelector, BlockStyle newStyle)
-    {
-        _defaultVertexStyle[styleSelector.ordinal()] = (VertexStyle)newStyle.getCopy();
-    }
-
-    public void setDefaultEdgeStyle(IStyled.EStyle styleSelector, EdgeStyle newStyle)
-    {
-        _defaultEdgeStyle[styleSelector.ordinal()] = (EdgeStyle)newStyle.getCopy();
-    }
-
-    public void setDefaultAttachmentStyle(IStyled.EStyle styleSelector, BlockStyle newStyle)
-    {
-        _defaultAttachmentStyle[styleSelector.ordinal()] = (AttachmentStyle)newStyle.getCopy();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

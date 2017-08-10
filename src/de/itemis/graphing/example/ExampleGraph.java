@@ -2,6 +2,7 @@ package de.itemis.graphing.example;
 
 import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.style.BlockStyle;
+import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.model.style.VertexStyle;
 
 public class ExampleGraph {
@@ -15,15 +16,11 @@ public class ExampleGraph {
 
     public static void fillExampleGraph(Graph graph)
     {
-        VertexStyle operatorStyle = graph.getDefaultVertexStyle(IStyled.EStyle.Regular);
+        VertexStyle operatorStyle = new VertexStyle();
         operatorStyle.setShape(BlockStyle.EShape.Circle);
         operatorStyle.setFillColor("CCCCCC");
-        VertexStyle operatorStyleClicked = graph.getDefaultVertexStyle(IStyled.EStyle.Clicked);
-        operatorStyleClicked.setShape(BlockStyle.EShape.Circle);
-        operatorStyleClicked.setFillColor("CCCCCC");
-        VertexStyle operatorStyleSelected = graph.getDefaultVertexStyle(IStyled.EStyle.Selected);
-        operatorStyleSelected.setShape(BlockStyle.EShape.Circle);
-        operatorStyleSelected.setFillColor("CCCCCC");
+        VertexStyle operatorStyleClicked = (VertexStyle)operatorStyle.getCopy();
+        operatorStyleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
 
         Vertex vertexA = graph.addVertex("A", 0.0, 0.0);
         vertexA.addAttachment("N1", 0.3, 0.2, 0, 0).setLabel("N1");
@@ -58,24 +55,21 @@ public class ExampleGraph {
 
         Vertex vertex1 = graph.addVertex("&1", 0.5, 0.5);
         vertex1.setLabel("&");
-        vertex1.setStyle(operatorStyle);
-        vertex1.setStyle(IStyled.EStyle.Clicked, operatorStyleClicked);
-        vertex1.setStyle(IStyled.EStyle.Selected, operatorStyleSelected);
-        vertex1.setSelectable(false);
+        vertex1.setStyleRegular(operatorStyle);
+        vertex1.setStyleClicked(operatorStyleClicked);
+        vertex1.setIsSelectable(false);
 
         Vertex vertex2 = graph.addVertex("&2", 0.5, 0.5);
         vertex2.setLabel("&");
-        vertex2.setStyle(operatorStyle);
-        vertex2.setStyle(IStyled.EStyle.Clicked, operatorStyleClicked);
-        vertex2.setStyle(IStyled.EStyle.Selected, operatorStyleSelected);
-        vertex2.setSelectable(false);
+        vertex2.setStyleRegular(operatorStyle);
+        vertex2.setStyleClicked(operatorStyleClicked);
+        vertex2.setIsSelectable(false);
 
         Vertex vertex3 = graph.addVertex("&3", 0.5, 0.5);
         vertex3.setLabel("&");
-        vertex3.setStyle(operatorStyle);
-        vertex3.setStyle(IStyled.EStyle.Clicked, operatorStyleClicked);
-        vertex3.setStyle(IStyled.EStyle.Selected, operatorStyleSelected);
-        vertex3.setSelectable(false);
+        vertex3.setStyleRegular(operatorStyle);
+        vertex3.setStyleClicked(operatorStyleClicked);
+        vertex3.setIsSelectable(false);
 
         graph.addEdge("A", "&1");
         graph.addEdge("&1", "B");
