@@ -1,7 +1,5 @@
 package de.itemis.graphing.model.style;
 
-import de.itemis.graphing.model.GraphElement;
-
 public abstract class Style implements Cloneable
 {
     public static final String DEFAULT_LINE_COLOR_HL = "0099FF";

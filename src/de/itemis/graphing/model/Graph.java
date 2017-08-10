@@ -1,11 +1,9 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.model.style.AttachmentStyle;
-import de.itemis.graphing.model.style.BlockStyle;
-import de.itemis.graphing.model.style.EdgeStyle;
-import de.itemis.graphing.model.style.VertexStyle;
-
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Graph
 {

@@ -1,16 +1,15 @@
 package de.itemis.graphing.example.graphstream;
 
+import de.itemis.graphing.example.ExampleGraph;
+import de.itemis.graphing.interactions.AutomarkLinks;
 import de.itemis.graphing.interactions.DebugInteractionListener;
 import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
 import de.itemis.graphing.model.Graph;
-import de.itemis.graphing.example.ExampleGraph;
-import de.itemis.graphing.interactions.AutomarkLinks;
 import de.itemis.graphing.view.graphstream.GraphstreamViewManager;
 import de.itemis.graphing.view.graphstream.layout.StaticLayout;
 import org.graphstream.ui.layout.Layout;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class ExampleGraphstreamView
 {

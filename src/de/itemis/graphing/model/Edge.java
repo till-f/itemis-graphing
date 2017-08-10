@@ -2,7 +2,6 @@ package de.itemis.graphing.model;
 
 import de.itemis.graphing.model.style.EdgeStyle;
 import de.itemis.graphing.model.style.Style;
-import de.itemis.graphing.model.style.VertexStyle;
 
 import java.util.LinkedList;
 

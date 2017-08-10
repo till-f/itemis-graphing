@@ -2,7 +2,6 @@ package de.itemis.graphing.model;
 
 import de.itemis.graphing.model.style.AttachmentStyle;
 import de.itemis.graphing.model.style.Style;
-import de.itemis.graphing.model.style.VertexStyle;
 
 public class Attachment extends GraphElement implements ISized
 {

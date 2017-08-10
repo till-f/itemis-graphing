@@ -2,7 +2,7 @@ package de.itemis.graphing.view;
 
 import de.itemis.graphing.model.GraphElement;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.util.Set;
 

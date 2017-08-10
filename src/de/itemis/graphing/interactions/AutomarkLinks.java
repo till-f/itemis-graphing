@@ -1,6 +1,8 @@
 package de.itemis.graphing.interactions;
 
-import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.Edge;
+import de.itemis.graphing.model.GraphElement;
+import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.view.IInteractionListener;
 

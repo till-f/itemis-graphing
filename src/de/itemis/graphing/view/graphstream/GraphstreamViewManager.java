@@ -1,12 +1,6 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.model.Attachment;
-import de.itemis.graphing.model.Edge;
-import de.itemis.graphing.model.Graph;
-import de.itemis.graphing.model.GraphElement;
-import de.itemis.graphing.model.IGraphListener;
-import de.itemis.graphing.model.Size;
-import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.model.*;
 import de.itemis.graphing.view.AbstractViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
@@ -19,7 +13,7 @@ import org.graphstream.ui.swingViewer.DefaultView;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseWheelEvent;

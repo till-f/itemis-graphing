@@ -12,10 +12,7 @@ import org.graphstream.ui.view.Camera;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.util.MouseManager;
 
-import javax.swing.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
 public class NotifyingMouseManager implements MouseManager
 {

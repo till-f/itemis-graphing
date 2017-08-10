@@ -1,6 +1,9 @@
 package de.itemis.graphing.example;
 
-import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.Attachment;
+import de.itemis.graphing.model.Edge;
+import de.itemis.graphing.model.Graph;
+import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.BlockStyle;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.model.style.VertexStyle;
