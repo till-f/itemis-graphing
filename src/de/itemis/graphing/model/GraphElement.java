@@ -179,13 +179,13 @@ public abstract class GraphElement implements IStyled
     public Style getActiveStyle()
     {
         if (_isClicked)
-            return _styleClicked.getCopy();
+            return _styleClicked;
         else if (_isSelected)
-            return _styleSelected.getCopy();
+            return _styleSelected;
         else if (_highlightStyles.size() > 0)
-            return _highlightStyles.peek().getCopy();
+            return _highlightStyles.peek();
         else
-            return _styleRegular.getCopy();
+            return _styleRegular;
     }
 
     @Override

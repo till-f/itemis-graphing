@@ -40,12 +40,12 @@ public interface IStyled
     void pushHighlighting(Style hightlightingStyle);
 
     /**
-     * removes highlighting
+     * removes last applied highlighting
      */
     void popHighlighting();
 
     /**
-     * returns a copy of the current active style (should be used by view only)
+     * returns the current active style (not a copy!). should not be used by user code.
      */
     Style getActiveStyle();
 
