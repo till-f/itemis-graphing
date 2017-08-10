@@ -176,6 +176,13 @@ public abstract class GraphElement implements IStyled
     }
 
     @Override
+    public void clearHighlighting()
+    {
+        _highlightStyles.clear();
+        styleChanged();
+    }
+
+    @Override
     public Style getActiveStyle()
     {
         if (_isClicked)

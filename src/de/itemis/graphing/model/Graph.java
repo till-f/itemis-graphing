@@ -52,19 +52,19 @@ public class Graph
         }
     }
 
-    public void resetHighlighting()
+    public void clearHighlighting()
     {
         for(Vertex v : _vertexes.values())
         {
-            v.popHighlighting();
+            v.clearHighlighting();
         }
         for(Edge e : _edges.values())
         {
-            e.popHighlighting();
+            e.clearHighlighting();
         }
         for(Attachment a : _attachments.values())
         {
-            a.popHighlighting();
+            a.clearHighlighting();
         }
     }
 

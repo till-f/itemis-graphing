@@ -40,9 +40,14 @@ public interface IStyled
     void pushHighlighting(Style hightlightingStyle);
 
     /**
-     * removes last applied highlighting
+     * removes last applied highlighting (throws if no highlighting is applied)
      */
     void popHighlighting();
+
+    /*
+     * clears all highlighting (never throws)
+     */
+    void clearHighlighting();
 
     /**
      * returns the current active style (not a copy!). should not be used by user code.
