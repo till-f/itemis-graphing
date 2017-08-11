@@ -77,25 +77,27 @@ public abstract class AbstractViewManager implements IViewManager
         else if (clickBegin != null && clickBegin)
         {
             element.clickBegin();
-            notifyClickBegin(element, new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown()));
+            notifyClickBegin(element, event);
         }
         else if (clickEnd != null && clickEnd)
         {
             element.clickEnd();
-            notifyClickEnd(element, new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown()));
+            notifyClickEnd(element, event);
         }
     }
 
-    public void notifyClickBegin(GraphElement element, IInteractionListener.ClickParameters params)
+    public void notifyClickBegin(GraphElement element, MouseEvent event)
     {
+        IInteractionListener.ClickParameters params = new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
         for(IInteractionListener listener : _interactionListeners)
         {
             listener.clickBegin(element, params);
         }
     }
 
-    public void notifyClickEnd(GraphElement element, IInteractionListener.ClickParameters params)
+    public void notifyClickEnd(GraphElement element, MouseEvent event)
     {
+        IInteractionListener.ClickParameters params = new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
         for(IInteractionListener listener : _interactionListeners)
         {
             listener.clickEnd(element, params);

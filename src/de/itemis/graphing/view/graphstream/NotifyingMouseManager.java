@@ -59,15 +59,12 @@ public class NotifyingMouseManager implements MouseManager
     }
 
     protected final GraphstreamViewManager _viewManager;
-    protected final boolean _allowDragNodes = false;        // not used atm
-    protected final boolean _allowDragSprites = false;      // not used atm
 
     protected ViewPanel _view;
     protected GraphicGraph _gsGraph;
     protected Camera _camera;
 
     protected GraphicElement _touchedElement;
-    protected GraphicElement _dragElement;
     protected float _selectionX;
     protected float _selectionY;
     protected MousePan _mousePan;
@@ -117,13 +114,6 @@ public class NotifyingMouseManager implements MouseManager
                 _viewManager.notifySelectionChanged();
             }
         }
-
-        _dragElement = null;
-    }
-
-    protected void mouseButtonRelease(MouseEvent event)
-    {
-        _dragElement = null;
     }
 
     protected void selectElementsInArea(Iterable<GraphicElement> elementsInArea)
@@ -179,15 +169,8 @@ public class NotifyingMouseManager implements MouseManager
     @Override
     public void mouseDragged(MouseEvent event)
     {
-        if (_dragElement != null)
-        {
-            elementMoving(_dragElement, event);
-        }
-        else
-        {
-            _view.selectionGrowsAt(event.getX(), event.getY());
-            _mousePan.update(event.getX(), event.getY());
-        }
+        _view.selectionGrowsAt(event.getX(), event.getY());
+        _mousePan.update(event.getX(), event.getY());
     }
 
     @Override
@@ -217,16 +200,11 @@ public class NotifyingMouseManager implements MouseManager
 
         if (_touchedElement != null)
         {
-            if (((_touchedElement instanceof GraphicSprite) && _allowDragSprites) ||
-                ((_touchedElement instanceof GraphicNode) && _allowDragNodes))
-            {
-                _dragElement = _touchedElement;
-            }
             mouseButtonPressOnElement(_touchedElement, event);
         }
         else if (event.getButton() == 1)
         {
-            _viewManager.notifyClickBegin(null, new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown()));
+            _viewManager.notifyClickBegin(null, event);
 
             _selectionX = event.getX();
             _selectionY = event.getY();
@@ -243,8 +221,6 @@ public class NotifyingMouseManager implements MouseManager
     @Override
     public void mouseReleased(MouseEvent event)
     {
-        mouseButtonRelease(event);
-
         if (_touchedElement != null)
         {
             mouseButtonReleaseFromElement(_touchedElement, event);
@@ -252,7 +228,7 @@ public class NotifyingMouseManager implements MouseManager
         }
         else if (event.getButton() == 1)
         {
-            _viewManager.notifyClickEnd(null, new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown()));
+            _viewManager.notifyClickEnd(null, event);
 
             float x2 = event.getX();
             float y2 = event.getY();
