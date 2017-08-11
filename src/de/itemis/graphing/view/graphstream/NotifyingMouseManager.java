@@ -1,11 +1,10 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.view.IInteractionListener;
+import de.itemis.graphing.view.IViewManager;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphicElement;
 import org.graphstream.ui.graphicGraph.GraphicGraph;
-import org.graphstream.ui.graphicGraph.GraphicNode;
 import org.graphstream.ui.graphicGraph.GraphicSprite;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Camera;
@@ -58,7 +57,7 @@ public class NotifyingMouseManager implements MouseManager
         }
     }
 
-    protected final GraphstreamViewManager _viewManager;
+    protected final IViewManager _viewManager;
 
     protected ViewPanel _view;
     protected GraphicGraph _gsGraph;
@@ -69,7 +68,7 @@ public class NotifyingMouseManager implements MouseManager
     protected float _selectionY;
     protected MousePan _mousePan;
 
-    public NotifyingMouseManager(GraphstreamViewManager viewManager)
+    public NotifyingMouseManager(IViewManager viewManager)
     {
         _viewManager = viewManager;
     }

@@ -13,6 +13,8 @@ public abstract class AbstractViewManager implements IViewManager
     private final LinkedHashSet<IInteractionListener> _interactionListeners = new LinkedHashSet<IInteractionListener>();
     private final Graph _graph;
 
+    private Set<GraphElement> _lastSelection = new LinkedHashSet<>();
+
     public AbstractViewManager(Graph graph)
     {
         _graph = graph;
@@ -86,6 +88,7 @@ public abstract class AbstractViewManager implements IViewManager
         }
     }
 
+    @Override
     public void notifyClickBegin(GraphElement element, MouseEvent event)
     {
         IInteractionListener.ClickParameters params = new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
@@ -95,6 +98,7 @@ public abstract class AbstractViewManager implements IViewManager
         }
     }
 
+    @Override
     public void notifyClickEnd(GraphElement element, MouseEvent event)
     {
         IInteractionListener.ClickParameters params = new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
@@ -104,7 +108,7 @@ public abstract class AbstractViewManager implements IViewManager
         }
     }
 
-    private Set<GraphElement> _lastSelection = new LinkedHashSet<>();
+    @Override
     public void notifySelectionChanged()
     {
         Set<GraphElement> newSelection = getSelectedElements();
