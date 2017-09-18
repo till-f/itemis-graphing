@@ -10,14 +10,28 @@ import java.util.Set;
 
 public class AutomarkLinks implements IInteractionListener
 {
+    private enum EDirection { both, incoming, outgoing }
+
     private Vertex _lastMarkedVertex = null;
+
+    private final int DEPTH;
+
+    public AutomarkLinks()
+    {
+        this(1);
+    }
+
+    public AutomarkLinks(int depth)
+    {
+        DEPTH = depth;
+    }
 
     @Override
     public void clickBegin(GraphElement element, ClickParameters params)
     {
         if (_lastMarkedVertex != null)
         {
-            selectStyle(_lastMarkedVertex, false);
+            selectStyle(_lastMarkedVertex, false, DEPTH, EDirection.both);
             _lastMarkedVertex = null;
         }
     }
@@ -28,7 +42,7 @@ public class AutomarkLinks implements IInteractionListener
         if (element instanceof Vertex)
         {
             _lastMarkedVertex = (Vertex) element;
-            selectStyle(_lastMarkedVertex, true);
+            selectStyle(_lastMarkedVertex, true, DEPTH, EDirection.both);
         }
     }
 
@@ -37,20 +51,28 @@ public class AutomarkLinks implements IInteractionListener
     {
     }
 
-    private void selectStyle(Vertex vertex, boolean setHighlighted)
+    private void selectStyle(Vertex vertex, boolean setHighlighted, int depth, EDirection direction)
     {
         switchStyle(vertex, setHighlighted);
 
-        for(Edge edge : vertex.getIncomingEdges())
+        if (depth==0)
+            return;
+
+        if (direction == EDirection.both || direction == EDirection.incoming)
         {
-            switchStyle(edge, setHighlighted);
-            switchStyle(edge.getFrom(), setHighlighted);
+            for(Edge edge : vertex.getIncomingEdges())
+            {
+                switchStyle(edge, setHighlighted);
+                selectStyle(edge.getFrom(), setHighlighted, depth-1, EDirection.incoming);
+            }
         }
 
-        for(Edge edge : vertex.getOutgoingEdges())
+        if (direction == EDirection.both || direction == EDirection.outgoing)
         {
-            switchStyle(edge, setHighlighted);
-            switchStyle(edge.getTo(), setHighlighted);
+            for (Edge edge : vertex.getOutgoingEdges()) {
+                switchStyle(edge, setHighlighted);
+                selectStyle(edge.getTo(), setHighlighted, depth - 1, EDirection.outgoing);
+            }
         }
     }
 
