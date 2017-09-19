@@ -19,7 +19,9 @@ public class Edge extends GraphElement
     {
         super(g, id);
         _from = from;
+        _fromId = from.getId();
         _to = to;
+        _toId = to.getId();
         setIsSelectable(false);
     }
 

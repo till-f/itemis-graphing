@@ -70,12 +70,12 @@ public class Vertex extends GraphElement implements ISized
 
     public Set<Edge> getOutgoingEdges()
     {
-        return _outgoingEdges;
+        return new LinkedHashSet<>(_outgoingEdges);
     }
 
     public Set<Edge> getIncomingEdges()
     {
-        return _incomingEdges;
+        return new LinkedHashSet<>(_incomingEdges);
     }
 
     public List<Vertex> getTargets()
@@ -96,32 +96,6 @@ public class Vertex extends GraphElement implements ISized
             sources.add(e.getFrom());
         }
         return sources;
-    }
-
-    public List<Edge> removeEdgesTo(Vertex target)
-    {
-        LinkedList<Edge> toRemove = new LinkedList<Edge>();
-        for (Edge e : _outgoingEdges)
-        {
-            if (e.getTo() == target)
-                toRemove.add(e);
-        }
-        _outgoingEdges.removeAll(toRemove);
-
-        return toRemove;
-    }
-
-    public List<Edge> removeEdgesFrom(Vertex source)
-    {
-        LinkedList<Edge> toRemove = new LinkedList<Edge>();
-        for (Edge e : _incomingEdges)
-        {
-            if (e.getFrom() == source)
-                toRemove.add(e);
-        }
-        _incomingEdges.removeAll(toRemove);
-
-        return toRemove;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

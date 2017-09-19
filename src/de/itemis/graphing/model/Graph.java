@@ -108,16 +108,18 @@ public class Graph
         {
             for(Vertex vertex : removedVertex.getSources())
             {
-                for (Edge edge : vertex.removeEdgesTo(removedVertex))
+                for (Edge edge : vertex.getOutgoingEdges())
                 {
-                    _edges.remove(edge);
+                    if (edge.getToId().equals(id))
+                        removeEdge(edge.getId());
                 }
             }
             for(Vertex vertex : removedVertex.getTargets())
             {
-                for (Edge edge : vertex.removeEdgesFrom(removedVertex))
+                for (Edge edge : vertex.getIncomingEdges())
                 {
-                    _edges.remove(edge);
+                    if (edge.getFromId().equals(id))
+                        removeEdge(edge.getId());
                 }
             }
 
@@ -166,7 +168,7 @@ public class Graph
         {
             e.getFrom().removeOutgoingEdge(e);
             e.getTo().removeIncomingEdge(e);
-            _edges.remove(e);
+            _edges.remove(edgeId);
 
             for(IGraphListener listener : _graphListeners)
             {
