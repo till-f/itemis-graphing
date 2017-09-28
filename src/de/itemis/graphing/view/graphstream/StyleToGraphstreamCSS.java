@@ -43,19 +43,34 @@ public class StyleToGraphstreamCSS
             {
                 sb.append("stroke-mode: none;");
                 sb.append("fill-mode: none;");
-                sb.append("size: 0gu;");
+                sb.append("size: 0px;");
+                sb.append("stroke-width: 0px;");
             }
             else if (style.getLineMode() == Style.ELineMode.Dotted)
             {
                 sb.append("stroke-mode: dots;");
-                sb.append("fill-mode: none;");
-                sb.append("size: 0gu;");
-                sb.append("stroke-width: " + style.getLineThickness() * SCALE + ";");
+                sb.append("fill-mode: plain;");
+                sb.append("size: 0px;");
+                sb.append("stroke-width: " + style.getLineThickness() * SCALE + "px;");
             }
-            else if (style.getLineThickness() >= 1.0)
+            else if (style.getLineMode() == Style.ELineMode.Solid && style.getLineThickness() * SCALE > 1.0)
             {
                 sb.append("stroke-mode: plain;");
-                sb.append("stroke-width: " + (int)(style.getLineThickness() * SCALE / 2) + ";");
+                sb.append("fill-mode: plain;");
+                sb.append("size: 0px;");
+                sb.append("stroke-width: " + style.getLineThickness() * SCALE + "px;");
+            }
+            else if (style.getLineMode() == Style.ELineMode.Solid)
+            {
+                // line thickness <= 1.0 ensured
+                sb.append("stroke-mode: plain;");
+                sb.append("fill-mode: plain;");
+                sb.append("size: " + style.getLineThickness() * SCALE + "px;");
+                sb.append("stroke-width: 0px;");
+            }
+            else
+            {
+                throw new IllegalArgumentException("unexpected line mode: " + style.getLineMode());
             }
 
             sb.append("stroke-color: #" + style.getLineColor() + ";");
