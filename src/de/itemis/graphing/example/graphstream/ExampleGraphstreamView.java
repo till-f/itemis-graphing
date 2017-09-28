@@ -1,6 +1,7 @@
 package de.itemis.graphing.example.graphstream;
 
 import de.itemis.graphing.example.ExampleGraph;
+import de.itemis.graphing.helper.ScalingHelper;
 import de.itemis.graphing.interactions.AutomarkLinks;
 import de.itemis.graphing.interactions.DebugInteractionListener;
 import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
@@ -10,11 +11,16 @@ import de.itemis.graphing.view.graphstream.layout.StaticLayout;
 import org.graphstream.ui.layout.Layout;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class ExampleGraphstreamView
 {
    public static void main(String[] args)
     {
+        System.out.println("Scaling Factor: " + ScalingHelper.getScreenScalingFactor());
+
+        double scale = ScalingHelper.getScreenScalingFactor();
+
         Graph graph = ExampleGraph.getExampleGraph();
 
         GraphstreamViewManager viewManager = new GraphstreamViewManager(graph);
@@ -26,7 +32,7 @@ public class ExampleGraphstreamView
         JPanel view = viewManager.getView();
         JFrame jframe = new JFrame("Graph Example");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jframe.setSize(600, 600);
+        jframe.setSize((int)(600 * scale), (int)(600 * scale));
         jframe.add(view);
 
         jframe.setVisible(true);
