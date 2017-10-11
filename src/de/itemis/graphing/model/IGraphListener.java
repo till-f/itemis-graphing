@@ -7,8 +7,8 @@ public interface IGraphListener
     void vertexRemoved(Vertex vertex);
     void edgeAdded(Edge edge);
     void edgeRemoved(Edge edge);
-    void attachmentAdded(Attachment attachment);
-    void attachmentRemoved(Attachment attachment);
+    void attachmentAdded(AttachmentBase attachment);
+    void attachmentRemoved(AttachmentBase attachment);
     void styleChanged(GraphElement element);
     void labelChanged(GraphElement element);
     void labelPriorityChanged(GraphElement element);

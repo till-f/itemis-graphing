@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Vertex extends GraphElement implements ISized
 {
-    private final LinkedHashMap<String, Attachment> _attachments = new LinkedHashMap<String, Attachment>();
+    private final LinkedHashMap<String, AttachmentBase> _attachments = new LinkedHashMap<String, AttachmentBase>();
     private final HashMap<Integer, Double> _rowHeights = new HashMap<>();
     private final HashMap<Integer, Double> _colWidths = new HashMap<>();
 
@@ -155,9 +155,19 @@ public class Vertex extends GraphElement implements ISized
         return a;
     }
 
+    public FloatingAttachment addFloatingAttachment(String id, double width, double height, double posAngle, double posDistance)
+    {
+        FloatingAttachment a = new FloatingAttachment(this, id, new Size(width, height), posAngle, posDistance);
+
+        _attachments.put(id, a);
+        _graph.attachmentAdded(a);
+
+        return a;
+    }
+
     public void removeAttachment(String id)
     {
-        Attachment a = _attachments.get(id);
+        AttachmentBase a = _attachments.get(id);
 
         if (a != null)
         {
@@ -170,10 +180,10 @@ public class Vertex extends GraphElement implements ISized
         }
     }
 
-    public List<Attachment> getAttachments()
+    public List<AttachmentBase> getAttachments()
     {
-        LinkedList<Attachment> attachments = new LinkedList<>();
-        for (Attachment a : _attachments.values())
+        LinkedList<AttachmentBase> attachments = new LinkedList<>();
+        for (AttachmentBase a : _attachments.values())
         {
             attachments.add(a);
         }
@@ -254,8 +264,12 @@ public class Vertex extends GraphElement implements ISized
 
     private void updateTableSize()
     {
-        for (Attachment a : _attachments.values())
+        for (AttachmentBase a_base : _attachments.values())
         {
+            if (!(a_base instanceof Attachment))
+                continue;
+            Attachment a = (Attachment)a_base;
+
             if (a.getColSpan() == 1)
             {
                 updateTableSize_step(_colWidths, a.getColIndex(), a.getColSpan(), a.getSize().getWidth());
@@ -265,8 +279,12 @@ public class Vertex extends GraphElement implements ISized
                 updateTableSize_step(_rowHeights, a.getRowIndex(), a.getRowSpan(), a.getSize().getHeight());
             }
         }
-        for (Attachment a : _attachments.values())
+        for (AttachmentBase a_base : _attachments.values())
         {
+            if (!(a_base instanceof Attachment))
+                continue;
+            Attachment a = (Attachment)a_base;
+
             if (a.getColSpan() > 1)
             {
                 updateTableSize_step(_colWidths, a.getColIndex(), a.getColSpan(), a.getSize().getWidth());

@@ -11,7 +11,7 @@ public class Graph
 
     private final LinkedHashMap<String, Vertex> _vertexes = new LinkedHashMap<String, Vertex>();
     private final LinkedHashMap<String, Edge> _edges = new LinkedHashMap<String, Edge>();
-    private final LinkedHashMap<String, Attachment> _attachments = new LinkedHashMap<String, Attachment>();
+    private final LinkedHashMap<String, AttachmentBase> _attachments = new LinkedHashMap<String, AttachmentBase>();
 
     private final LinkedHashSet<IGraphListener> _graphListeners = new LinkedHashSet<IGraphListener>();
 
@@ -32,9 +32,9 @@ public class Graph
         return edges;
     }
 
-    public List<Attachment> getAttachments()
+    public List<AttachmentBase> getAttachments()
     {
-        List<Attachment> attachments = new LinkedList<Attachment>();
+        List<AttachmentBase> attachments = new LinkedList<AttachmentBase>();
         attachments.addAll(_attachments.values());
         return attachments;
     }
@@ -62,7 +62,7 @@ public class Graph
         {
             e.clearHighlighting();
         }
-        for(Attachment a : _attachments.values())
+        for(AttachmentBase a : _attachments.values())
         {
             a.clearHighlighting();
         }
@@ -244,7 +244,7 @@ public class Graph
         }
     }
 
-    public void attachmentAdded(Attachment attachment)
+    public void attachmentAdded(AttachmentBase attachment)
     {
         _attachments.put(attachment.getId(), attachment);
 
@@ -254,7 +254,7 @@ public class Graph
         }
     }
 
-    public void attachmentRemoved(Attachment attachment)
+    public void attachmentRemoved(AttachmentBase attachment)
     {
         _attachments.remove(attachment.getId());
 

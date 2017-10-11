@@ -253,10 +253,10 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     }
 
     @Override
-    public void attachmentAdded(Attachment attachment)
+    public void attachmentAdded(AttachmentBase attachment)
     {
         // remove all attachments, then insert new set (required for space calculation)
-        for (Attachment existingAttachment : attachment.getParent().getAttachments())
+        for (AttachmentBase existingAttachment : attachment.getParent().getAttachments())
         {
             if (existingAttachment != attachment)
                 removeAttachment(existingAttachment);
@@ -268,11 +268,11 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     }
 
     @Override
-    public void attachmentRemoved(Attachment attachment)
+    public void attachmentRemoved(AttachmentBase attachment)
     {
         // remove all attachments, then insert new set (required for space calculation)
         removeAttachment(attachment);
-        for (Attachment existingAttachment : attachment.getParent().getAttachments())
+        for (AttachmentBase existingAttachment : attachment.getParent().getAttachments())
         {
             removeAttachment(existingAttachment);
         }
@@ -367,7 +367,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
     private void removeVertex(Vertex vertex)
     {
-        for (Attachment a : vertex.getAttachments())
+        for (AttachmentBase a : vertex.getAttachments())
         {
             removeAttachment(a);
         }
@@ -391,13 +391,13 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
     private void addAttachments(Vertex vertex)
     {
-        for(Attachment attachment : vertex.getAttachments())
+        for(AttachmentBase attachment : vertex.getAttachments())
         {
             addAttachment(attachment);
         }
     }
 
-    private void addAttachment(Attachment attachment)
+    private void addAttachment(AttachmentBase attachment)
     {
         Vertex vertex = attachment.getParent();
 
@@ -409,8 +409,19 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
         sprite.attachToNode(vertex.getId());
 
-        // calculate rendering position for the attachment
-        // -------------------------------------------------------------------------------------------------------------
+        if (attachment instanceof Attachment)
+        {
+            setRenderingPosition_Tabular((Attachment) attachment, sprite);
+        }
+        else if (attachment instanceof FloatingAttachment)
+        {
+            setRenderingPosition_Floating((FloatingAttachment) attachment, sprite);
+        }
+    }
+
+    private void setRenderingPosition_Tabular(Attachment attachment, Sprite sprite)
+    {
+        Vertex vertex = attachment.getParent();
 
         Size cellOffset = vertex.getCellOffset(attachment.getRowIndex(), attachment.getColIndex());
         Size cellSize = vertex.getCellSize(attachment.getRowIndex(), attachment.getColIndex(), attachment.getColSpan(), attachment.getRowSpan());
@@ -450,12 +461,17 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
         double distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         double radian = Math.atan2(y, x);
-        double degree = 360 / (2 * Math.PI) * radian;
+        double angle = 360 / (2 * Math.PI) * radian;
 
-        sprite.setPosition(distance, 0.0, degree);
+        sprite.setPosition(distance, 0.0, angle);
     }
 
-    private void removeAttachment(Attachment attachment)
+    private void setRenderingPosition_Floating(FloatingAttachment attachment, Sprite sprite)
+    {
+        sprite.setPosition(attachment.getDistance(), 0.0, attachment.getAngle());
+    }
+
+    private void removeAttachment(AttachmentBase attachment)
     {
         _spriteManager.removeSprite(attachment.getId());
     }
