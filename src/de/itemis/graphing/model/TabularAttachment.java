@@ -3,7 +3,7 @@ package de.itemis.graphing.model;
 import de.itemis.graphing.model.style.AttachmentStyle;
 import de.itemis.graphing.model.style.Style;
 
-public class Attachment extends AttachmentBase
+public class TabularAttachment extends AttachmentBase
 {
     public enum EHAlignment { Left, Center, Right }
     public enum EVAlignment { Top, Middle, Bottom }
@@ -17,7 +17,7 @@ public class Attachment extends AttachmentBase
 
     private boolean _delegateInteractionToParent = false;
 
-    public Attachment(Vertex vertex, String id, Size size, int rowIndex, int colIndex, int colSpan, int rowSpan, EHAlignment hAlign, EVAlignment vAlign, boolean affectDynamicLayout)
+    public TabularAttachment(Vertex vertex, String id, Size size, int rowIndex, int colIndex, int colSpan, int rowSpan, EHAlignment hAlign, EVAlignment vAlign, boolean affectDynamicLayout)
     {
         super(vertex, id, size, affectDynamicLayout);
 

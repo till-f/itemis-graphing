@@ -7,8 +7,6 @@ import java.util.LinkedList;
 
 public class Edge extends GraphElement
 {
-    private final LinkedList<Attachment> _attachments = new LinkedList<>();
-
     private Vertex _from;
     private Vertex _to;
 

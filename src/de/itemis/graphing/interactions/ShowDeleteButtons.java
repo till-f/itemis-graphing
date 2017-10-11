@@ -10,14 +10,14 @@
 //{
 //    private final Size _size;
 //    private final double _padding;
-//    private final Attachment.ELocation _location;
+//    private final TabularAttachment.ELocation _location;
 //
 //    private final AttachmentStyle regularStyle = new AttachmentStyle();
 //    private final AttachmentStyle clickedStyle;
 //
-//    private Attachment _deleteAttachment = null;
+//    private TabularAttachment _deleteAttachment = null;
 //
-//    public ShowDeleteButtons(double width, double height, double padding, Attachment.ELocation location)
+//    public ShowDeleteButtons(double width, double height, double padding, TabularAttachment.ELocation location)
 //    {
 //        _size = new Size(width, height);
 //        _padding = padding;
@@ -50,9 +50,9 @@
 //            _deleteAttachment.setStyle(IStyled.EStyle.Clicked, clickedStyle);
 //        }
 //
-//        if (element instanceof Attachment && element.getId().equals("DELETE_BUTTON"))
+//        if (element instanceof TabularAttachment && element.getId().equals("DELETE_BUTTON"))
 //        {
-//            element.getGraph().removeVertex(((Attachment) element).getParent().getId());
+//            element.getGraph().removeVertex(((TabularAttachment) element).getParent().getId());
 //            _deleteAttachment = null;
 //        }
 //    }

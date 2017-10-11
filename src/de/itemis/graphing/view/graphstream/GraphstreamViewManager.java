@@ -331,7 +331,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         {
             gsElement = _gsGraph.getEdge(element.getId());
         }
-        else if (element instanceof Attachment)
+        else if (element instanceof TabularAttachment)
         {
             gsElement = _spriteManager.getSprite(element.getId());
         }
@@ -409,9 +409,9 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
         sprite.attachToNode(vertex.getId());
 
-        if (attachment instanceof Attachment)
+        if (attachment instanceof TabularAttachment)
         {
-            setRenderingPosition_Tabular((Attachment) attachment, sprite);
+            setRenderingPosition_Tabular((TabularAttachment) attachment, sprite);
         }
         else if (attachment instanceof FloatingAttachment)
         {
@@ -419,7 +419,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         }
     }
 
-    private void setRenderingPosition_Tabular(Attachment attachment, Sprite sprite)
+    private void setRenderingPosition_Tabular(TabularAttachment attachment, Sprite sprite)
     {
         Vertex vertex = attachment.getParent();
 

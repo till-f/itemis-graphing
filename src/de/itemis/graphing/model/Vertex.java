@@ -101,49 +101,49 @@ public class Vertex extends GraphElement implements ISized
     // -----------------------------------------------------------------------------------------------------------------
     // attachments and size calculation
 
-    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex)
+    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex)
     {
-        return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, Attachment.EHAlignment.Center, Attachment.EVAlignment.Middle, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, TabularAttachment.EHAlignment.Center, TabularAttachment.EVAlignment.Middle, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan)
+    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan)
     {
-        return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, Attachment.EHAlignment.Center, Attachment.EVAlignment.Middle, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, TabularAttachment.EHAlignment.Center, TabularAttachment.EVAlignment.Middle, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EHAlignment hAlign)
+    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, TabularAttachment.EHAlignment hAlign)
     {
-        return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, hAlign, Attachment.EVAlignment.Middle, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, hAlign, TabularAttachment.EVAlignment.Middle, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, Attachment.EHAlignment hAlign)
+    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EHAlignment hAlign)
     {
-        return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, hAlign, Attachment.EVAlignment.Middle, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, hAlign, TabularAttachment.EVAlignment.Middle, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EVAlignment vAlign)
+    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, TabularAttachment.EVAlignment vAlign)
     {
-        return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, Attachment.EHAlignment.Center, vAlign, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, TabularAttachment.EHAlignment.Center, vAlign, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, Attachment.EVAlignment vAlign)
+    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EVAlignment vAlign)
     {
-        return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, Attachment.EHAlignment.Center, vAlign, false);
+        return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, TabularAttachment.EHAlignment.Center, vAlign, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, Attachment.EHAlignment hAlign, Attachment.EVAlignment vAlign)
+    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, TabularAttachment.EHAlignment hAlign, TabularAttachment.EVAlignment vAlign)
     {
         return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, hAlign, vAlign, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, Attachment.EHAlignment hAlign, Attachment.EVAlignment vAlign)
+    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EHAlignment hAlign, TabularAttachment.EVAlignment vAlign)
     {
         return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, hAlign, vAlign, false);
     }
 
-    public Attachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, Attachment.EHAlignment hAlign, Attachment.EVAlignment vAlign, boolean affectDynamicLayout)
+    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EHAlignment hAlign, TabularAttachment.EVAlignment vAlign, boolean affectDynamicLayout)
     {
-        Attachment a = new Attachment(this, id, new Size(width, height), rowIndex, colIndex, colSpan, rowSpan, hAlign, vAlign, affectDynamicLayout);
+        TabularAttachment a = new TabularAttachment(this, id, new Size(width, height), rowIndex, colIndex, colSpan, rowSpan, hAlign, vAlign, affectDynamicLayout);
 
         clearTableSize();
 
@@ -266,9 +266,9 @@ public class Vertex extends GraphElement implements ISized
     {
         for (AttachmentBase a_base : _attachments.values())
         {
-            if (!(a_base instanceof Attachment))
+            if (!(a_base instanceof TabularAttachment))
                 continue;
-            Attachment a = (Attachment)a_base;
+            TabularAttachment a = (TabularAttachment)a_base;
 
             if (a.getColSpan() == 1)
             {
@@ -281,9 +281,9 @@ public class Vertex extends GraphElement implements ISized
         }
         for (AttachmentBase a_base : _attachments.values())
         {
-            if (!(a_base instanceof Attachment))
+            if (!(a_base instanceof TabularAttachment))
                 continue;
-            Attachment a = (Attachment)a_base;
+            TabularAttachment a = (TabularAttachment)a_base;
 
             if (a.getColSpan() > 1)
             {

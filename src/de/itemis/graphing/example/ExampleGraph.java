@@ -1,6 +1,6 @@
 package de.itemis.graphing.example;
 
-import de.itemis.graphing.model.Attachment;
+import de.itemis.graphing.model.TabularAttachment;
 import de.itemis.graphing.model.Edge;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.Vertex;
@@ -29,7 +29,7 @@ public class ExampleGraph {
         vertexA.addAttachment("N1", 0.3, 0.2, 0, 0).setLabel("N1");
         vertexA.addAttachment("N2", 0.85, 0.2, 0, 1, 2, 1).setLabel("N2");
         vertexA.addAttachment("M1", 0.3, 0.2, 1, 0).setLabel("M1");
-        vertexA.addAttachment("M2", 0.25, 0.15, 1, 1, Attachment.EHAlignment.Center, Attachment.EVAlignment.Middle).setLabel("M2");
+        vertexA.addAttachment("M2", 0.25, 0.15, 1, 1, TabularAttachment.EHAlignment.Center, TabularAttachment.EVAlignment.Middle).setLabel("M2");
         vertexA.addAttachment("M3", 0.3, 0.8, 1, 2, 1, 2).setLabel("M3");
         vertexA.addAttachment("S1", 0.3, 0.2, 2, 0).setLabel("S1");
         vertexA.addAttachment("S2", 0.3, 0.2, 2, 1).setLabel("S2");
