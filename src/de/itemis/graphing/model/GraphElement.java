@@ -162,6 +162,15 @@ public abstract class GraphElement implements IStyled
     }
 
     @Override
+    public void setAllStyles(Style newStyle)
+    {
+        _styleRegular = newStyle.getCopy();
+        _styleClicked = newStyle.getCopy();
+        _styleSelected = newStyle.getCopy();
+        styleChanged();
+    }
+
+    @Override
     public void pushHighlighting(Style hightlightingStyle)
     {
         _highlightStyles.push(hightlightingStyle);

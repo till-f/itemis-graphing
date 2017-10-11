@@ -1,5 +1,6 @@
 package de.itemis.graphing.view;
 
+import de.itemis.graphing.model.AttachmentBase;
 import de.itemis.graphing.model.TabularAttachment;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.GraphElement;
@@ -61,9 +62,13 @@ public abstract class AbstractViewManager implements IViewManager
     public void applyInteraction(String elementId, Boolean select, Boolean toggleSelect, Boolean clickBegin, Boolean clickEnd, MouseEvent event)
     {
         GraphElement element = _graph.getElement(elementId);
-        if (element instanceof TabularAttachment && ((TabularAttachment) element).isDelegateInteractionToParent())
+
+        if (element == null)
+            throw new RuntimeException("could not get element for id: " + elementId);
+
+        if (element instanceof AttachmentBase && ((AttachmentBase) element).isDelegateInteractionToParent())
         {
-            element = ((TabularAttachment) element).getParent();
+            element = ((AttachmentBase) element).getParent();
         }
 
         if (select != null)

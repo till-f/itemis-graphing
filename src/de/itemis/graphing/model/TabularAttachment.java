@@ -15,8 +15,6 @@ public class TabularAttachment extends AttachmentBase
     private final EHAlignment _hAlign;
     private final EVAlignment _vAlign;
 
-    private boolean _delegateInteractionToParent = false;
-
     public TabularAttachment(Vertex vertex, String id, Size size, int rowIndex, int colIndex, int colSpan, int rowSpan, EHAlignment hAlign, EVAlignment vAlign, boolean affectDynamicLayout)
     {
         super(vertex, id, size, affectDynamicLayout);
@@ -58,17 +56,4 @@ public class TabularAttachment extends AttachmentBase
     {
         return _vAlign;
     }
-
-    public boolean isDelegateInteractionToParent()
-    {
-        return _delegateInteractionToParent;
-    }
-
-    public void setDelegateInteractionToParent(boolean delegateInteractionToParent)
-    {
-        _delegateInteractionToParent = delegateInteractionToParent;
-    }
-
-
-
 }

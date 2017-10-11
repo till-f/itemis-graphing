@@ -255,13 +255,24 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     @Override
     public void attachmentAdded(AttachmentBase attachment)
     {
-        // remove all attachments, then insert new set (required for space calculation)
-        for (AttachmentBase existingAttachment : attachment.getParent().getAttachments())
+        if (attachment instanceof TabularAttachment)
         {
-            if (existingAttachment != attachment)
-                removeAttachment(existingAttachment);
+            // remove all attachments, then insert new set (required for space calculation)
+            for (AttachmentBase existingAttachment : attachment.getParent().getAttachments())
+            {
+                if (existingAttachment != attachment)
+                    removeAttachment(existingAttachment);
+            }
+            addAllAttachments(attachment.getParent());
         }
-        addAttachments(attachment.getParent());
+        else if (attachment instanceof FloatingAttachment)
+        {
+            addAttachment(attachment);
+        }
+        else
+        {
+            throw new IllegalArgumentException("unexpected attachment type: " + attachment);
+        }
 
         if (attachment.isDynamicLayoutAffected())
             _layout.compute();
@@ -270,13 +281,17 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     @Override
     public void attachmentRemoved(AttachmentBase attachment)
     {
-        // remove all attachments, then insert new set (required for space calculation)
         removeAttachment(attachment);
-        for (AttachmentBase existingAttachment : attachment.getParent().getAttachments())
+
+        if (attachment instanceof TabularAttachment)
         {
-            removeAttachment(existingAttachment);
+            // remove all attachments, then insert new set (required for space calculation)
+            for (AttachmentBase existingAttachment : attachment.getParent().getAttachments())
+            {
+                removeAttachment(existingAttachment);
+            }
+            addAllAttachments(attachment.getParent());
         }
-        addAttachments(attachment.getParent());
 
         if (attachment.isDynamicLayoutAffected())
             _layout.compute();
@@ -331,7 +346,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         {
             gsElement = _gsGraph.getEdge(element.getId());
         }
-        else if (element instanceof TabularAttachment)
+        else if (element instanceof AttachmentBase)
         {
             gsElement = _spriteManager.getSprite(element.getId());
         }
@@ -362,7 +377,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         labelPriorityChanged(vertex);
         styleChanged(vertex);
 
-        addAttachments(vertex);
+        addAllAttachments(vertex);
     }
 
     private void removeVertex(Vertex vertex)
@@ -389,7 +404,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         _gsGraph.removeEdge(edge.getId());
     }
 
-    private void addAttachments(Vertex vertex)
+    private void addAllAttachments(Vertex vertex)
     {
         for(AttachmentBase attachment : vertex.getAttachments())
         {
@@ -468,7 +483,25 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
     private void setRenderingPosition_Floating(FloatingAttachment attachment, Sprite sprite)
     {
-        sprite.setPosition(attachment.getDistance(), 0.0, attachment.getAngle());
+        if (attachment.getPosMode() == FloatingAttachment.EPositioningMode.Radial)
+        {
+            sprite.setPosition(attachment.getDistanceOrY(), 0.0, attachment.getAngleOrX());
+        }
+        else if(attachment.getPosMode() == FloatingAttachment.EPositioningMode.XY)
+        {
+            double x = attachment.getAngleOrX();
+            double y = attachment.getDistanceOrY();
+
+            double distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+            double radian = Math.atan2(y, x);
+            double angle = 360 / (2 * Math.PI) * radian;
+
+            sprite.setPosition(distance, 0.0, angle);
+        }
+        else
+        {
+            throw new IllegalArgumentException("unexpected positioning mode: " + attachment.getPosMode());
+        }
     }
 
     private void removeAttachment(AttachmentBase attachment)

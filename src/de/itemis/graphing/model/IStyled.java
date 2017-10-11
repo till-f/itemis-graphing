@@ -35,6 +35,11 @@ public interface IStyled
     void setStyleSelected(Style newStyle);
 
     /**
+     * sets a copy of the given style for REGULAR, CLICKED, SELECTED
+     */
+    void setAllStyles(Style newStyle);
+
+    /**
      * applies highlighting with a given style
      */
     void pushHighlighting(Style hightlightingStyle);

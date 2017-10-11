@@ -9,6 +9,8 @@ public abstract class AttachmentBase  extends GraphElement implements ISized
     private final Size _size;
     private final boolean _affectDynamicLayout;
 
+    private boolean _delegateInteractionToParent = false;
+
     public AttachmentBase(Vertex vertex, String id, Size size, boolean affectDynamicLayout)
     {
         super(vertex.getGraph(), id);
@@ -48,6 +50,16 @@ public abstract class AttachmentBase  extends GraphElement implements ISized
     public boolean isDynamicLayoutAffected()
     {
         return _affectDynamicLayout;
+    }
+
+    public boolean isDelegateInteractionToParent()
+    {
+        return _delegateInteractionToParent;
+    }
+
+    public void setDelegateInteractionToParent(boolean delegateInteractionToParent)
+    {
+        _delegateInteractionToParent = delegateInteractionToParent;
     }
 
 }

@@ -2,24 +2,34 @@ package de.itemis.graphing.model;
 
 public class FloatingAttachment extends AttachmentBase
 {
-    private final double _posAngle;
-    private final double _posDistance;
+    public enum EPositioningMode { Radial, XY }
 
-    public FloatingAttachment(Vertex vertex, String id, Size size, double posAngle, double posDistance)
+    private final double _posAngleOrX;
+    private final double _posDistanceOrY;
+    private final EPositioningMode _posMode;
+
+    public FloatingAttachment(Vertex vertex, String id, Size size, double posAngleOrX, double posDistanceOrY, EPositioningMode mode)
     {
         super(vertex, id, size, false);
 
-        _posAngle = posAngle;
-        _posDistance = posDistance;
+        _posAngleOrX = posAngleOrX;
+        _posDistanceOrY = posDistanceOrY;
+        _posMode = mode;
     }
 
-    public double getAngle()
+    public double getAngleOrX()
     {
-        return _posAngle;
+        return _posAngleOrX;
     }
 
-    public double getDistance()
+    public double getDistanceOrY()
     {
-        return _posDistance;
+        return _posDistanceOrY;
     }
+
+    public EPositioningMode getPosMode()
+    {
+        return _posMode;
+    }
+
 }

@@ -1,6 +1,7 @@
 package de.itemis.graphing.view.graphstream;
 
 import de.itemis.graphing.helper.ScalingHelper;
+import de.itemis.graphing.model.FloatingAttachment;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.ISized;
 import de.itemis.graphing.model.style.BlockStyle;
@@ -24,7 +25,7 @@ public class StyleToGraphstreamCSS
             BlockStyle blockStyle = (BlockStyle) style;
 
             sb.append("shape: " + getGraphstreamShape(blockStyle.getShape()) + ";");
-            sb.append("size: " + ((ISized) element).getSize().getWidth() + "gu," + ((ISized) element).getSize().getHeight() + "gu" + ";");
+            sb.append("size: " + ((ISized) element).getSize().getWidth() + "gu," + ((ISized) element).getSize().getHeight() + "gu;");
             sb.append("fill-mode: plain;");
             sb.append("fill-color: #" + style.getFillColor() + ";");
             sb.append("stroke-color: #" + style.getLineColor() + ";");
@@ -79,11 +80,23 @@ public class StyleToGraphstreamCSS
 
         sb.append("text-color: #" + style.getTextColor() + ";");
         sb.append("text-size: " + style.getFontSize() * SCALE + ";");
-        sb.append("text-padding: " + (int)(3.0 * SCALE + 0.1) + ",0.0px;");
+        sb.append("text-padding: " + (int)(3.0 * SCALE + 0.1) + "px,0.0px;");
         sb.append("text-background-mode: plain;");
         sb.append("text-background-color: #" + style.getFillColor() + ";");
         sb.append("text-alignment: " + getGraphstreamTextAlignment(style.getLabelAlignment()) + ";");
-        sb.append("z-index: " + style.getzIndex() + ";");
+
+        if (element instanceof FloatingAttachment)
+        {
+            sb.append("z-index: 7;");
+            sb.append("shadow-mode: gradient-radial;");
+            sb.append("shadow-color: #A0A0A0FF,#A0A0A0FF,#A0A0A0FF,#A0A0A000;");
+            sb.append("shadow-width: " + 0.05 * SCALE + "gu;");
+            sb.append("shadow-offset: " + 0.0 * SCALE + "px,-" + 0.0 * SCALE + "px;");
+        }
+        else
+        {
+            sb.append("z-index: " + style.getzIndex() + ";");
+        }
 
         return sb.toString();
     }
