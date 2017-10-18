@@ -2,9 +2,7 @@ package de.itemis.graphing.view;
 
 import de.itemis.graphing.model.GraphElement;
 
-import java.util.Set;
-
-public interface IInteractionListener
+public interface IClickHandler
 {
 
     public class ClickParameters
@@ -33,18 +31,8 @@ public interface IInteractionListener
         }
     }
 
-    /**
-     * called when left mouse button is clicked.
-     */
     void clickBegin(GraphElement element, ClickParameters params);
 
-    /**
-     * called when left mouse button is released. element is ensured to be the same as last call to notifyClickBegin().
-     */
     void clickEnd(GraphElement element, ClickParameters params);
 
-    /**
-     * called when the selection has changed. contains only changes since previous notifications.
-     */
-    void selectionChanged(Set<GraphElement> selected, Set<GraphElement> unselected);
 }

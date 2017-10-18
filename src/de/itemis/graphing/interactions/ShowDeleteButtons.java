@@ -6,7 +6,7 @@
 //
 //import java.util.Set;
 //
-//public class ShowDeleteButtons implements IInteractionListener
+//public class ShowDeleteButtons implements IClickHandler
 //{
 //    private final Size _size;
 //    private final double _padding;
@@ -58,7 +58,7 @@
 //    }
 //
 //    @Override
-//    public void notifySelectionChanged(Set<GraphElement> selected, Set<GraphElement> unselected)
+//    public void selectionCompleted(Set<GraphElement> selected, Set<GraphElement> unselected)
 //    {
 //    }
 //}

@@ -1,7 +1,6 @@
 package de.itemis.graphing.view;
 
 import de.itemis.graphing.model.AttachmentBase;
-import de.itemis.graphing.model.TabularAttachment;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.GraphElement;
 
@@ -11,7 +10,9 @@ import java.util.Set;
 
 public abstract class AbstractViewManager implements IViewManager
 {
-    private final LinkedHashSet<IInteractionListener> _interactionListeners = new LinkedHashSet<IInteractionListener>();
+    private final LinkedHashSet<IHoverHandler> _hoverHandlers = new LinkedHashSet<>();
+    private final LinkedHashSet<IClickHandler> _clickHandlers = new LinkedHashSet<>();
+    private final LinkedHashSet<ISelectionHandler> _selectionHandlers = new LinkedHashSet<>();
     private final Graph _graph;
 
     private Set<GraphElement> _lastSelection = new LinkedHashSet<>();
@@ -22,15 +23,39 @@ public abstract class AbstractViewManager implements IViewManager
     }
 
     @Override
-    public void registerInteractionListener(IInteractionListener listener)
+    public void registerHoverHandler(IHoverHandler handler)
     {
-        _interactionListeners.add(listener);
+        _hoverHandlers.add(handler);
     }
 
     @Override
-    public void removeInteractionListener(IInteractionListener listener)
+    public void removeHoverHandler(IHoverHandler handler)
     {
-        _interactionListeners.remove(listener);
+        _hoverHandlers.remove(handler);
+    }
+
+    @Override
+    public void registerClickHandler(IClickHandler handler)
+    {
+        _clickHandlers.add(handler);
+    }
+
+    @Override
+    public void removeClickHandler(IClickHandler handler)
+    {
+        _clickHandlers.remove(handler);
+    }
+
+    @Override
+    public void registerSelectionHandler(ISelectionHandler handler)
+    {
+        _selectionHandlers.add(handler);
+    }
+
+    @Override
+    public void removeSelectionHandler(ISelectionHandler handler)
+    {
+        _selectionHandlers.remove(handler);
     }
 
     @Override
@@ -59,62 +84,71 @@ public abstract class AbstractViewManager implements IViewManager
     // -----------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void applyInteraction(String elementId, Boolean select, Boolean toggleSelect, Boolean clickBegin, Boolean clickEnd, MouseEvent event)
+    public void applyHoverInteraction(String elementId, boolean mouseEntered, MouseEvent event)
     {
-        GraphElement element = _graph.getElement(elementId);
+        GraphElement element = getInteractionElement(elementId);
+        element.setHovered(mouseEntered);
 
-        if (element == null)
-            throw new RuntimeException("could not get element for id: " + elementId);
-
-        if (element instanceof AttachmentBase && ((AttachmentBase) element).isDelegateInteractionToParent())
+        // notify listeners
+        IHoverHandler.HoverParameters params = new IHoverHandler.HoverParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
+        for(IHoverHandler listener : _hoverHandlers)
         {
-            element = ((AttachmentBase) element).getParent();
+            if (mouseEntered)
+            {
+                listener.mouseEntered(element, params);
+            }
+            else
+            {
+                listener.mouseExited(element, params);
+            }
+        }
+    }
+
+    @Override
+    public void applyClickInteraction(String elementId, boolean clickBegin, MouseEvent event)
+    {
+        GraphElement element = elementId == null ? null : getInteractionElement(elementId);
+
+        if (element != null)
+        {
+            element.setClicked(clickBegin);
         }
 
-        if (select != null)
+        // notify listeners
+        IClickHandler.ClickParameters params = new IClickHandler.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
+        for(IClickHandler listener : _clickHandlers)
         {
-            if (element.isSelectable())
-                element.setSelected(select);
+            if (clickBegin)
+            {
+                listener.clickBegin(element, params);
+            }
+            else
+            {
+                listener.clickEnd(element, params);
+            }
         }
-        else if (toggleSelect != null && toggleSelect)
+    }
+
+
+    @Override
+    public void applySelectInteraction(String elementId, Boolean select)
+    {
+        GraphElement element = getInteractionElement(elementId);
+
+        if (select == null)
         {
             if (element.isSelectable())
                 element.setSelected(!element.isSelected());
         }
-        else if (clickBegin != null && clickBegin)
+        else
         {
-            element.clickBegin();
-            notifyClickBegin(element, event);
-        }
-        else if (clickEnd != null && clickEnd)
-        {
-            element.clickEnd();
-            notifyClickEnd(element, event);
+            if (element.isSelectable())
+                element.setSelected(select);
         }
     }
 
     @Override
-    public void notifyClickBegin(GraphElement element, MouseEvent event)
-    {
-        IInteractionListener.ClickParameters params = new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
-        for(IInteractionListener listener : _interactionListeners)
-        {
-            listener.clickBegin(element, params);
-        }
-    }
-
-    @Override
-    public void notifyClickEnd(GraphElement element, MouseEvent event)
-    {
-        IInteractionListener.ClickParameters params = new IInteractionListener.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
-        for(IInteractionListener listener : _interactionListeners)
-        {
-            listener.clickEnd(element, params);
-        }
-    }
-
-    @Override
-    public void notifySelectionChanged()
+    public void selectionCompleted()
     {
         Set<GraphElement> newSelection = getSelectedElements();
 
@@ -136,10 +170,25 @@ public abstract class AbstractViewManager implements IViewManager
 
         if (selected.size() != 0 || unselected.size() != 0)
         {
-            for(IInteractionListener listener : _interactionListeners)
+            for(ISelectionHandler listener : _selectionHandlers)
             {
                 listener.selectionChanged(selected, unselected);
             }
         }
+    }
+
+    private GraphElement getInteractionElement(String elementId)
+    {
+        GraphElement element = _graph.getElement(elementId);
+
+        if (element == null)
+            throw new RuntimeException("illegal call to applyInteraction: could not get element for id: " + elementId);
+
+        if (element instanceof AttachmentBase && ((AttachmentBase) element).isDelegateInteractionToParent())
+        {
+            element = ((AttachmentBase) element).getParent();
+        }
+
+        return element;
     }
 }

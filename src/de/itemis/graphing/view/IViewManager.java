@@ -22,35 +22,44 @@ public interface IViewManager
     void close();
 
     // -----------------------------------------------------------------------------------------------------------------
-    // not technology specific (default implementation in AbstractViewManager should not be overridden)
+    // not rendering technology specific (default implementation in AbstractViewManager should not be overridden)
 
     Set<GraphElement> getSelectedElements();
 
-    void registerInteractionListener(IInteractionListener listener);
+    void registerHoverHandler(IHoverHandler handler);
 
-    void removeInteractionListener(IInteractionListener listener);
+    void removeHoverHandler(IHoverHandler handler);
 
-    /**
-     * Must be called by the interaction handling component (e.g. mouse controller) when an element is clicked/selected.
-     * Calls notifyClickBegin() and notifyClickEnd(), but NOT notifySelectionChanged() in order to support comprehensive
-     * selection changed notifications.
-     */
-    void applyInteraction(String elementId, Boolean select, Boolean toggleSelect, Boolean clickBegin, Boolean clickEnd, MouseEvent event);
+    void registerClickHandler(IClickHandler handler);
 
-    /**
-     * Should be called by the interaction handling component only on clicks in empty space (element == null),
-     * as it is automatically called from applyInteraction() above.
-     */
-    void notifyClickBegin(GraphElement element, MouseEvent event);
+    void removeClickHandler(IClickHandler handler);
+
+    void registerSelectionHandler(ISelectionHandler handler);
+
+    void removeSelectionHandler(ISelectionHandler handler);
 
     /**
-     * Should be called by the interaction handling component only on clicks in empty space (element == null),
-     * as it is automatically called from applyInteraction() above.
+     * Must be called by the interaction handling component (e.g. mouse controller) when the mouse is entering / exiting.
+     * elementId must not be null.
      */
-    void notifyClickEnd(GraphElement element, MouseEvent event);
+    void applyHoverInteraction(String elementId, boolean mouseEntered, MouseEvent event);
+
+    /**
+     * Must be called by the interaction handling component (e.g. mouse controller) when an element is clicked.
+     * elementId may be null to indicate clicks in empty space.
+     */
+    void applyClickInteraction(String elementId, boolean clickBegin, MouseEvent event);
+
+    /**
+     * Must be called by the interaction handling component (e.g. mouse controller) when an element is selected or unselected.
+     * select may be null to indicate that the selection is toggled.
+     * elementId must not be null.
+     * A subsequent call to selectionCompleted() is necessary in every case (allows to comprehend multiple selected elements).
+     */
+    void applySelectInteraction(String elementId, Boolean select);
 
     /**
      * Must always be called by the interaction handling component after the selection has changed.
      */
-    void notifySelectionChanged();
+    void selectionCompleted();
 }

@@ -17,6 +17,7 @@ public abstract class GraphElement implements IStyled
     private boolean _isSelectable = true;
     private boolean _isSelected = false;
     private boolean _isClicked = false;
+    private boolean _isHovered = false;
 
     // must be set in constructors of concrete graph elements
     protected Style _styleRegular;
@@ -102,15 +103,15 @@ public abstract class GraphElement implements IStyled
         }
     }
 
-    public void clickBegin()
+    public void setClicked(boolean clicked)
     {
-        _isClicked = true;
+        _isClicked = clicked;
         styleChanged();
     }
 
-    public void clickEnd()
+    public void setHovered(boolean hovered)
     {
-        _isClicked = false;
+        _isHovered = hovered;
         styleChanged();
     }
 

@@ -4,11 +4,11 @@ import de.itemis.graphing.model.Edge;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.Style;
-import de.itemis.graphing.view.IInteractionListener;
+import de.itemis.graphing.view.IClickHandler;
 
 import java.util.Set;
 
-public class AutomarkLinks implements IInteractionListener
+public class AutomarkLinks implements IClickHandler
 {
     private enum EDirection { both, incoming, outgoing }
 
@@ -44,11 +44,6 @@ public class AutomarkLinks implements IInteractionListener
             _lastMarkedVertex = (Vertex) element;
             selectStyle(_lastMarkedVertex, true, DEPTH, EDirection.both);
         }
-    }
-
-    @Override
-    public void selectionChanged(Set<GraphElement> selected, Set<GraphElement> unselected)
-    {
     }
 
     private void selectStyle(Vertex vertex, boolean setHighlighted, int depth, EDirection direction)
