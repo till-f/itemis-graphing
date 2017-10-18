@@ -157,7 +157,12 @@ public class Vertex extends GraphElement implements ISized
 
     public FloatingAttachment addFloatingAttachment(String id, double width, double height, double posAngleOrX, double posDistanceOrY, FloatingAttachment.EPositioningMode posMode)
     {
-        FloatingAttachment a = new FloatingAttachment(this, id, new Size(width, height), posAngleOrX, posDistanceOrY, posMode);
+        return addFloatingAttachment(id, width, height, posAngleOrX, posDistanceOrY, posMode, false);
+    }
+
+    public FloatingAttachment addFloatingAttachment(String id, double width, double height, double posAngleOrX, double posDistanceOrY, FloatingAttachment.EPositioningMode posMode, boolean isPixelCoordinates)
+    {
+        FloatingAttachment a = new FloatingAttachment(this, id, new Size(width, height), posAngleOrX, posDistanceOrY, posMode, isPixelCoordinates);
 
         _attachments.put(id, a);
         _graph.attachmentAdded(a);

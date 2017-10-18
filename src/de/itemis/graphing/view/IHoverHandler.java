@@ -31,7 +31,6 @@ public interface IHoverHandler
         }
     }
 
-    void mouseEntered(GraphElement element, HoverParameters params);
+    void mouseHover(GraphElement enterElement, GraphElement exitElement, HoverParameters params, IViewManager viewManager);
 
-    void mouseExited(GraphElement element, HoverParameters params);
 }

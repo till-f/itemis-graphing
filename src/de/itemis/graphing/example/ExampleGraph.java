@@ -1,9 +1,6 @@
 package de.itemis.graphing.example;
 
-import de.itemis.graphing.model.TabularAttachment;
-import de.itemis.graphing.model.Edge;
-import de.itemis.graphing.model.Graph;
-import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.style.BlockStyle;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.model.style.VertexStyle;
@@ -36,7 +33,7 @@ public class ExampleGraph {
 
         Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
         vertexB.setLabel("vertex B");
-        vertexB.setIsLowPrioLabel(true);
+        vertexB.setLabelPrio(GraphElement.ELabelPriority.Low);
 
         Vertex vertexC = graph.addVertex("C", 1.0, 0.5);
         vertexC.setLabel("vertex C");

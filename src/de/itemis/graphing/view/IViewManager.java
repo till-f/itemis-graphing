@@ -21,6 +21,8 @@ public interface IViewManager
 
     void close();
 
+    int calculateTextSize(String txt);
+
     // -----------------------------------------------------------------------------------------------------------------
     // not rendering technology specific (default implementation in AbstractViewManager should not be overridden)
 
@@ -40,9 +42,9 @@ public interface IViewManager
 
     /**
      * Must be called by the interaction handling component (e.g. mouse controller) when the mouse is entering / exiting.
-     * elementId must not be null.
+     * one of enterId, exitId may be null to indicate enter/exit from/to empty space.
      */
-    void applyHoverInteraction(String elementId, boolean mouseEntered, MouseEvent event);
+    void applyHoverInteraction(String enterId, String exitId, MouseEvent event);
 
     /**
      * Must be called by the interaction handling component (e.g. mouse controller) when an element is clicked.

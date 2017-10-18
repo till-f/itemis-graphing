@@ -84,23 +84,16 @@ public abstract class AbstractViewManager implements IViewManager
     // -----------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void applyHoverInteraction(String elementId, boolean mouseEntered, MouseEvent event)
+    public void applyHoverInteraction(String enterId, String exitId, MouseEvent event)
     {
-        GraphElement element = getInteractionElement(elementId);
-        element.setHovered(mouseEntered);
+        GraphElement enterElement = enterId == null ? null : getInteractionElement(enterId);
+        GraphElement exitElement = exitId == null ? null :getInteractionElement(exitId);
 
         // notify listeners
         IHoverHandler.HoverParameters params = new IHoverHandler.HoverParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
         for(IHoverHandler listener : _hoverHandlers)
         {
-            if (mouseEntered)
-            {
-                listener.mouseEntered(element, params);
-            }
-            else
-            {
-                listener.mouseExited(element, params);
-            }
+            listener.mouseHover(enterElement, exitElement, params, this);
         }
     }
 

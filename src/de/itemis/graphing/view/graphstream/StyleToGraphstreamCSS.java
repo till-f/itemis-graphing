@@ -24,8 +24,10 @@ public class StyleToGraphstreamCSS
 
             BlockStyle blockStyle = (BlockStyle) style;
 
+            String unit = (element instanceof FloatingAttachment && ((FloatingAttachment) element).isPixelCoordinates()) ? "px" : "gu";
+
             sb.append("shape: " + getGraphstreamShape(blockStyle.getShape()) + ";");
-            sb.append("size: " + ((ISized) element).getSize().getWidth() + "gu," + ((ISized) element).getSize().getHeight() + "gu;");
+            sb.append("size: " + ((ISized) element).getSize().getWidth() + unit + "," + ((ISized) element).getSize().getHeight() + unit + ";");
             sb.append("fill-mode: plain;");
             sb.append("fill-color: #" + style.getFillColor() + ";");
             sb.append("stroke-color: #" + style.getLineColor() + ";");
@@ -88,10 +90,6 @@ public class StyleToGraphstreamCSS
         if (element instanceof FloatingAttachment)
         {
             sb.append("z-index: 7;");
-            sb.append("shadow-mode: gradient-radial;");
-            sb.append("shadow-color: #A0A0A0FF,#A0A0A0FF,#A0A0A0FF,#A0A0A000;");
-            sb.append("shadow-width: " + 0.05 * SCALE + "gu;");
-            sb.append("shadow-offset: " + 0.0 * SCALE + "px,-" + 0.0 * SCALE + "px;");
         }
         else
         {

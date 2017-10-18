@@ -6,18 +6,19 @@ import java.util.Stack;
 
 public abstract class GraphElement implements IStyled
 {
+    public enum ELabelPriority { Normal, Low, AlwaysShown }
+
     protected final Graph _graph;
     protected final String _id;
 
     private Object _userObject = null;
     private String _label = null;
-    private boolean _isLowPioLabel = false;
+    private ELabelPriority _labelPrio = ELabelPriority.Normal;
 
     private Stack<Style> _highlightStyles = new Stack<>();
     private boolean _isSelectable = true;
     private boolean _isSelected = false;
     private boolean _isClicked = false;
-    private boolean _isHovered = false;
 
     // must be set in constructors of concrete graph elements
     protected Style _styleRegular;
@@ -65,14 +66,14 @@ public abstract class GraphElement implements IStyled
 
     }
 
-    public boolean isLowPrioLabel()
+    public ELabelPriority getLabelPrio()
     {
-        return _isLowPioLabel;
+        return _labelPrio;
     }
 
-    public void setIsLowPrioLabel(boolean isLowPrio)
+    public void setLabelPrio(ELabelPriority labelPrio)
     {
-        _isLowPioLabel = isLowPrio;
+        _labelPrio = labelPrio;
         _graph.labelPriorityChanged(this);
     }
 
@@ -106,12 +107,6 @@ public abstract class GraphElement implements IStyled
     public void setClicked(boolean clicked)
     {
         _isClicked = clicked;
-        styleChanged();
-    }
-
-    public void setHovered(boolean hovered)
-    {
-        _isHovered = hovered;
         styleChanged();
     }
 

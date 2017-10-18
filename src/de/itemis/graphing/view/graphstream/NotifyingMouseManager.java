@@ -190,17 +190,13 @@ public class NotifyingMouseManager implements MouseManager
     {
         GraphicElement streakedElement = _view.findNodeOrSpriteAt(event.getX(), event.getY());
 
-        if (_lastStreakedElement != null && _lastStreakedElement != streakedElement)
+        if (streakedElement != null || _lastStreakedElement != null)
         {
-            _viewManager.applyHoverInteraction(_lastStreakedElement.getId(), false, event);
+            String enterId = streakedElement == null ? null : streakedElement.getId();
+            String exitId = _lastStreakedElement == null ? null : _lastStreakedElement.getId();
+            _viewManager.applyHoverInteraction(enterId, exitId, event);
+            _lastStreakedElement = streakedElement;
         }
-
-        if (streakedElement != null)
-        {
-            _viewManager.applyHoverInteraction(streakedElement.getId(), true, event);
-        }
-
-        _lastStreakedElement = streakedElement;
     }
 
     @Override

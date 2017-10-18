@@ -7,6 +7,7 @@ import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.geom.Point3;
+import org.graphstream.ui.graphicGraph.stylesheet.StyleConstants;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
@@ -149,6 +150,12 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         _viewer.close();
     }
 
+    @Override
+    public int calculateTextSize(String txt)
+    {
+        return _view.getGraphics().getFontMetrics().stringWidth(txt);
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // MouseWheelListener and HierarchyBoundsListener (size and zoom changing)
 
@@ -213,7 +220,8 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         String visMain = showMainText ? "text-visibility-mode: normal;" : "text-visibility-mode: hidden;" ;
         String visLowPrio = showLowPrioText ? "text-visibility-mode: normal;" : "text-visibility-mode: hidden;" ;
 
-        _gsGraph.addAttribute("ui.stylesheet", "graph { padding: 0.7gu; } node { " + visMain + " } edge { " + visMain + " arrow-size: 0.1gu,0.04gu; } sprite { " + visMain + " } node.lowpriotxt { " + visLowPrio + " } edge.lowpriotxt { " + visLowPrio + " } sprite.lowpriotxt { " + visLowPrio + " }");
+        _gsGraph.addAttribute("ui.stylesheet", "graph { padding: 0.7gu; } node { " + visMain + " } edge { " + visMain + " arrow-size: 0.1gu,0.04gu; } sprite { " + visMain + " } node.lowpriotxt { " + visLowPrio + " } edge.lowpriotxt { " + visLowPrio + " } sprite.lowpriotxt { " + visLowPrio + " } node.infpriotxt { text-visibility-mode: normal; } edge.infpriotxt { text-visibility-mode: normal; } sprite.infpriotxt { text-visibility-mode: normal; }");
+
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -328,10 +336,19 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         if (gsElement == null)
             return;
 
-        if (element.isLowPrioLabel())
-            gsElement.setAttribute("ui.class", "lowpriotxt");
-        else
-            gsElement.setAttribute("ui.class", "");
+        switch (element.getLabelPrio())
+        {
+
+            case Normal:
+                gsElement.setAttribute("ui.class", "");
+                break;
+            case Low:
+                gsElement.setAttribute("ui.class", "lowpriotxt");
+                break;
+            case AlwaysShown:
+                gsElement.setAttribute("ui.class", "infpriotxt");
+                break;
+        }
     }
 
     private Element getGraphstreamElement(GraphElement element)
@@ -483,9 +500,11 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
     private void setRenderingPosition_Floating(FloatingAttachment attachment, Sprite sprite)
     {
+        StyleConstants.Units unit = attachment.isPixelCoordinates() ? StyleConstants.Units.PX : StyleConstants.Units.GU;
+
         if (attachment.getPosMode() == FloatingAttachment.EPositioningMode.Radial)
         {
-            sprite.setPosition(attachment.getDistanceOrY(), 0.0, attachment.getAngleOrX());
+            sprite.setPosition(unit, attachment.getDistanceOrY(), 0.0, attachment.getAngleOrX());
         }
         else if(attachment.getPosMode() == FloatingAttachment.EPositioningMode.XY)
         {
@@ -496,7 +515,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
             double radian = Math.atan2(y, x);
             double angle = 360 / (2 * Math.PI) * radian;
 
-            sprite.setPosition(distance, 0.0, angle);
+            sprite.setPosition(unit, distance, 0.0, angle);
         }
         else
         {
