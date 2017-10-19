@@ -21,6 +21,8 @@ public interface IViewManager
 
     void close();
 
+    double getGraphicalUnitsPerPixel();
+
     int calculateTextSize(String txt);
 
     // -----------------------------------------------------------------------------------------------------------------

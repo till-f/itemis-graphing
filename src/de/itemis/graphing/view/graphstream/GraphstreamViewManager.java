@@ -36,7 +36,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
     public GraphstreamViewManager(Graph graph)
     {
-        this(graph, 25, 55);
+        this(graph, 0.03, 0.02);
     }
 
     public GraphstreamViewManager(Graph graph, double textThresholdMainText, double textThresholdLowPrioText)
@@ -144,10 +144,23 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         _view.getCamera().resetView();
     }
 
+    @Override
     public void close()
     {
         _view.removeMouseWheelListener(this);
         _viewer.close();
+    }
+
+    @Override
+    public double getGraphicalUnitsPerPixel()
+    {
+        // quick distance calculation, relies on 2-dimensional, not rotated rendering
+        double distancePX = 5;
+        Point3 p1 = _view.getCamera().transformPxToGu(0, 0);
+        Point3 p2 = _view.getCamera().transformPxToGu(0, distancePX);
+        double distanceGU = Math.abs(p2.y - p1.y);
+        double relationPXGU = distancePX / distanceGU;
+        return 1 / relationPXGU;
     }
 
     @Override
@@ -191,15 +204,10 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
         try
         {
-            // quick distance calculation, relies on 2-dimensional, not rotated rendering
-            double distancePX = 5;
-            Point3 p1 = _view.getCamera().transformPxToGu(0, 0);
-            Point3 p2 = _view.getCamera().transformPxToGu(0, distancePX);
-            double distanceGU = Math.abs(p2.y - p1.y);
-            double relationPXGU = distancePX / distanceGU;
+            double gpp = getGraphicalUnitsPerPixel();
 
-            boolean showMainText = relationPXGU > _textThresholdMainText;
-            boolean showLowPrioText = relationPXGU > _textThresholdLowPrioText;
+            boolean showMainText = gpp < _textThresholdMainText;
+            boolean showLowPrioText = gpp < _textThresholdLowPrioText;
 
             if (showMainText != _showMainText || showLowPrioText != _showLowPrioText)
             {
@@ -500,11 +508,9 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
     private void setRenderingPosition_Floating(FloatingAttachment attachment, Sprite sprite)
     {
-        StyleConstants.Units unit = attachment.isPixelCoordinates() ? StyleConstants.Units.PX : StyleConstants.Units.GU;
-
         if (attachment.getPosMode() == FloatingAttachment.EPositioningMode.Radial)
         {
-            sprite.setPosition(unit, attachment.getDistanceOrY(), 0.0, attachment.getAngleOrX());
+            sprite.setPosition(attachment.getDistanceOrY(), 0.0, attachment.getAngleOrX());
         }
         else if(attachment.getPosMode() == FloatingAttachment.EPositioningMode.XY)
         {
@@ -515,7 +521,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
             double radian = Math.atan2(y, x);
             double angle = 360 / (2 * Math.PI) * radian;
 
-            sprite.setPosition(unit, distance, 0.0, angle);
+            sprite.setPosition(distance, 0.0, angle);
         }
         else
         {
@@ -533,5 +539,4 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         _gsGraph.addAttribute("ui.quality");
         _gsGraph.addAttribute("ui.antialias");
     }
-
 }

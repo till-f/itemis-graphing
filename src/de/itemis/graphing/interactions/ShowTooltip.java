@@ -53,8 +53,8 @@ public class ShowTooltip implements IHoverHandler
                     getClass().getSimpleName(),
                     size.getWidth(),
                     size.getHeight(),
-                    getAngleOrX(enterElement, params),
-                    getDistanceOrY(enterElement, params),
+                    getAngleOrX(parent, enterElement, params),
+                    getDistanceOrY(parent, enterElement, params),
                     getPosMode(enterElement, params),
                     isPixelCoordinates(enterElement, params)
                 );
@@ -74,14 +74,14 @@ public class ShowTooltip implements IHoverHandler
         return new Size(_viewManager.calculateTextSize(element.getLabel() + 10), 20);
     }
 
-    public double getAngleOrX(GraphElement element, HoverParameters params)
+    public double getAngleOrX(Vertex parent, GraphElement element, HoverParameters params)
     {
         return 90.0;
     }
 
-    public double getDistanceOrY(GraphElement element, HoverParameters params)
+    public double getDistanceOrY(Vertex parent,GraphElement element, HoverParameters params)
     {
-        return 15;
+        return parent.getSize().getHeight() / 2 + _viewManager.getGraphicalUnitsPerPixel() * 10;
     }
 
     public FloatingAttachment.EPositioningMode getPosMode(GraphElement element, HoverParameters params)
@@ -99,4 +99,5 @@ public class ShowTooltip implements IHoverHandler
         a.setLabel(element.getLabel());
         a.setLabelPrio(GraphElement.ELabelPriority.AlwaysShown);
     }
+
 }
