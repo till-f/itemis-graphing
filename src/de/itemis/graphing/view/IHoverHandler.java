@@ -2,7 +2,7 @@ package de.itemis.graphing.view;
 
 import de.itemis.graphing.model.GraphElement;
 
-public interface IHoverHandler
+public interface IHoverHandler extends IHandler
 {
 
     public class HoverParameters
@@ -31,6 +31,6 @@ public interface IHoverHandler
         }
     }
 
-    void mouseHover(GraphElement enterElement, GraphElement exitElement, HoverParameters params, IViewManager viewManager);
+    void mouseHover(GraphElement enterElement, GraphElement exitElement, HoverParameters params);
 
 }

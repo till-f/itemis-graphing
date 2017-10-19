@@ -23,39 +23,39 @@ public abstract class AbstractViewManager implements IViewManager
     }
 
     @Override
-    public void registerHoverHandler(IHoverHandler handler)
+    public void registerHandler(IHandler handler)
     {
-        _hoverHandlers.add(handler);
+        if (handler instanceof IHoverHandler)
+        {
+            _hoverHandlers.add((IHoverHandler) handler);
+        }
+        if (handler instanceof IClickHandler)
+        {
+            _clickHandlers.add((IClickHandler) handler);
+        }
+        if (handler instanceof ISelectionHandler)
+        {
+            _selectionHandlers.add((ISelectionHandler) handler);
+        }
+
+        handler.setViewManager(this);
     }
 
     @Override
-    public void removeHoverHandler(IHoverHandler handler)
+    public void removeHandler(IHandler handler)
     {
-        _hoverHandlers.remove(handler);
-    }
-
-    @Override
-    public void registerClickHandler(IClickHandler handler)
-    {
-        _clickHandlers.add(handler);
-    }
-
-    @Override
-    public void removeClickHandler(IClickHandler handler)
-    {
-        _clickHandlers.remove(handler);
-    }
-
-    @Override
-    public void registerSelectionHandler(ISelectionHandler handler)
-    {
-        _selectionHandlers.add(handler);
-    }
-
-    @Override
-    public void removeSelectionHandler(ISelectionHandler handler)
-    {
-        _selectionHandlers.remove(handler);
+        if (handler instanceof IHoverHandler)
+        {
+            _hoverHandlers.remove((IHoverHandler) handler);
+        }
+        if (handler instanceof IClickHandler)
+        {
+            _clickHandlers.remove((IClickHandler) handler);
+        }
+        if (handler instanceof ISelectionHandler)
+        {
+            _selectionHandlers.remove((ISelectionHandler) handler);
+        }
     }
 
     @Override
@@ -93,7 +93,7 @@ public abstract class AbstractViewManager implements IViewManager
         IHoverHandler.HoverParameters params = new IHoverHandler.HoverParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
         for(IHoverHandler listener : _hoverHandlers)
         {
-            listener.mouseHover(enterElement, exitElement, params, this);
+            listener.mouseHover(enterElement, exitElement, params);
         }
     }
 

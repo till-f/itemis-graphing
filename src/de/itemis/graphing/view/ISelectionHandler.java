@@ -4,7 +4,7 @@ import de.itemis.graphing.model.GraphElement;
 
 import java.util.Set;
 
-public interface ISelectionHandler
+public interface ISelectionHandler extends IHandler
 {
 
     /**

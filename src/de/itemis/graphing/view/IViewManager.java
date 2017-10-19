@@ -28,17 +28,9 @@ public interface IViewManager
 
     Set<GraphElement> getSelectedElements();
 
-    void registerHoverHandler(IHoverHandler handler);
+    void registerHandler(IHandler handler);
 
-    void removeHoverHandler(IHoverHandler handler);
-
-    void registerClickHandler(IClickHandler handler);
-
-    void removeClickHandler(IClickHandler handler);
-
-    void registerSelectionHandler(ISelectionHandler handler);
-
-    void removeSelectionHandler(ISelectionHandler handler);
+    void removeHandler(IHandler handler);
 
     /**
      * Must be called by the interaction handling component (e.g. mouse controller) when the mouse is entering / exiting.

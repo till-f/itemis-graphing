@@ -24,8 +24,8 @@ public class ExampleGraphstreamView
 
         GraphstreamViewManager viewManager = new GraphstreamViewManager(graph);
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
-        viewManager.registerClickHandler(new AutomarkLinks());
-        viewManager.registerHoverHandler(new ShowTooltip());
+        viewManager.registerHandler(new AutomarkLinks());
+        viewManager.registerHandler(new ShowTooltip());
         viewManager.configure(layout);
 
         JPanel view = viewManager.getView();

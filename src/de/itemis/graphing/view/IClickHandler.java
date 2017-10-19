@@ -2,7 +2,7 @@ package de.itemis.graphing.view;
 
 import de.itemis.graphing.model.GraphElement;
 
-public interface IClickHandler
+public interface IClickHandler extends IHandler
 {
 
     public class ClickParameters

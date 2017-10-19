@@ -6,14 +6,21 @@ import de.itemis.graphing.view.IViewManager;
 
 public class ShowTooltip implements IHoverHandler
 {
+    private IViewManager _viewManager = null;
     private FloatingAttachment _showingAttachment = null;
 
     @Override
-    public void mouseHover(GraphElement enterElement, GraphElement exitElement, HoverParameters params, IViewManager viewManager)
+    public void setViewManager(IViewManager viewManager)
+    {
+        _viewManager = viewManager;
+    }
+
+    @Override
+    public void mouseHover(GraphElement enterElement, GraphElement exitElement, HoverParameters params)
     {
         if (_showingAttachment != null)
         {
-            if (enterElement == _showingAttachment || enterElement == _showingAttachment.getParent())
+            if (enterElement == _showingAttachment)
             {
                 return;
             }
@@ -40,7 +47,7 @@ public class ShowTooltip implements IHoverHandler
                 return;
             }
 
-            Size size = getSize(enterElement, params, viewManager);
+            Size size = getSize(enterElement, params);
 
             FloatingAttachment a = parent.addFloatingAttachment(
                     getClass().getSimpleName(),
@@ -62,9 +69,9 @@ public class ShowTooltip implements IHoverHandler
         return true;
     }
 
-    public Size getSize(GraphElement element, HoverParameters params, IViewManager viewManager)
+    public Size getSize(GraphElement element, HoverParameters params)
     {
-        return new Size(viewManager.calculateTextSize(element.getLabel() + 10), 20);
+        return new Size(_viewManager.calculateTextSize(element.getLabel() + 10), 20);
     }
 
     public double getAngleOrX(GraphElement element, HoverParameters params)
