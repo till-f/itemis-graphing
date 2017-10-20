@@ -1,8 +1,8 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.util.StreamUtil;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.model.style.VertexStyle;
+import de.itemis.graphing.util.StreamUtil;
 
 import java.util.*;
 

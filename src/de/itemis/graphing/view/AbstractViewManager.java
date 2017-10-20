@@ -3,6 +3,10 @@ package de.itemis.graphing.view;
 import de.itemis.graphing.model.AttachmentBase;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.GraphElement;
+import de.itemis.graphing.view.handlers.IClickHandler;
+import de.itemis.graphing.view.handlers.IHandler;
+import de.itemis.graphing.view.handlers.IHoverHandler;
+import de.itemis.graphing.view.handlers.ISelectionHandler;
 
 import java.awt.event.MouseEvent;
 import java.util.LinkedHashSet;

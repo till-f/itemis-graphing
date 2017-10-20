@@ -1,10 +1,9 @@
-package de.itemis.graphing.interactionhandlers;
+package de.itemis.graphing.view.handlers;
 
 import de.itemis.graphing.model.Edge;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.Style;
-import de.itemis.graphing.view.IClickHandler;
 
 public class HighlightEdges implements IClickHandler
 {

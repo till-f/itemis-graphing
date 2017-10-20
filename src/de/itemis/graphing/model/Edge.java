@@ -3,8 +3,6 @@ package de.itemis.graphing.model;
 import de.itemis.graphing.model.style.EdgeStyle;
 import de.itemis.graphing.model.style.Style;
 
-import java.util.LinkedList;
-
 public class Edge extends GraphElement
 {
     private Vertex _from;

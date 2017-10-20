@@ -1,10 +1,9 @@
-package de.itemis.graphing.interactionhandlers;
+package de.itemis.graphing.view.handlers;
 
 import de.itemis.graphing.model.*;
-import de.itemis.graphing.view.IHoverHandler;
 import de.itemis.graphing.view.IViewManager;
 
-public class ShowTooltip implements IHoverHandler
+public abstract class ShowTooltipBase implements IHoverHandler
 {
     public enum ETooltipPosition { Top, Right, Bottom, Left }
 
@@ -50,7 +49,7 @@ public class ShowTooltip implements IHoverHandler
             String label = getLabel(enterElement, params);
             ETooltipPosition pos = getPosition(enterElement, params);
 
-            Size size = calculateSize(label);
+            Size size = calculateSize(label, getPadding(enterElement, params));
 
             FloatingAttachment attachment = parent.addFloatingAttachment(
                     getClass().getSimpleName(),
@@ -71,32 +70,31 @@ public class ShowTooltip implements IHoverHandler
         }
     }
 
-    public boolean hasTooltip(GraphElement element, HoverParameters params)
-    {
-        return element.getLabel() != null && !element.getLabel().isEmpty();
-    }
+    protected abstract boolean hasTooltip(GraphElement element, HoverParameters params);
 
-    public String getLabel(GraphElement element, HoverParameters params)
-    {
-        return element.getLabel();
-    }
+    protected abstract String getLabel(GraphElement element, HoverParameters params);
 
-    public ETooltipPosition getPosition(GraphElement enterElement, HoverParameters params)
+    protected ETooltipPosition getPosition(GraphElement enterElement, HoverParameters params)
     {
         return ETooltipPosition.Top;
     }
 
-    public void applyExtraAttributes(GraphElement element, HoverParameters params, FloatingAttachment attachment)
+    protected Padding getPadding(GraphElement enterElement, HoverParameters params)
+    {
+        return new Padding(10, 4);
+    }
+
+    protected void applyExtraAttributes(GraphElement element, HoverParameters params, FloatingAttachment attachment)
     {
     }
 
-    private Size calculateSize(String label)
+    protected Size calculateSize(String label, Padding p)
     {
         Size txtSize = _viewManager.calculateTextSize(label);
-        return new Size(txtSize.getWidth() + 10, txtSize.getHeight() + 4);
+        return txtSize.addPadding(p);
     }
 
-    private double calculateAngle(ETooltipPosition position)
+    protected double calculateAngle(ETooltipPosition position)
     {
         switch (position)
         {
@@ -113,7 +111,7 @@ public class ShowTooltip implements IHoverHandler
         }
     }
 
-    private double calculateDistance(Vertex parent, Size ownSize, ETooltipPosition position)
+    protected double calculateDistance(Vertex parent, Size ownSize, ETooltipPosition position)
     {
         switch (position)
         {

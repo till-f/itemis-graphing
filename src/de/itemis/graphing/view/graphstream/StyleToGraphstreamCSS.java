@@ -1,12 +1,12 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.model.FloatingAttachment;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.ISized;
 import de.itemis.graphing.model.style.BlockStyle;
 import de.itemis.graphing.model.style.EdgeStyle;
 import de.itemis.graphing.model.style.Style;
+import de.itemis.graphing.util.Screen;
 
 public class StyleToGraphstreamCSS
 {

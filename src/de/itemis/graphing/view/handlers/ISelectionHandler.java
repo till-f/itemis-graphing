@@ -1,4 +1,4 @@
-package de.itemis.graphing.view;
+package de.itemis.graphing.view.handlers;
 
 import de.itemis.graphing.model.GraphElement;
 

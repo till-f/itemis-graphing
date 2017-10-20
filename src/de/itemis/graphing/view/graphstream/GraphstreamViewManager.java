@@ -1,7 +1,7 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.model.*;
+import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.view.AbstractViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;

@@ -1,8 +1,5 @@
 package de.itemis.graphing.model;
 
-import de.itemis.graphing.model.style.AttachmentStyle;
-import de.itemis.graphing.model.style.Style;
-
 public class TabularAttachment extends AttachmentBase
 {
     public enum EHAlignment { Left, Center, Right }
