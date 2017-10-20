@@ -18,6 +18,7 @@ public abstract class GraphElement implements IStyled
     private Stack<Style> _highlightStyles = new Stack<>();
     private boolean _isSelectable = true;
     private boolean _isSelected = false;
+    private boolean _isClickable = true;
     private boolean _isClicked = false;
 
     // must be set in constructors of concrete graph elements
@@ -97,6 +98,9 @@ public abstract class GraphElement implements IStyled
 
     public void setSelected(boolean selected)
     {
+        if (selected && !_isSelectable)
+            throw new RuntimeException("element is not selectable");
+
         if (_isSelected != selected)
         {
             _isSelected = selected;
@@ -104,10 +108,26 @@ public abstract class GraphElement implements IStyled
         }
     }
 
+    public boolean isClickable()
+    {
+        return _isClickable;
+    }
+
+    public void setIsClickable(boolean clickable)
+    {
+        _isClickable = clickable;
+    }
+
     public void setClicked(boolean clicked)
     {
-        _isClicked = clicked;
-        styleChanged();
+        if (clicked && !_isClickable)
+            throw new RuntimeException("element is not clickable");
+
+        if (_isClicked != clicked)
+        {
+            _isClicked = clicked;
+            styleChanged();
+        }
     }
 
     protected void styleChanged()

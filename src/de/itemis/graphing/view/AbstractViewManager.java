@@ -108,6 +108,9 @@ public abstract class AbstractViewManager implements IViewManager
 
         if (element != null)
         {
+            if (!element.isClickable())
+                return;
+
             element.setClicked(clickBegin);
         }
 

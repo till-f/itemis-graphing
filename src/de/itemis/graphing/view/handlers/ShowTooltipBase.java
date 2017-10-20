@@ -86,6 +86,8 @@ public abstract class ShowTooltipBase implements IHoverHandler
 
     protected void applyExtraAttributes(GraphElement element, HoverParameters params, FloatingAttachment attachment)
     {
+        attachment.setIsSelectable(false);
+        attachment.setIsClickable(false);
     }
 
     protected Size calculateSize(String label, Padding p)
