@@ -1,13 +1,12 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.helper.ScalingHelper;
+import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.model.*;
 import de.itemis.graphing.view.AbstractViewManager;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.geom.Point3;
-import org.graphstream.ui.graphicGraph.stylesheet.StyleConstants;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
@@ -48,7 +47,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         _spriteManager = new SpriteManager(_gsGraph);
         _styleConverter = new StyleToGraphstreamCSS();
 
-        double scale = ScalingHelper.getScreenScalingFactor();
+        double scale = Screen.getScalingFactor();
         _textThresholdMainText = textThresholdMainText * scale;
         _textThresholdLowPrioText = textThresholdLowPrioText * scale;
 

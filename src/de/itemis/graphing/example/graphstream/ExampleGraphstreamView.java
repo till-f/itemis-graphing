@@ -1,7 +1,8 @@
 package de.itemis.graphing.example.graphstream;
 
 import de.itemis.graphing.example.ExampleGraph;
-import de.itemis.graphing.helper.ScalingHelper;
+import de.itemis.graphing.layout.TreeLayoutAbego;
+import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.interactionhandlers.HighlightEdges;
 import de.itemis.graphing.interactionhandlers.ShowTooltip;
 import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
@@ -16,14 +17,15 @@ public class ExampleGraphstreamView
 {
    public static void main(String[] args)
     {
-        System.out.println("Scaling Factor: " + ScalingHelper.getScreenScalingFactor());
+        System.out.println("Scaling Factor: " + Screen.getScalingFactor());
 
-        double scale = ScalingHelper.getScreenScalingFactor();
+        double scale = Screen.getScalingFactor();
 
         Graph graph = ExampleGraph.getExampleGraph();
 
         GraphstreamViewManager viewManager = new GraphstreamViewManager(graph);
         Layout layout = new StaticLayout(graph, new HierarchicalLayoutJGraphX());
+        //Layout layout = new StaticLayout(graph, new TreeLayoutAbego());
         viewManager.registerHandler(new HighlightEdges());
         viewManager.registerHandler(new ShowTooltip());
         viewManager.configure(layout);

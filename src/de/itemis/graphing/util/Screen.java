@@ -1,10 +1,10 @@
-package de.itemis.graphing.helper;
+package de.itemis.graphing.util;
 
 import java.awt.*;
 
-public class ScalingHelper
+public class Screen
 {
-    public static double getScreenScalingFactor()
+    public static double getScalingFactor()
     {
         return Toolkit.getDefaultToolkit().getScreenResolution() / 96.0;
 

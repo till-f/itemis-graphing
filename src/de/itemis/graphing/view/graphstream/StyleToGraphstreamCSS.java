@@ -1,6 +1,6 @@
 package de.itemis.graphing.view.graphstream;
 
-import de.itemis.graphing.helper.ScalingHelper;
+import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.model.FloatingAttachment;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.ISized;
@@ -10,7 +10,7 @@ import de.itemis.graphing.model.style.Style;
 
 public class StyleToGraphstreamCSS
 {
-    private final double SCALE = ScalingHelper.getScreenScalingFactor();
+    private final double SCALE = Screen.getScalingFactor();
 
     public String getAtciveStyleCSS(GraphElement element)
     {

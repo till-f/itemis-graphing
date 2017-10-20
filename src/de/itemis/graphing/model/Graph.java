@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Graph
 {
@@ -181,15 +182,7 @@ public class Graph
 
     public List<Vertex> getRootVertexes()
     {
-        LinkedList<Vertex> rootVertexes = new LinkedList<Vertex>();
-        for (Vertex vertex : _vertexes.values())
-        {
-            if (vertex.getSources().size() < 1)
-            {
-                rootVertexes.add(vertex);
-            }
-        }
-        return rootVertexes;
+        return _vertexes.values().stream().filter(it -> it.getSources().size() < 1).collect(Collectors.toList());
     }
 
     public GraphElement getElement(String id)

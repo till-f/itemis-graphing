@@ -1,5 +1,6 @@
 package de.itemis.graphing.model;
 
+import de.itemis.graphing.util.StreamUtil;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.model.style.VertexStyle;
 
@@ -269,36 +270,31 @@ public class Vertex extends GraphElement implements ISized
 
     private void updateTableSize()
     {
-        for (AttachmentBase a_base : _attachments.values())
-        {
-            if (!(a_base instanceof TabularAttachment))
-                continue;
-            TabularAttachment a = (TabularAttachment)a_base;
+        _attachments.values().stream().flatMap(StreamUtil.ofType(TabularAttachment.class)).forEach(a ->
+                {
+                    if (a.getColSpan() == 1)
+                    {
+                        updateTableSize_step(_colWidths, a.getColIndex(), a.getColSpan(), a.getSize().getWidth());
+                    }
+                    if (a.getRowSpan() == 1)
+                    {
+                        updateTableSize_step(_rowHeights, a.getRowIndex(), a.getRowSpan(), a.getSize().getHeight());
+                    }
+                }
+            );
 
-            if (a.getColSpan() == 1)
-            {
-                updateTableSize_step(_colWidths, a.getColIndex(), a.getColSpan(), a.getSize().getWidth());
-            }
-            if (a.getRowSpan() == 1)
-            {
-                updateTableSize_step(_rowHeights, a.getRowIndex(), a.getRowSpan(), a.getSize().getHeight());
-            }
-        }
-        for (AttachmentBase a_base : _attachments.values())
-        {
-            if (!(a_base instanceof TabularAttachment))
-                continue;
-            TabularAttachment a = (TabularAttachment)a_base;
-
-            if (a.getColSpan() > 1)
-            {
-                updateTableSize_step(_colWidths, a.getColIndex(), a.getColSpan(), a.getSize().getWidth());
-            }
-            if (a.getRowSpan() > 1)
-            {
-                updateTableSize_step(_rowHeights, a.getRowIndex(), a.getRowSpan(), a.getSize().getHeight());
-            }
-        }
+        _attachments.values().stream().flatMap(StreamUtil.ofType(TabularAttachment.class)).forEach(a ->
+                {
+                    if (a.getColSpan() > 1)
+                    {
+                        updateTableSize_step(_colWidths, a.getColIndex(), a.getColSpan(), a.getSize().getWidth());
+                    }
+                    if (a.getRowSpan() > 1)
+                    {
+                        updateTableSize_step(_rowHeights, a.getRowIndex(), a.getRowSpan(), a.getSize().getHeight());
+                    }
+                }
+            );
 
         _isTableSizeDirty = false;
     }
