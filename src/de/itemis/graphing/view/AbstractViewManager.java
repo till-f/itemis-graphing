@@ -182,7 +182,7 @@ public abstract class AbstractViewManager implements IViewManager
         GraphElement element = _graph.getElement(elementId);
 
         if (element == null)
-            throw new RuntimeException("illegal call to applyInteraction: could not get element for id: " + elementId);
+            return null;
 
         if (element instanceof AttachmentBase && ((AttachmentBase) element).isDelegateInteractionToParent())
         {

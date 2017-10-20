@@ -239,7 +239,11 @@ public class Graph
 
     public void attachmentAdded(AttachmentBase attachment)
     {
-        _attachments.put(attachment.getId(), attachment);
+        String id = attachment.getId();
+        if (_attachments.containsKey(id))
+            throw new RuntimeException("attachment with Id '" + id + "' already inserted, attachment Ids must be globally unique (not only per vertex)");
+
+        _attachments.put(id, attachment);
 
         for(IGraphListener listener : _graphListeners)
         {

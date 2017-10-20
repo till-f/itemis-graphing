@@ -4,9 +4,11 @@ import de.itemis.graphing.model.*;
 import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.view.IViewManager;
 
+import javax.swing.*;
+import java.util.concurrent.*;
+
 public abstract class ShowTooltipBase implements IHoverHandler
 {
-
 
     public enum ETooltipPosition { Top, Right, Bottom, Left;}
 
@@ -15,6 +17,8 @@ public abstract class ShowTooltipBase implements IHoverHandler
     private IViewManager _viewManager = null;
     private FloatingAttachment _showingAttachment = null;
     private GraphElement _lastEnteredElement = null;
+
+    private Thread _removeTipThread = null;
 
     @Override
     public void setViewManager(IViewManager viewManager)
@@ -30,7 +34,21 @@ public abstract class ShowTooltipBase implements IHoverHandler
             if (enterElement == _showingAttachment) return;
             if (_lastEnteredElement != null && enterElement == _lastEnteredElement) return;
 
-            _showingAttachment.getParent().removeAttachment(_showingAttachment.getId());
+            final FloatingAttachment attachmentToRemove = _showingAttachment;
+            _removeTipThread = new Thread(() -> {
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException e)
+                {
+                }
+                finally
+                {
+                    attachmentToRemove.getParent().removeAttachment(attachmentToRemove.getId());
+                }
+            });
+            _removeTipThread.start();
         }
         _showingAttachment = null;
         _lastEnteredElement = enterElement;
@@ -51,20 +69,27 @@ public abstract class ShowTooltipBase implements IHoverHandler
 
         if (hasTooltip(enterElement, params))
         {
+            if (_removeTipThread != null)
+            {
+                _removeTipThread.interrupt();
+                while (_removeTipThread.isAlive());
+                _removeTipThread = null;
+            }
+
             String label = getLabel(enterElement, params);
             ETooltipPosition pos = getPosition(enterElement, params);
 
             Size size = calculateSize(label, getPadding(enterElement, params));
 
             FloatingAttachment attachment = parent.addFloatingAttachment(
-                    getClass().getSimpleName(),
+                    parent.getId() + "_" + getClass().getSimpleName(),
                     size.getWidth(),
                     size.getHeight(),
                     calculateAngle(pos),
                     calculateDistance(parent, size, pos),
                     FloatingAttachment.EPositioningMode.Radial,
                     true
-                );
+            );
 
             attachment.setLabel(label);
             attachment.setLabelPrio(GraphElement.ELabelPriority.AlwaysShown);
