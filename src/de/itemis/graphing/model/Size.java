@@ -32,4 +32,9 @@ public class Size
         double maxHeight = Math.max(a.getHeight(), b.getHeight());
         return new Size(maxWidth, maxHeight);
     }
+
+    public Size scale(double gpp)
+    {
+        return new Size(_width * gpp, _height * gpp);
+    }
 }

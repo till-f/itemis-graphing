@@ -5,7 +5,7 @@ import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.Style;
 
-public class HighlightEdges implements IClickHandler
+public class HighlightLinksClickHandler implements IClickHandler
 {
     private enum EDirection { both, incoming, outgoing }
 
@@ -13,12 +13,12 @@ public class HighlightEdges implements IClickHandler
 
     private final int DEPTH;
 
-    public HighlightEdges()
+    public HighlightLinksClickHandler()
     {
         this(1);
     }
 
-    public HighlightEdges(int depth)
+    public HighlightLinksClickHandler(int depth)
     {
         DEPTH = depth;
     }
