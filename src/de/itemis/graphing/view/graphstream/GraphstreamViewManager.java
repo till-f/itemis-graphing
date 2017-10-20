@@ -20,6 +20,7 @@ import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Rectangle2D;
 
 public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener, MouseWheelListener, HierarchyBoundsListener
 {
@@ -164,9 +165,10 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     }
 
     @Override
-    public int calculateTextSize(String txt)
+    public Size calculateTextSize(String txt)
     {
-        return _view.getGraphics().getFontMetrics().stringWidth(txt);
+        Rectangle2D bounds = _view.getGraphics().getFontMetrics().getStringBounds(txt, _view.getGraphics());
+        return new Size(bounds.getWidth(), bounds.getHeight());
     }
 
     // -----------------------------------------------------------------------------------------------------------------

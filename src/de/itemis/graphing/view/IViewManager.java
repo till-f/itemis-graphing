@@ -1,6 +1,7 @@
 package de.itemis.graphing.view;
 
 import de.itemis.graphing.model.GraphElement;
+import de.itemis.graphing.model.Size;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -23,7 +24,7 @@ public interface IViewManager
 
     double getGraphicalUnitsPerPixel();
 
-    int calculateTextSize(String txt);
+    Size calculateTextSize(String txt);
 
     // -----------------------------------------------------------------------------------------------------------------
     // not rendering technology specific (default implementation in AbstractViewManager should not be overridden)

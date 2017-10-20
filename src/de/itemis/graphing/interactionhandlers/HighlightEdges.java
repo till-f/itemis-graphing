@@ -1,4 +1,4 @@
-package de.itemis.graphing.interactions;
+package de.itemis.graphing.interactionhandlers;
 
 import de.itemis.graphing.model.Edge;
 import de.itemis.graphing.model.GraphElement;
@@ -6,9 +6,7 @@ import de.itemis.graphing.model.Vertex;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.view.IClickHandler;
 
-import java.util.Set;
-
-public class AutomarkLinks implements IClickHandler
+public class HighlightEdges implements IClickHandler
 {
     private enum EDirection { both, incoming, outgoing }
 
@@ -16,12 +14,12 @@ public class AutomarkLinks implements IClickHandler
 
     private final int DEPTH;
 
-    public AutomarkLinks()
+    public HighlightEdges()
     {
         this(1);
     }
 
-    public AutomarkLinks(int depth)
+    public HighlightEdges(int depth)
     {
         DEPTH = depth;
     }
