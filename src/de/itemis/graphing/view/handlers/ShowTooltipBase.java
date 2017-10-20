@@ -1,11 +1,16 @@
 package de.itemis.graphing.view.handlers;
 
 import de.itemis.graphing.model.*;
+import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.view.IViewManager;
 
 public abstract class ShowTooltipBase implements IHoverHandler
 {
-    public enum ETooltipPosition { Top, Right, Bottom, Left }
+
+
+    public enum ETooltipPosition { Top, Right, Bottom, Left;}
+
+    private final double SCALE = Screen.getScalingFactor();
 
     private IViewManager _viewManager = null;
     private FloatingAttachment _showingAttachment = null;
@@ -93,7 +98,7 @@ public abstract class ShowTooltipBase implements IHoverHandler
     protected Size calculateSize(String label, Padding p)
     {
         Size txtSize = _viewManager.calculateTextSize(label);
-        return txtSize.addPadding(p);
+        return txtSize.addPadding(p.scale(SCALE));
     }
 
     protected double calculateAngle(ETooltipPosition position)

@@ -23,6 +23,8 @@ import java.awt.geom.Rectangle2D;
 
 public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener, MouseWheelListener, HierarchyBoundsListener
 {
+    private final double SCALE = Screen.getScalingFactor();
+
     private final org.graphstream.graph.Graph _gsGraph;
     private final StyleToGraphstreamCSS _styleConverter;
     private SpriteManager _spriteManager;                   // cannot be final due to bug in graphstream (reset of SpriteManager does not work properly)
@@ -47,9 +49,8 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         _spriteManager = new SpriteManager(_gsGraph);
         _styleConverter = new StyleToGraphstreamCSS();
 
-        double scale = Screen.getScalingFactor();
-        _textThresholdMainText = textThresholdMainText * scale;
-        _textThresholdLowPrioText = textThresholdLowPrioText * scale;
+        _textThresholdMainText = textThresholdMainText * SCALE;
+        _textThresholdLowPrioText = textThresholdLowPrioText * SCALE;
 
         setInitialAttributes();
         setLabelState(true, true);
@@ -167,7 +168,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     public Size calculateTextSize(String txt)
     {
         Rectangle2D bounds = _view.getGraphics().getFontMetrics().getStringBounds(txt, _view.getGraphics());
-        return new Size(bounds.getWidth(), bounds.getHeight());
+        return new Size(bounds.getWidth() * SCALE, bounds.getHeight() * SCALE);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

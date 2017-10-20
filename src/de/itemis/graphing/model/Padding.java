@@ -46,4 +46,9 @@ public class Padding
     public double getWest() {
         return _west;
     }
+
+    public Padding scale(double scale)
+    {
+        return new Padding(_north * scale, _east * scale, _south * scale, _west * scale);
+    }
 }

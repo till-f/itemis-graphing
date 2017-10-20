@@ -16,9 +16,9 @@ public class ExampleGraphstreamView
 {
    public static void main(String[] args)
     {
-        System.out.println("Scaling Factor: " + Screen.getScalingFactor());
-
         double scale = Screen.getScalingFactor();
+
+        System.out.println("Scaling Factor: " + scale);
 
         Graph graph = ExampleGraph.getExampleGraph();
 
