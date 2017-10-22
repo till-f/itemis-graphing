@@ -3,6 +3,7 @@ package de.itemis.graphing.example.graphstream;
 import de.itemis.graphing.example.ExampleGraph;
 import de.itemis.graphing.example.handlers.ShowButtonsExampleHoverHandler;
 import de.itemis.graphing.example.handlers.ShowLabelTooltipHoverHandler;
+import de.itemis.graphing.example.handlers.ShowTooltipHoverHandler;
 import de.itemis.graphing.layout.HierarchicalLayoutJGraphX;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.util.Screen;
