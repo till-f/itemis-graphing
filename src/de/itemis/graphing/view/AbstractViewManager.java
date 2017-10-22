@@ -3,10 +3,10 @@ package de.itemis.graphing.view;
 import de.itemis.graphing.model.AttachmentBase;
 import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.GraphElement;
-import de.itemis.graphing.view.handlers.IClickHandler;
-import de.itemis.graphing.view.handlers.IHandler;
-import de.itemis.graphing.view.handlers.IHoverHandler;
-import de.itemis.graphing.view.handlers.ISelectionHandler;
+import de.itemis.graphing.view.interaction.IClickHandler;
+import de.itemis.graphing.view.interaction.IInteractionHandler;
+import de.itemis.graphing.view.interaction.IHoverHandler;
+import de.itemis.graphing.view.interaction.ISelectionHandler;
 
 import java.awt.event.MouseEvent;
 import java.util.LinkedHashSet;
@@ -27,7 +27,7 @@ public abstract class AbstractViewManager implements IViewManager
     }
 
     @Override
-    public void registerHandler(IHandler handler)
+    public void registerHandler(IInteractionHandler handler)
     {
         if (handler instanceof IHoverHandler)
         {
@@ -46,7 +46,7 @@ public abstract class AbstractViewManager implements IViewManager
     }
 
     @Override
-    public void removeHandler(IHandler handler)
+    public void removeHandler(IInteractionHandler handler)
     {
         if (handler instanceof IHoverHandler)
         {

@@ -1,8 +1,8 @@
-package de.itemis.graphing.view.handlers;
+package de.itemis.graphing.view.interaction;
 
 import de.itemis.graphing.view.IViewManager;
 
-public interface IHandler
+public interface IInteractionHandler
 {
 
     /**

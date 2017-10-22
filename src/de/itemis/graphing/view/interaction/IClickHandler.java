@@ -1,8 +1,8 @@
-package de.itemis.graphing.view.handlers;
+package de.itemis.graphing.view.interaction;
 
 import de.itemis.graphing.model.GraphElement;
 
-public interface IClickHandler extends IHandler
+public interface IClickHandler extends IInteractionHandler
 {
 
     public class ClickParameters

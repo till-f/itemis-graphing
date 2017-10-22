@@ -8,7 +8,7 @@ import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.view.graphstream.GraphstreamViewManager;
 import de.itemis.graphing.view.graphstream.layout.StaticLayout;
-import de.itemis.graphing.view.handlers.HighlightLinksClickHandler;
+import de.itemis.graphing.view.interaction.HighlightLinksClickHandler;
 import org.graphstream.ui.layout.Layout;
 
 import javax.swing.*;

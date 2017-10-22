@@ -1,13 +1,11 @@
-package de.itemis.graphing.view.handlers;
+package de.itemis.graphing.view.interaction;
 
 import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.style.AttachmentStyle;
-import de.itemis.graphing.model.style.BlockStyle;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.view.IViewManager;
 
-import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
 

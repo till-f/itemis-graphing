@@ -3,7 +3,7 @@ package de.itemis.graphing.view;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.Size;
 import de.itemis.graphing.model.style.Style;
-import de.itemis.graphing.view.handlers.IHandler;
+import de.itemis.graphing.view.interaction.IInteractionHandler;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -33,9 +33,9 @@ public interface IViewManager
 
     Set<GraphElement> getSelectedElements();
 
-    void registerHandler(IHandler handler);
+    void registerHandler(IInteractionHandler handler);
 
-    void removeHandler(IHandler handler);
+    void removeHandler(IInteractionHandler handler);
 
     /**
      * Must be called by the interaction handling component (e.g. mouse controller) when the mouse is entering / exiting.

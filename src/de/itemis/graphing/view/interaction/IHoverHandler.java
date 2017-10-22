@@ -1,8 +1,8 @@
-package de.itemis.graphing.view.handlers;
+package de.itemis.graphing.view.interaction;
 
 import de.itemis.graphing.model.GraphElement;
 
-public interface IHoverHandler extends IHandler
+public interface IHoverHandler extends IInteractionHandler
 {
 
     public class HoverParameters

@@ -1,7 +1,7 @@
 package de.itemis.graphing.example.handlers;
 
 import de.itemis.graphing.model.GraphElement;
-import de.itemis.graphing.view.handlers.ShowAttachmentsHoverHandler;
+import de.itemis.graphing.view.interaction.ShowAttachmentsHoverHandler;
 
 import java.util.LinkedList;
 import java.util.List;

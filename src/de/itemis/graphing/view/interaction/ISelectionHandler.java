@@ -1,10 +1,10 @@
-package de.itemis.graphing.view.handlers;
+package de.itemis.graphing.view.interaction;
 
 import de.itemis.graphing.model.GraphElement;
 
 import java.util.Set;
 
-public interface ISelectionHandler extends IHandler
+public interface ISelectionHandler extends IInteractionHandler
 {
 
     /**

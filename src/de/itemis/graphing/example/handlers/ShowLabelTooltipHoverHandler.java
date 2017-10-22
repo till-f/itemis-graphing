@@ -4,8 +4,7 @@ import de.itemis.graphing.model.FloatingAttachment;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.style.AttachmentStyle;
 import de.itemis.graphing.model.style.Style;
-import de.itemis.graphing.view.handlers.IHoverHandler;
-import de.itemis.graphing.view.handlers.ShowAttachmentsHoverHandler;
+import de.itemis.graphing.view.interaction.ShowAttachmentsHoverHandler;
 
 import java.util.LinkedList;
 import java.util.List;
