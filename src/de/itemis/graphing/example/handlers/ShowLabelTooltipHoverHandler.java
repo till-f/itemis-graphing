@@ -2,6 +2,9 @@ package de.itemis.graphing.example.handlers;
 
 import de.itemis.graphing.model.FloatingAttachment;
 import de.itemis.graphing.model.GraphElement;
+import de.itemis.graphing.model.style.AttachmentStyle;
+import de.itemis.graphing.model.style.Style;
+import de.itemis.graphing.view.handlers.IHoverHandler;
 import de.itemis.graphing.view.handlers.ShowAttachmentsHoverHandler;
 
 import java.util.LinkedList;
@@ -21,7 +24,10 @@ public class ShowLabelTooltipHoverHandler extends ShowAttachmentsHoverHandler
             return null;
 
         List<AttachmentInfo> ais = new LinkedList<>();
-        ais.add(new AttachmentInfo("tooltip", element.getLabel()));
+        Style s = new AttachmentStyle();
+        s.setFillColor("FFFA90");
+        s.setLineMode(Style.ELineMode.None);
+        ais.add(new AttachmentInfo("tooltip", element.getLabel(), s));
         return ais;
     }
 

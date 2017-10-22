@@ -1,6 +1,9 @@
 package de.itemis.graphing.view.handlers;
 
 import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.style.AttachmentStyle;
+import de.itemis.graphing.model.style.BlockStyle;
+import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.view.IViewManager;
 
@@ -97,7 +100,12 @@ public abstract class ShowAttachmentsHoverHandler implements IHoverHandler
             resetAndRemove(_showingElement);
         }
 
-        calculateSizeAndPosition(ais, getPosition(enterElement, params), getSpacing(enterElement, params), getPadding(enterElement, params), parent);
+        calculateSizeAndPosition(
+                ais,
+                enterElement,
+                params,
+                parent
+        );
 
         for (AttachmentInfo ai : ais)
         {
@@ -112,6 +120,7 @@ public abstract class ShowAttachmentsHoverHandler implements IHoverHandler
             );
 
             attachment.setLabel(ai.getLabel());
+            attachment.setStyleRegular(ai.getStyle());
             attachment.setLabelPrio(GraphElement.ELabelPriority.AlwaysShown);
 
             applyExtraAttributes(enterElement, params, attachment);
@@ -133,18 +142,16 @@ public abstract class ShowAttachmentsHoverHandler implements IHoverHandler
         return 4;
     }
 
-    protected Padding getPadding(GraphElement enterElement, HoverParameters params)
-    {
-        return new Padding(10, 4);
-    }
-
     protected void applyExtraAttributes(GraphElement element, HoverParameters params, FloatingAttachment attachment)
     {
         attachment.setIsSelectable(false);
     }
 
-    private void calculateSizeAndPosition(List<AttachmentInfo> ais, EPosition pos, double spacing, Padding p, Vertex parent)
+    private void calculateSizeAndPosition(List<AttachmentInfo> ais, GraphElement enterElement, HoverParameters params, Vertex parent)
     {
+        EPosition pos = getPosition(enterElement, params);
+        double spacing = getSpacing(enterElement, params) * SCALE;
+
         double gpp = _viewManager.getGraphicalUnitsPerPixel();
         spacing = spacing * gpp;
 
@@ -161,7 +168,7 @@ public abstract class ShowAttachmentsHoverHandler implements IHoverHandler
                 sumHeight += spacing;
             }
 
-            Size pixelSize = calculatePixelSize(ai.getLabel(), p);
+            Size pixelSize = calculatePixelSize(ai.getLabel(), ai.getPadding(), ai.getStyle());
             Size guSize = pixelSize.scale(gpp);
 
             ai.pixelSize = pixelSize;
@@ -197,9 +204,9 @@ public abstract class ShowAttachmentsHoverHandler implements IHoverHandler
         }
     }
 
-    private Size calculatePixelSize(String label, Padding p)
+    private Size calculatePixelSize(String label, Padding p, Style s)
     {
-        Size txtSize = _viewManager.calculateTextSize(label);
+        Size txtSize = _viewManager.calculateTextSize(label, s);
         return txtSize.addPadding(p.scale(SCALE));
     }
 
@@ -224,15 +231,35 @@ public abstract class ShowAttachmentsHoverHandler implements IHoverHandler
         private final String id;
         private final String label;
 
+        private final Padding padding;
+
+        private final Style style;
         private Size pixelSize = null;
+
         private Size guSize = null;
         private double x = 0.0;
         private double y = 0.0;
-
         public AttachmentInfo(String id, String label)
+        {
+            this(id, label, new Padding(10, 4), new AttachmentStyle());
+        }
+
+        public AttachmentInfo(String id, String label, Padding padding)
+        {
+            this(id, label, padding, new AttachmentStyle());
+        }
+
+        public AttachmentInfo(String id, String label, Style style)
+        {
+            this(id, label, new Padding(10, 4), style);
+        }
+
+        public AttachmentInfo(String id, String label, Padding padding, Style style)
         {
             this.id = id;
             this.label = label;
+            this.padding = padding;
+            this.style = style;
         }
 
         public String getId()
@@ -243,6 +270,16 @@ public abstract class ShowAttachmentsHoverHandler implements IHoverHandler
         public String getLabel()
         {
             return label;
+        }
+
+        public Padding getPadding()
+        {
+            return padding;
+        }
+
+        public Style getStyle()
+        {
+            return style;
         }
     }
 }

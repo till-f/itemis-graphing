@@ -1,6 +1,7 @@
 package de.itemis.graphing.view.graphstream;
 
 import de.itemis.graphing.model.*;
+import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.view.AbstractViewManager;
 import org.graphstream.graph.Element;
@@ -15,6 +16,7 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseWheelEvent;
@@ -165,10 +167,21 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     }
 
     @Override
-    public Size calculateTextSize(String txt)
+    public Size calculateTextSize(String txt, Style style)
     {
-        Rectangle2D bounds = _view.getGraphics().getFontMetrics().getStringBounds(txt, _view.getGraphics());
-        return new Size(bounds.getWidth() * SCALE, bounds.getHeight() * SCALE);
+        Graphics g = _view.getGraphics();
+        Font originalFont = g.getFont();
+        try
+        {
+            Font f = new Font(originalFont.getName(), originalFont.getStyle(), (int)(style.getFontSize() * SCALE));
+            g.setFont(f);
+            Rectangle2D bounds = g.getFontMetrics().getStringBounds(txt, _view.getGraphics());
+            return new Size(bounds.getWidth(), bounds.getHeight());
+        }
+        finally
+        {
+            g.setFont(originalFont);
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
