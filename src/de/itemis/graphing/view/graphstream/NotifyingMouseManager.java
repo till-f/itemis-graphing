@@ -133,20 +133,16 @@ public class NotifyingMouseManager implements MouseManager
     protected void mouseButtonPressOnElement(GraphicElement gsElement, MouseEvent event)
     {
         _view.freezeElement(gsElement, true);
-
-        if (event.getButton() == 1)
-        {
-            _viewManager.applyClickInteraction(gsElement.getId(), true, event);
-        }
+        _viewManager.applyClickInteraction(gsElement.getId(), true, event);
     }
 
     protected void mouseButtonReleaseFromElement(GraphicElement gsElement, MouseEvent event)
     {
         _view.freezeElement(gsElement, false);
+        _viewManager.applyClickInteraction(gsElement.getId(), false, event);
 
         if (event.getButton() == 1)
         {
-            _viewManager.applyClickInteraction(gsElement.getId(), false, event);
 
             if (event.isShiftDown())
             {
@@ -210,13 +206,16 @@ public class NotifyingMouseManager implements MouseManager
         {
             mouseButtonPressOnElement(_lastTouchedElement, event);
         }
-        else if (event.getButton() == 1)
+        else
         {
             _viewManager.applyClickInteraction(null, true, event);
 
-            _selectionX = event.getX();
-            _selectionY = event.getY();
-            _view.beginSelectionAt(_selectionX, _selectionY);
+            if (event.getButton() == 1)
+            {
+                _selectionX = event.getX();
+                _selectionY = event.getY();
+                _view.beginSelectionAt(_selectionX, _selectionY);
+            }
         }
 
         if (event.getButton() == 3)
@@ -234,28 +233,31 @@ public class NotifyingMouseManager implements MouseManager
             mouseButtonReleaseFromElement(_lastTouchedElement, event);
             _lastTouchedElement = null;
         }
-        else if (event.getButton() == 1)
+        else
         {
             _viewManager.applyClickInteraction(null, false, event);
 
-            float x2 = event.getX();
-            float y2 = event.getY();
-            float t;
+            if (event.getButton() == 1)
+            {
+                float x2 = event.getX();
+                float y2 = event.getY();
+                float t;
 
-            if (_selectionX > x2)
-            {
-                t = _selectionX;
-                _selectionX = x2;
-                x2 = t;
+                if (_selectionX > x2)
+                {
+                    t = _selectionX;
+                    _selectionX = x2;
+                    x2 = t;
+                }
+                if (_selectionY > y2)
+                {
+                    t = _selectionY;
+                    _selectionY = y2;
+                    y2 = t;
+                }
+                _view.endSelectionAt(x2, y2);
+                selectElementsInArea(_view.allNodesOrSpritesIn(_selectionX, _selectionY, x2, y2));
             }
-            if (_selectionY > y2)
-            {
-                t = _selectionY;
-                _selectionY = y2;
-                y2 = t;
-            }
-            _view.endSelectionAt(x2, y2);
-            selectElementsInArea(_view.allNodesOrSpritesIn(_selectionX, _selectionY, x2, y2));
         }
 
         if (event.getButton() == 3)

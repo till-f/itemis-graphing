@@ -115,7 +115,22 @@ public abstract class AbstractViewManager implements IViewManager
         }
 
         // notify listeners
-        IClickHandler.ClickParameters params = new IClickHandler.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown());
+        IClickHandler.ClickParameters.EButton button;
+        switch (event.getButton())
+        {
+            case 1:
+                button = IClickHandler.ClickParameters.EButton.LEFT;
+                break;
+            case 2:
+                button = IClickHandler.ClickParameters.EButton.MIDDLE;
+                break;
+            case 3:
+                button = IClickHandler.ClickParameters.EButton.RIGHT;
+                break;
+            default:
+                button = IClickHandler.ClickParameters.EButton.OTHER;
+        }
+        IClickHandler.ClickParameters params = new IClickHandler.ClickParameters(event.isControlDown(), event.isShiftDown(), event.isAltDown(), button);
         for(IClickHandler listener : _clickHandlers)
         {
             if (clickBegin)

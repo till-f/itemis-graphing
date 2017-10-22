@@ -26,6 +26,9 @@ public class HighlightLinksClickHandler implements IClickHandler
     @Override
     public void clickBegin(GraphElement element, ClickParameters params)
     {
+        if (params.getButton() != ClickParameters.EButton.LEFT)
+            return;
+
         if (_lastMarkedVertex != null)
         {
             selectStyle(_lastMarkedVertex, false, DEPTH, EDirection.both);
@@ -36,6 +39,9 @@ public class HighlightLinksClickHandler implements IClickHandler
     @Override
     public void clickEnd(GraphElement element, ClickParameters params)
     {
+        if (params.getButton() != ClickParameters.EButton.LEFT)
+            return;
+
         if (element instanceof Vertex)
         {
             _lastMarkedVertex = (Vertex) element;
