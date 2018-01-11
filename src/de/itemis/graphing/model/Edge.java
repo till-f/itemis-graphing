@@ -32,12 +32,12 @@ public class Edge extends GraphElement
     @Override
     protected void setInitialStyles()
     {
-        _styleRegular = new EdgeStyle();
-        _styleClicked = new EdgeStyle();
+        _styleRegular = EdgeStyle.Default();
+        _styleClicked = EdgeStyle.Empty();
         _styleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HLEDGE);
         _styleClicked.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
         _styleClicked.setIsInLevelForeground(true);
-        _styleSelected = new EdgeStyle();
+        _styleSelected = EdgeStyle.Empty();
         _styleSelected.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HLEDGE);
         _styleSelected.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
         _styleSelected.setIsInLevelForeground(true);

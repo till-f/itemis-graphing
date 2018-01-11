@@ -239,12 +239,12 @@ public abstract class ShowAttachmentsHoverHandler implements IHoverHandler
         private double y = 0.0;
         public AttachmentInfo(String id, String label)
         {
-            this(id, label, new Padding(10, 4), new AttachmentStyle());
+            this(id, label, new Padding(10, 4), AttachmentStyle.Default());
         }
 
         public AttachmentInfo(String id, String label, Padding padding)
         {
-            this(id, label, padding, new AttachmentStyle());
+            this(id, label, padding, AttachmentStyle.Default());
         }
 
         public AttachmentInfo(String id, String label, Style style)

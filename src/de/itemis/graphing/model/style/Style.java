@@ -10,15 +10,15 @@ public abstract class Style implements Cloneable
 
     public enum ELabelAlignment { Center, Above, AtRight, Under, AtLeft }
 
-    protected String lineColor = "000000";
-    protected String fillColor = "FFFFFF";
-    protected String textColor = "000000";
-    protected Double lineThickness = 1.0;
-    protected ELineMode lineMode = ELineMode.Solid;
-    protected Double fontSize = 12.0;
-    protected ELabelAlignment labelAlignment = ELabelAlignment.Center;
+    protected String lineColor = null;
+    protected String fillColor = null;
+    protected String textColor = null;
+    protected Double lineThickness = null;
+    protected ELineMode lineMode = null;
+    protected Double fontSize = null;
+    protected ELabelAlignment labelAlignment = null;
+    protected Boolean isInLevelForeground = null;
     protected Integer zIndex = 1;
-    protected Boolean isInLevelForeground = false;
 
     public Style getCopy()
     {
@@ -113,5 +113,17 @@ public abstract class Style implements Cloneable
     public void setIsInLevelForeground(boolean isInLevelForeground)
     {
         this.isInLevelForeground = isInLevelForeground;
+    }
+
+    protected void setDefaults()
+    {
+        lineColor = "000000";
+        fillColor = "FFFFFF";
+        textColor = "000000";
+        lineThickness = 1.0;
+        lineMode = ELineMode.Solid;
+        fontSize = 12.0;
+        labelAlignment = ELabelAlignment.Center;
+        isInLevelForeground = false;
     }
 }

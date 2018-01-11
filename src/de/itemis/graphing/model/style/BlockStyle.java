@@ -4,7 +4,7 @@ public abstract class BlockStyle extends Style
 {
     public enum EShape { Box, RoundedBox, Circle }
 
-    protected EShape shape = EShape.RoundedBox;
+    protected EShape shape = null;
 
     public EShape getShape()
     {
@@ -15,4 +15,11 @@ public abstract class BlockStyle extends Style
     {
         this.shape = shape;
     }
+
+    protected void setDefaults()
+    {
+        super.setDefaults();
+        shape = EShape.RoundedBox;
+    }
+
 }

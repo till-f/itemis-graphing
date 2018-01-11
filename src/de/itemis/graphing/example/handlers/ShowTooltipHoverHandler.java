@@ -27,7 +27,7 @@ public abstract class ShowTooltipHoverHandler extends ShowAttachmentsHoverHandle
             return null;
 
         List<AttachmentInfo> ais = new LinkedList<>();
-        Style s = new AttachmentStyle();
+        Style s = AttachmentStyle.Default();
         s.setFillColor("FFFA90");
         s.setLineMode(Style.ELineMode.None);
         ais.add(new AttachmentInfo("tooltip", txt, s));

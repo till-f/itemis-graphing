@@ -35,12 +35,12 @@ public class Vertex extends GraphElement implements ISized
     @Override
     protected void setInitialStyles()
     {
-        _styleRegular = new VertexStyle();
-        _styleClicked = new VertexStyle();
+        _styleRegular = VertexStyle.Default();
+        _styleClicked = VertexStyle.Empty();
         _styleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
         _styleClicked.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
         _styleClicked.setIsInLevelForeground(true);
-        _styleSelected = new VertexStyle();
+        _styleSelected = VertexStyle.Empty();
         _styleSelected.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
         _styleSelected.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
         _styleSelected.setIsInLevelForeground(true);

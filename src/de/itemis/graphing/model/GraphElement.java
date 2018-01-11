@@ -2,6 +2,10 @@ package de.itemis.graphing.model;
 
 import de.itemis.graphing.model.style.Style;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 public abstract class GraphElement implements IStyled
@@ -136,7 +140,7 @@ public abstract class GraphElement implements IStyled
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // IStyle
+    // IStyled
 
     @Override
     public Style getStyleRegular()
@@ -211,11 +215,11 @@ public abstract class GraphElement implements IStyled
     public Style getActiveStyle()
     {
         if (_isClicked)
-            return _styleClicked;
+            return mergeStyles(_styleRegular, _styleClicked);
         else if (_isSelected)
-            return _styleSelected;
+            return mergeStyles(_styleRegular, _styleSelected);
         else if (_highlightStyles.size() > 0)
-            return _highlightStyles.peek();
+            return mergeStyles(_styleRegular, _highlightStyles.peek());
         else
             return _styleRegular;
     }
@@ -225,4 +229,39 @@ public abstract class GraphElement implements IStyled
     {
         return getId();
     }
+
+    private static Style mergeStyles(Style primary, Style secondary)
+    {
+        try {
+            Style result = primary.getCopy();
+            copyAllFieldsNotNull(secondary, result);
+            return result;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Could not merge styles", e);
+        }
+    }
+
+    private static <T1 extends Object>  void copyAllFieldsNotNull(T1 srcObject, T1 dstObject) throws IllegalAccessException
+    {
+        Class<?> clazz = srcObject.getClass();
+        while (clazz != null && Style.class.isAssignableFrom(clazz))
+        {
+            for (Field field : clazz.getDeclaredFields())
+            {
+                if ((field.getModifiers() & (Modifier.FINAL | Modifier.STATIC)) != 0)
+                    continue;
+
+                field.setAccessible(true);
+                Object value = field.get(srcObject);
+                if (value != null)
+                {
+                    field.set(dstObject, value);
+                }
+            }
+
+            clazz = clazz.getSuperclass();
+        }
+
+    }
+
 }

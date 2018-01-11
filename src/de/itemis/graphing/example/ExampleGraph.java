@@ -16,10 +16,10 @@ public class ExampleGraph {
 
     public static void fillExampleGraph(Graph graph)
     {
-        VertexStyle operatorStyle = new VertexStyle();
+        VertexStyle operatorStyle = VertexStyle.Default();
         operatorStyle.setShape(BlockStyle.EShape.Circle);
         operatorStyle.setFillColor("CCCCCC");
-        VertexStyle operatorStyleClicked = (VertexStyle)operatorStyle.getCopy();
+        VertexStyle operatorStyleClicked = VertexStyle.Empty();
         operatorStyleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
 
         Vertex vertexA = graph.addVertex("A", 0.0, 0.0);

@@ -1,9 +1,13 @@
 package de.itemis.graphing.view.interaction;
 
+import de.itemis.graphing.model.AttachmentBase;
 import de.itemis.graphing.model.Edge;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.Vertex;
+import de.itemis.graphing.model.style.AttachmentStyle;
+import de.itemis.graphing.model.style.EdgeStyle;
 import de.itemis.graphing.model.style.Style;
+import de.itemis.graphing.model.style.VertexStyle;
 
 public class HighlightLinksClickHandler implements IClickHandler
 {
@@ -78,7 +82,16 @@ public class HighlightLinksClickHandler implements IClickHandler
     {
         if (setHighlighted)
         {
-            Style s = e.getStyleRegular();
+            Style s;
+            if (e instanceof Vertex)
+                s = VertexStyle.Empty();
+            else if (e instanceof AttachmentBase)
+                s = AttachmentStyle.Empty();
+            else if (e instanceof Edge)
+                s = EdgeStyle.Empty();
+            else
+                throw new RuntimeException("unexpected element type");
+
             s.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
             s.setLineColor("FF0000");
             s.setIsInLevelForeground(true);

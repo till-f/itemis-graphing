@@ -24,12 +24,12 @@ public abstract class AttachmentBase  extends GraphElement implements ISized
     @Override
     protected void setInitialStyles()
     {
-        _styleRegular = new AttachmentStyle();
-        _styleClicked = new AttachmentStyle();
+        _styleRegular = AttachmentStyle.Default();
+        _styleClicked = AttachmentStyle.Empty();
         _styleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
         _styleClicked.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
         _styleClicked.setIsInLevelForeground(true);
-        _styleSelected = new AttachmentStyle();
+        _styleSelected = AttachmentStyle.Empty();
         _styleSelected.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
         _styleSelected.setLineColor(Style.DEFAULT_LINE_COLOR_HL);
         _styleSelected.setIsInLevelForeground(true);
