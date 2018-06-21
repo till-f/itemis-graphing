@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Graph
 {
@@ -178,6 +179,22 @@ public class Graph
         }
 
         _uninsertedEdges.remove(edgeId);
+    }
+
+    public List<Edge> getEdgesBetween(String vertexIdA, String vertexIdB)
+    {
+        Vertex vertexA = _vertexes.get(vertexIdA);
+        Vertex vertexB = _vertexes.get(vertexIdA);
+        if (vertexA != null && vertexB != null)
+        {
+            Stream<Edge> e1 = vertexA.getOutgoingEdges().stream().filter(edge -> edge.getTo().equals(vertexB));
+            Stream<Edge> e2 = vertexB.getOutgoingEdges().stream().filter(edge -> edge.getTo().equals(vertexA));
+            return Stream.concat(e1,  e2).collect(Collectors.toList());
+        }
+        else
+        {
+            return new LinkedList<Edge>();
+        }
     }
 
     public List<Vertex> getRootVertexes()
