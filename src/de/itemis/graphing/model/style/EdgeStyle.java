@@ -3,9 +3,11 @@ package de.itemis.graphing.model.style;
 public class EdgeStyle extends Style
 {
     public enum EShape { None, Arrow, Circle, Diamond }
+    public enum EArrowOrientation { AsEdge, Opposite }
     public enum EEdgeRouting { Direct, Cubic, Routed }
 
     protected EShape shape = null;
+    protected EArrowOrientation arrowOrientation = null;
     protected EEdgeRouting edgeRouting = null;
 
     public static EdgeStyle Default()
@@ -30,6 +32,11 @@ public class EdgeStyle extends Style
         return shape;
     }
 
+    public EArrowOrientation getArrowOrientation()
+    {
+        return arrowOrientation;
+    }
+
     public EEdgeRouting getEdgeRouting()
     {
         return edgeRouting;
@@ -38,6 +45,11 @@ public class EdgeStyle extends Style
     public void setShape(EShape shape)
     {
         this.shape = shape;
+    }
+
+    public void setArrowOrientation(EArrowOrientation arrowOrientation)
+    {
+        this.arrowOrientation = arrowOrientation;
     }
 
     public void setEdgeRouting(EEdgeRouting edgeRouting)
@@ -49,6 +61,7 @@ public class EdgeStyle extends Style
     {
         super.setDefaults();
         shape = EShape.Arrow;
+        arrowOrientation = EArrowOrientation.AsEdge;
         edgeRouting = EEdgeRouting.Direct;
     }
 

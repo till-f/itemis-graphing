@@ -40,6 +40,7 @@ public class StyleToGraphstreamCSS
 
             sb.append("shape: " + getGraphstreamEdgeShape(edgeStyle.getEdgeRouting()) + ";");
             sb.append("arrow-shape: " + getGraphstreamArrowShape(edgeStyle.getShape()) + ";");
+            sb.append("arrow-orientation: " + getGraphstreamArrowOrientation(edgeStyle.getArrowOrientation())  + ";");
             sb.append("fill-color: #" + style.getLineColor() + ";");
 
             if (style.getLineMode() == Style.ELineMode.None)
@@ -129,6 +130,19 @@ public class StyleToGraphstreamCSS
         }
 
         throw new IllegalArgumentException("invalid shape: " + shape);
+    }
+
+    private String getGraphstreamArrowOrientation(EdgeStyle.EArrowOrientation arrowOrientation)
+    {
+        switch (arrowOrientation)
+        {
+            case AsEdge:
+                return "as-edge";
+            case Opposite:
+                return "opposite";
+        }
+
+        throw new IllegalArgumentException("invalid arrow direction: " + arrowOrientation);
     }
 
     private String getGraphstreamEdgeShape(EdgeStyle.EEdgeRouting edgeRouting)
