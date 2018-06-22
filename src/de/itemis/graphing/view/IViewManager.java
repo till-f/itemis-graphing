@@ -1,5 +1,6 @@
 package de.itemis.graphing.view;
 
+import de.itemis.graphing.model.Graph;
 import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.Size;
 import de.itemis.graphing.model.style.Style;
@@ -30,6 +31,8 @@ public interface IViewManager
 
     // -----------------------------------------------------------------------------------------------------------------
     // not rendering technology specific (default implementation in AbstractViewManager should not be overridden)
+
+    Graph getGraph();
 
     Set<GraphElement> getSelectedElements();
 

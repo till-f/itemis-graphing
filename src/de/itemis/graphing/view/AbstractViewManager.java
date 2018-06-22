@@ -27,6 +27,12 @@ public abstract class AbstractViewManager implements IViewManager
     }
 
     @Override
+    public Graph getGraph()
+    {
+        return _graph;
+    }
+
+    @Override
     public void registerHandler(IInteractionHandler handler)
     {
         if (handler instanceof IHoverHandler)
