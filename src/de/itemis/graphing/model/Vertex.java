@@ -196,6 +196,11 @@ public class Vertex extends GraphElement implements ISized
         return attachments;
     }
 
+    public AttachmentBase getAttachment(String id)
+    {
+        return _attachments.get(id);
+    }
+
     @Override
     public Size getSize()
     {
