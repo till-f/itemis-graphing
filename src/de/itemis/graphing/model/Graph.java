@@ -184,7 +184,7 @@ public class Graph
     public List<Edge> getEdgesBetween(String vertexIdA, String vertexIdB)
     {
         Vertex vertexA = _vertexes.get(vertexIdA);
-        Vertex vertexB = _vertexes.get(vertexIdA);
+        Vertex vertexB = _vertexes.get(vertexIdB);
         if (vertexA != null && vertexB != null)
         {
             Stream<Edge> e1 = vertexA.getOutgoingEdges().stream().filter(edge -> edge.getTo().equals(vertexB));
