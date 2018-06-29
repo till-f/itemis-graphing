@@ -7,6 +7,7 @@ import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.view.interaction.IInteractionHandler;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public interface IViewManager
     // -----------------------------------------------------------------------------------------------------------------
     // rendering technology specific (must be implemented by custom view managers)
 
-    JPanel getView();
+    Component getView();
 
     void zoomIn();
 
@@ -24,10 +25,6 @@ public interface IViewManager
     void fitView();
 
     void close();
-
-    double getGraphicalUnitsPerPixel();
-
-    Size calculateTextSize(String txt, Style style);
 
     // -----------------------------------------------------------------------------------------------------------------
     // not rendering technology specific (default implementation in AbstractViewManager should not be overridden)

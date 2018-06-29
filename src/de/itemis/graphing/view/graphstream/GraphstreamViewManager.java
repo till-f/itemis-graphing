@@ -15,7 +15,6 @@ import org.graphstream.ui.swingViewer.DefaultView;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
@@ -120,7 +119,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     // IViewManager
 
     @Override
-    public JPanel getView()
+    public Component getView()
     {
         return _view;
     }
@@ -152,36 +151,6 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     {
         _view.removeMouseWheelListener(this);
         _viewer.close();
-    }
-
-    @Override
-    public double getGraphicalUnitsPerPixel()
-    {
-        // quick distance calculation, relies on 2-dimensional, not rotated rendering
-        double distancePX = 5;
-        Point3 p1 = _view.getCamera().transformPxToGu(0, 0);
-        Point3 p2 = _view.getCamera().transformPxToGu(0, distancePX);
-        double distanceGU = Math.abs(p2.y - p1.y);
-        double relationPXGU = distancePX / distanceGU;
-        return 1 / relationPXGU;
-    }
-
-    @Override
-    public Size calculateTextSize(String txt, Style style)
-    {
-        Graphics g = _view.getGraphics();
-        Font originalFont = g.getFont();
-        try
-        {
-            Font f = new Font(originalFont.getName(), originalFont.getStyle(), (int)(style.getFontSize() * SCALE));
-            g.setFont(f);
-            Rectangle2D bounds = g.getFontMetrics().getStringBounds(txt, _view.getGraphics());
-            return new Size(bounds.getWidth(), bounds.getHeight());
-        }
-        finally
-        {
-            g.setFont(originalFont);
-        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -399,7 +368,38 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // neded for MPS (creation of hotfixed view)
+    // should be private (currently a hack for ShowAttachmentsHoverHandler)
+
+    public double getGraphicalUnitsPerPixel()
+    {
+        // quick distance calculation, relies on 2-dimensional, not rotated rendering
+        double distancePX = 5;
+        Point3 p1 = _view.getCamera().transformPxToGu(0, 0);
+        Point3 p2 = _view.getCamera().transformPxToGu(0, distancePX);
+        double distanceGU = Math.abs(p2.y - p1.y);
+        double relationPXGU = distancePX / distanceGU;
+        return 1 / relationPXGU;
+    }
+
+    public Size calculateTextSize(String txt, Style style)
+    {
+        Graphics g = _view.getGraphics();
+        Font originalFont = g.getFont();
+        try
+        {
+            Font f = new Font(originalFont.getName(), originalFont.getStyle(), (int)(style.getFontSize() * SCALE));
+            g.setFont(f);
+            Rectangle2D bounds = g.getFontMetrics().getStringBounds(txt, _view.getGraphics());
+            return new Size(bounds.getWidth(), bounds.getHeight());
+        }
+        finally
+        {
+            g.setFont(originalFont);
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // needed for MPS (creation of hotfixed view), should not be used anymore (?)
 
     public org.graphstream.graph.Graph getGraphstreamGraph()
     {

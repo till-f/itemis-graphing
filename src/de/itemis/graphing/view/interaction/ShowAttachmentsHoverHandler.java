@@ -5,6 +5,7 @@ import de.itemis.graphing.model.style.AttachmentStyle;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.view.IViewManager;
+import de.itemis.graphing.view.graphstream.GraphstreamViewManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -150,7 +151,11 @@ public abstract class ShowAttachmentsHoverHandler implements IHoverHandler
         EPosition pos = getPosition(enterElement, params);
         double spacing = getSpacing(enterElement, params) * SCALE;
 
-        double gpp = _viewManager.getGraphicalUnitsPerPixel();
+        double gpp = 1.0;
+        if (_viewManager instanceof GraphstreamViewManager)
+        {
+            gpp = ((GraphstreamViewManager)_viewManager).getGraphicalUnitsPerPixel();
+        }
         spacing = spacing * gpp;
 
         double maxWidth = 0.0;
@@ -204,8 +209,15 @@ public abstract class ShowAttachmentsHoverHandler implements IHoverHandler
 
     private Size calculatePixelSize(String label, Padding p, Style s)
     {
-        Size txtSize = _viewManager.calculateTextSize(label, s);
-        return txtSize.addPadding(p.scale(SCALE));
+        if (_viewManager instanceof GraphstreamViewManager)
+        {
+            Size txtSize = ((GraphstreamViewManager)_viewManager).calculateTextSize(label, s);
+            return txtSize.addPadding(p.scale(SCALE));
+        }
+        else
+        {
+            return new Size(1.0,1.0);
+        }
     }
 
     private void resetAndRemove(GraphElement associatedElement)
