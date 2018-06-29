@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/de.itemis.graphing.iml" filepath="$PROJECT_DIR$/de.itemis.graphing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/graphing-core/graphing-core.iml" filepath="$PROJECT_DIR$/graphing-core/graphing-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/graphing-demo/graphing-demo.iml" filepath="$PROJECT_DIR$/graphing-demo/graphing-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/graphing-graphstream/graphing-graphstream.iml" filepath="$PROJECT_DIR$/graphing-graphstream/graphing-graphstream.iml" />
+      <module fileurl="file://$PROJECT_DIR$/graphing-jgraphx/graphing-jgraphx.iml" filepath="$PROJECT_DIR$/graphing-jgraphx/graphing-jgraphx.iml" />
     </modules>
   </component>
 </project>

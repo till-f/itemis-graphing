@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: jgraphx-3.7.4.jar graphing-core.jar
+

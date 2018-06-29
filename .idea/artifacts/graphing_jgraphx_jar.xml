@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="graphing-jgraphx:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts</output-path>
+    <root id="root">
+      <element id="archive" name="graphing-jgraphx.jar">
+        <element id="module-output" name="graphing-jgraphx" />
+      </element>
+      <element id="library" level="project" name="jgraphx-3.7.4" />
+    </root>
+  </artifact>
+</component>
