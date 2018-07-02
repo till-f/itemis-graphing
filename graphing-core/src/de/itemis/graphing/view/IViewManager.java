@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Set;
 
-public interface IViewManager
+public interface IViewManager<T>
 {
     // -----------------------------------------------------------------------------------------------------------------
     // rendering technology specific (must be implemented by custom view managers)
@@ -29,9 +29,9 @@ public interface IViewManager
     // -----------------------------------------------------------------------------------------------------------------
     // not rendering technology specific (default implementation in AbstractViewManager should not be overridden)
 
-    Graph getGraph();
+    Graph<T> getGraph();
 
-    Set<GraphElement> getSelectedElements();
+    Set<GraphElement<T>> getSelectedElements();
 
     void registerHandler(IInteractionHandler handler);
 

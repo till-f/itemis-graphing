@@ -4,5 +4,5 @@ import de.itemis.graphing.model.Graph;
 
 public interface ILayout
 {
-    void apply(Graph g);
+    void apply(Graph<?> g);
 }

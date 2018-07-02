@@ -14,22 +14,22 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public abstract class AbstractViewManager implements IViewManager
+public abstract class AbstractViewManager<T> implements IViewManager<T>
 {
     private final LinkedHashSet<IHoverHandler> _hoverHandlers = new LinkedHashSet<>();
     private final LinkedHashSet<IClickHandler> _clickHandlers = new LinkedHashSet<>();
     private final LinkedHashSet<ISelectionHandler> _selectionHandlers = new LinkedHashSet<>();
-    private final Graph _graph;
+    private final Graph<T> _graph;
 
-    private Set<GraphElement> _lastSelection = new LinkedHashSet<>();
+    private Set<GraphElement<T>> _lastSelection = new LinkedHashSet<>();
 
-    public AbstractViewManager(Graph graph)
+    public AbstractViewManager(Graph<T> graph)
     {
         _graph = graph;
     }
 
     @Override
-    public Graph getGraph()
+    public Graph<T> getGraph()
     {
         return _graph;
     }
@@ -58,33 +58,33 @@ public abstract class AbstractViewManager implements IViewManager
     {
         if (handler instanceof IHoverHandler)
         {
-            _hoverHandlers.remove((IHoverHandler) handler);
+            _hoverHandlers.remove(handler);
         }
         if (handler instanceof IClickHandler)
         {
-            _clickHandlers.remove((IClickHandler) handler);
+            _clickHandlers.remove(handler);
         }
         if (handler instanceof ISelectionHandler)
         {
-            _selectionHandlers.remove((ISelectionHandler) handler);
+            _selectionHandlers.remove(handler);
         }
     }
 
     @Override
-    public Set<GraphElement> getSelectedElements()
+    public Set<GraphElement<T>> getSelectedElements()
     {
-        LinkedHashSet<GraphElement> currentSelection = new LinkedHashSet<>();
-        for (GraphElement ge : _graph.getVertexes())
+        LinkedHashSet<GraphElement<T>> currentSelection = new LinkedHashSet<>();
+        for (GraphElement<T> ge : _graph.getVertexes())
         {
             if (ge.isSelected())
                 currentSelection.add(ge);
         }
-        for (GraphElement ge : _graph.getEdges())
+        for (GraphElement<T> ge : _graph.getEdges())
         {
             if (ge.isSelected())
                 currentSelection.add(ge);
         }
-        for (GraphElement ge : _graph.getAttachments())
+        for (GraphElement<T> ge : _graph.getAttachments())
         {
             if (ge.isSelected())
                 currentSelection.add(ge);
@@ -190,7 +190,7 @@ public abstract class AbstractViewManager implements IViewManager
     @Override
     public void selectionCompleted()
     {
-        Set<GraphElement> newSelection = getSelectedElements();
+        Set<GraphElement<T>> newSelection = getSelectedElements();
 
         LinkedHashSet<GraphElement> selected = new LinkedHashSet<>();
         LinkedHashSet<GraphElement> unselected = new LinkedHashSet<>();

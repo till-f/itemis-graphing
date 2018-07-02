@@ -3,15 +3,15 @@ package de.itemis.graphing.model;
 import de.itemis.graphing.model.style.EdgeStyle;
 import de.itemis.graphing.model.style.Style;
 
-public class Edge extends GraphElement
+public class Edge<T> extends GraphElement<T>
 {
-    private Vertex _from;
-    private Vertex _to;
+    private Vertex<T> _from;
+    private Vertex<T> _to;
 
     private String _fromId;
     private String _toId;
 
-    public Edge(Graph g, String id, Vertex from, Vertex to)
+    public Edge(Graph<T> g, String id, Vertex<T> from, Vertex<T> to)
     {
         super(g, id);
         _from = from;
@@ -21,7 +21,7 @@ public class Edge extends GraphElement
         setIsSelectable(false);
     }
 
-    public Edge(Graph g, String id, String fromId, String toId)
+    public Edge(Graph<T> g, String id, String fromId, String toId)
     {
         super(g, id);
         _fromId = fromId;
@@ -44,11 +44,11 @@ public class Edge extends GraphElement
 
     }
 
-    public Vertex getFrom() {
+    public Vertex<T> getFrom() {
         return _from;
     }
 
-    public Vertex getTo() {
+    public Vertex<T> getTo() {
         return _to;
     }
 
@@ -60,7 +60,7 @@ public class Edge extends GraphElement
         return _toId;
     }
 
-    public void setFromTo(Vertex from, Vertex to)
+    public void setFromTo(Vertex<T> from, Vertex<T> to)
     {
         if (_from == null && _to == null)
         {

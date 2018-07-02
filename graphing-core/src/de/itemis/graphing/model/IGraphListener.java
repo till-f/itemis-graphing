@@ -1,15 +1,15 @@
 package de.itemis.graphing.model;
 
-public interface IGraphListener
+public interface IGraphListener<T>
 {
     void graphCleared();
-    void vertexAdded(Vertex vertex);
-    void vertexRemoved(Vertex vertex);
-    void edgeAdded(Edge edge);
-    void edgeRemoved(Edge edge);
-    void attachmentAdded(AttachmentBase attachment);
-    void attachmentRemoved(AttachmentBase attachment);
-    void styleChanged(GraphElement element);
-    void labelChanged(GraphElement element);
-    void labelPriorityChanged(GraphElement element);
+    void vertexAdded(Vertex<T> vertex);
+    void vertexRemoved(Vertex<T> vertex);
+    void edgeAdded(Edge<T> edge);
+    void edgeRemoved(Edge<T> edge);
+    void attachmentAdded(AttachmentBase<T> attachment);
+    void attachmentRemoved(AttachmentBase<T> attachment);
+    void styleChanged(GraphElement<T> element);
+    void labelChanged(GraphElement<T> element);
+    void labelPriorityChanged(GraphElement<T> element);
 }

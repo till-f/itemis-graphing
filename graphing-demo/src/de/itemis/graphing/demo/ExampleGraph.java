@@ -8,14 +8,14 @@ import de.itemis.graphing.model.style.VertexStyle;
 
 public class ExampleGraph {
 
-    public static Graph getExampleGraph()
+    public static Graph<Object> getExampleGraph()
     {
-        Graph graph = new Graph();
+        Graph<Object> graph = new Graph<>();
         fillExampleGraph(graph);
         return graph;
     }
 
-    public static void fillExampleGraph(Graph graph)
+    private static void fillExampleGraph(Graph<Object> graph)
     {
         VertexStyle operatorStyle = VertexStyle.Default();
         operatorStyle.setShape(BlockStyle.EShape.Circle);
@@ -23,7 +23,7 @@ public class ExampleGraph {
         VertexStyle operatorStyleClicked = VertexStyle.Empty();
         operatorStyleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
 
-        Vertex vertexA = graph.addVertex("A", 0.0, 0.0);
+        Vertex<Object> vertexA = graph.addVertex("A", 0.0, 0.0);
         vertexA.addAttachment("N1", 0.3, 0.2, 0, 0).setLabel("N1");
         vertexA.addAttachment("N2", 0.85, 0.2, 0, 1, 2, 1).setLabel("N2");
         vertexA.addAttachment("M1", 0.3, 0.2, 1, 0).setLabel("M1");
@@ -31,7 +31,7 @@ public class ExampleGraph {
         vertexA.addAttachment("M3", 0.3, 0.8, 1, 2, 1, 2).setLabel("M3");
         vertexA.addAttachment("S1", 0.3, 0.2, 2, 0).setLabel("S1");
         vertexA.addAttachment("S2", 0.3, 0.2, 2, 1).setLabel("S2");
-        vertexA.getAttachments().stream().forEach(it -> it.setLabelPrio(GraphElement.ELabelPriority.Low));
+        vertexA.getAttachments().forEach(it -> it.setLabelPrio(GraphElement.ELabelPriority.Low));
 
         Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
         vertexB.setLabel("vertex B");

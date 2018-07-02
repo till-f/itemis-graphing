@@ -9,6 +9,8 @@ import de.itemis.graphing.model.style.EdgeStyle;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.model.style.VertexStyle;
 
+import java.util.List;
+
 public class HighlightLinksClickHandler implements IClickHandler
 {
     private enum EDirection { both, incoming, outgoing }
@@ -53,7 +55,7 @@ public class HighlightLinksClickHandler implements IClickHandler
         }
     }
 
-    private void selectStyle(Vertex vertex, boolean setHighlighted, int depth, EDirection direction)
+    private void selectStyle(Vertex<?> vertex, boolean setHighlighted, int depth, EDirection direction)
     {
         switchStyle(vertex, setHighlighted);
 

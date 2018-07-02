@@ -1,6 +1,6 @@
 package de.itemis.graphing.model;
 
-public class TabularAttachment extends AttachmentBase
+public class TabularAttachment<T> extends AttachmentBase<T>
 {
     public enum EHAlignment { Left, Center, Right }
     public enum EVAlignment { Top, Middle, Bottom }
@@ -12,7 +12,7 @@ public class TabularAttachment extends AttachmentBase
     private final EHAlignment _hAlign;
     private final EVAlignment _vAlign;
 
-    public TabularAttachment(Vertex vertex, String id, Size size, int rowIndex, int colIndex, int colSpan, int rowSpan, EHAlignment hAlign, EVAlignment vAlign, boolean affectDynamicLayout)
+    public TabularAttachment(Vertex<T> vertex, String id, Size size, int rowIndex, int colIndex, int colSpan, int rowSpan, EHAlignment hAlign, EVAlignment vAlign, boolean affectDynamicLayout)
     {
         super(vertex, id, size, affectDynamicLayout);
 

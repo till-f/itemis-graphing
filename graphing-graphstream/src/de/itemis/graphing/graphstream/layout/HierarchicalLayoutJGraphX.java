@@ -9,6 +9,7 @@ import de.itemis.graphing.model.Vertex;
 
 import javax.swing.*;
 import java.util.HashMap;
+import java.util.List;
 
 public class HierarchicalLayoutJGraphX implements ILayout
 {
@@ -58,7 +59,7 @@ public class HierarchicalLayoutJGraphX implements ILayout
     }
 
     @Override
-    public void apply(Graph graph)
+    public void apply(Graph<?> graph)
     {
         mxGraph mxGraph = new mxGraph();
         Object parent = mxGraph.getDefaultParent();
@@ -73,7 +74,7 @@ public class HierarchicalLayoutJGraphX implements ILayout
                 vertexToCell.put(n, cell);
             }
 
-            for (Vertex source : graph.getVertexes())
+            for (Vertex<?> source : graph.getVertexes())
             {
                 for (Vertex target : source.getTargets())
                 {

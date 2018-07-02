@@ -25,7 +25,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Rectangle2D;
 
-public class GraphstreamViewManager extends AbstractViewManager implements IGraphListener, MouseWheelListener, HierarchyBoundsListener
+public class GraphstreamViewManager<T> extends AbstractViewManager<T> implements IGraphListener<T>, MouseWheelListener, HierarchyBoundsListener
 {
     private final double SCALE = Screen.getScalingFactor();
 
@@ -40,17 +40,17 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     private final double _textThresholdMainText;
     private final double _textThresholdLowPrioText;
 
-    public GraphstreamViewManager(Graph graph)
+    public GraphstreamViewManager(Graph<T> graph)
     {
         this(graph,0.03, 0.02);
     }
 
-    public GraphstreamViewManager(Graph graph,  double textThresholdMainText, double textThresholdLowPrioText)
+    public GraphstreamViewManager(Graph<T> graph,  double textThresholdMainText, double textThresholdLowPrioText)
     {
         this(graph,null, textThresholdMainText, textThresholdLowPrioText);
     }
 
-    public GraphstreamViewManager(Graph graph, ILayout layout, double textThresholdMainText, double textThresholdLowPrioText)
+    public GraphstreamViewManager(Graph<T> graph, ILayout layout, double textThresholdMainText, double textThresholdLowPrioText)
     {
         super(graph);
 
@@ -64,12 +64,12 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         setInitialAttributes();
         setLabelState(true, true);
 
-        for(Vertex vertex : graph.getVertexes())
+        for(Vertex<T> vertex : graph.getVertexes())
         {
             addVertex(vertex);
         }
 
-        for(Edge edge : graph.getEdges())
+        for(Edge<T> edge : graph.getEdges())
         {
             addEdge(edge);
         }
@@ -266,36 +266,36 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     }
 
     @Override
-    public void vertexAdded(Vertex vertex)
+    public void vertexAdded(Vertex<T> vertex)
     {
         addVertex(vertex);
     }
 
     @Override
-    public void vertexRemoved(Vertex vertex)
+    public void vertexRemoved(Vertex<T> vertex)
     {
         removeVertex(vertex);
     }
 
     @Override
-    public void edgeAdded(Edge edge)
+    public void edgeAdded(Edge<T> edge)
     {
         addEdge(edge);
     }
 
     @Override
-    public void edgeRemoved(Edge edge)
+    public void edgeRemoved(Edge<T> edge)
     {
         removeEdge(edge);
     }
 
     @Override
-    public void attachmentAdded(AttachmentBase attachment)
+    public void attachmentAdded(AttachmentBase<T> attachment)
     {
         if (attachment instanceof TabularAttachment)
         {
             // remove all attachments, then insert new set (required for space calculation)
-            for (AttachmentBase existingAttachment : attachment.getParent().getAttachments())
+            for (AttachmentBase<T> existingAttachment : attachment.getParent().getAttachments())
             {
                 if (existingAttachment != attachment)
                     removeAttachment(existingAttachment);
@@ -316,14 +316,14 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     }
 
     @Override
-    public void attachmentRemoved(AttachmentBase attachment)
+    public void attachmentRemoved(AttachmentBase<T> attachment)
     {
         removeAttachment(attachment);
 
         if (attachment instanceof TabularAttachment)
         {
             // remove all attachments, then insert new set (required for space calculation)
-            for (AttachmentBase existingAttachment : attachment.getParent().getAttachments())
+            for (AttachmentBase<T> existingAttachment : attachment.getParent().getAttachments())
             {
                 removeAttachment(existingAttachment);
             }
@@ -335,7 +335,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     }
 
     @Override
-    public void styleChanged(GraphElement element)
+    public void styleChanged(GraphElement<T> element)
     {
         Element gsElement = getGraphstreamElement(element);
 
@@ -347,7 +347,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     }
 
     @Override
-    public void labelChanged(GraphElement element)
+    public void labelChanged(GraphElement<T> element)
     {
         Element gsElement = getGraphstreamElement(element);
 
@@ -358,7 +358,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     }
 
     @Override
-    public void labelPriorityChanged(GraphElement element)
+    public void labelPriorityChanged(GraphElement<T> element)
     {
         Element gsElement = getGraphstreamElement(element);
 
@@ -380,7 +380,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         }
     }
 
-    private Element getGraphstreamElement(GraphElement element)
+    private Element getGraphstreamElement(GraphElement<T> element)
     {
         Element gsElement;
 
@@ -407,7 +407,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
     // -----------------------------------------------------------------------------------------------------------------
     // dynamic inserting and removing elements
 
-    private void addVertex(Vertex vertex)
+    private void addVertex(Vertex<T> vertex)
     {
         Node gsNode = _gsGraph.addNode(vertex.getId());
 
@@ -418,9 +418,9 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         addAllAttachments(vertex);
     }
 
-    private void removeVertex(Vertex vertex)
+    private void removeVertex(Vertex<T> vertex)
     {
-        for (AttachmentBase a : vertex.getAttachments())
+        for (AttachmentBase<T> a : vertex.getAttachments())
         {
             removeAttachment(a);
         }
@@ -428,7 +428,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         _gsGraph.removeNode(vertex.getId());
     }
 
-    private void addEdge(Edge edge)
+    private void addEdge(Edge<T> edge)
     {
         org.graphstream.graph.Edge gsEdge = _gsGraph.addEdge(edge.getId(), edge.getFrom().getId(), edge.getTo().getId(), true);
 
@@ -437,20 +437,20 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         styleChanged(edge);
     }
 
-    private void removeEdge(Edge edge)
+    private void removeEdge(Edge<T> edge)
     {
         _gsGraph.removeEdge(edge.getId());
     }
 
-    private void addAllAttachments(Vertex vertex)
+    private void addAllAttachments(Vertex<T> vertex)
     {
-        for(AttachmentBase attachment : vertex.getAttachments())
+        for(AttachmentBase<T> attachment : vertex.getAttachments())
         {
             addAttachment(attachment);
         }
     }
 
-    private void addAttachment(AttachmentBase attachment)
+    private void addAttachment(AttachmentBase<T> attachment)
     {
         Vertex vertex = attachment.getParent();
 
@@ -464,15 +464,15 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
 
         if (attachment instanceof TabularAttachment)
         {
-            setRenderingPosition_Tabular((TabularAttachment) attachment, sprite);
+            setRenderingPosition_Tabular((TabularAttachment<T>) attachment, sprite);
         }
         else if (attachment instanceof FloatingAttachment)
         {
-            setRenderingPosition_Floating((FloatingAttachment) attachment, sprite);
+            setRenderingPosition_Floating((FloatingAttachment<T>) attachment, sprite);
         }
     }
 
-    private void setRenderingPosition_Tabular(TabularAttachment attachment, Sprite sprite)
+    private void setRenderingPosition_Tabular(TabularAttachment<T> attachment, Sprite sprite)
     {
         Vertex vertex = attachment.getParent();
 
@@ -519,7 +519,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         sprite.setPosition(distance, 0.0, angle);
     }
 
-    private void setRenderingPosition_Floating(FloatingAttachment attachment, Sprite sprite)
+    private void setRenderingPosition_Floating(FloatingAttachment<T> attachment, Sprite sprite)
     {
         if (attachment.getPosMode() == FloatingAttachment.EPositioningMode.Radial)
         {
@@ -542,7 +542,7 @@ public class GraphstreamViewManager extends AbstractViewManager implements IGrap
         }
     }
 
-    private void removeAttachment(AttachmentBase attachment)
+    private void removeAttachment(AttachmentBase<T> attachment)
     {
         _spriteManager.removeSprite(attachment.getId());
     }

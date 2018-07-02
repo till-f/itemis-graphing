@@ -6,14 +6,14 @@ import de.itemis.graphing.util.StreamUtil;
 
 import java.util.*;
 
-public class Vertex extends GraphElement implements ISized
+public class Vertex<T> extends GraphElement<T> implements ISized
 {
-    private final LinkedHashMap<String, AttachmentBase> _attachments = new LinkedHashMap<String, AttachmentBase>();
+    private final LinkedHashMap<String, AttachmentBase<T>> _attachments = new LinkedHashMap<String, AttachmentBase<T>>();
     private final HashMap<Integer, Double> _rowHeights = new HashMap<>();
     private final HashMap<Integer, Double> _colWidths = new HashMap<>();
 
-    private LinkedHashSet<Edge> _outgoingEdges = new LinkedHashSet<Edge>();
-    private LinkedHashSet<Edge> _incomingEdges = new LinkedHashSet<Edge>();
+    private LinkedHashSet<Edge<T>> _outgoingEdges = new LinkedHashSet<Edge<T>>();
+    private LinkedHashSet<Edge<T>> _incomingEdges = new LinkedHashSet<Edge<T>>();
 
     private final Size _minimalSize;
     private final Padding _padding;
@@ -24,7 +24,7 @@ public class Vertex extends GraphElement implements ISized
     private Double _x = null;
     private Double _y = null;
 
-    public Vertex(Graph g, String id, Size minimalSize, double cellSpacing, Padding padding)
+    public Vertex(Graph<T> g, String id, Size minimalSize, double cellSpacing, Padding padding)
     {
         super(g, id);
         _minimalSize = minimalSize;
@@ -49,50 +49,50 @@ public class Vertex extends GraphElement implements ISized
     // -----------------------------------------------------------------------------------------------------------------
     // edges and relations to other vertexes
 
-    public void addOutgoingEdge(Edge e)
+    public void addOutgoingEdge(Edge<T> e)
     {
         _outgoingEdges.add(e);
     }
 
-    public void removeOutgoingEdge(Edge e)
+    public void removeOutgoingEdge(Edge<T> e)
     {
         _outgoingEdges.remove(e);
     }
 
-    public void addIncomingEdge(Edge e)
+    public void addIncomingEdge(Edge<T> e)
     {
         _incomingEdges.add(e);
     }
 
-    public void removeIncomingEdge(Edge e)
+    public void removeIncomingEdge(Edge<T> e)
     {
         _incomingEdges.remove(e);
     }
 
-    public Set<Edge> getOutgoingEdges()
+    public Set<Edge<T>> getOutgoingEdges()
     {
         return new LinkedHashSet<>(_outgoingEdges);
     }
 
-    public Set<Edge> getIncomingEdges()
+    public Set<Edge<T>> getIncomingEdges()
     {
         return new LinkedHashSet<>(_incomingEdges);
     }
 
-    public List<Vertex> getTargets()
+    public List<Vertex<T>> getTargets()
     {
-        LinkedList<Vertex> targets = new LinkedList<Vertex>();
-        for (Edge e : _outgoingEdges)
+        LinkedList<Vertex<T>> targets = new LinkedList<Vertex<T>>();
+        for (Edge<T> e : _outgoingEdges)
         {
             targets.add(e.getTo());
         }
         return targets;
     }
 
-    public List<Vertex> getSources()
+    public List<Vertex<T>> getSources()
     {
-        LinkedList<Vertex> sources = new LinkedList<Vertex>();
-        for (Edge e : _incomingEdges)
+        LinkedList<Vertex<T>> sources = new LinkedList<Vertex<T>>();
+        for (Edge<T> e : _incomingEdges)
         {
             sources.add(e.getFrom());
         }
@@ -102,49 +102,49 @@ public class Vertex extends GraphElement implements ISized
     // -----------------------------------------------------------------------------------------------------------------
     // attachments and size calculation
 
-    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex)
+    public TabularAttachment<T> addAttachment(String id, double width, double height, int rowIndex, int colIndex)
     {
         return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, TabularAttachment.EHAlignment.Center, TabularAttachment.EVAlignment.Middle, false);
     }
 
-    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan)
+    public TabularAttachment<T> addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan)
     {
         return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, TabularAttachment.EHAlignment.Center, TabularAttachment.EVAlignment.Middle, false);
     }
 
-    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, TabularAttachment.EHAlignment hAlign)
+    public TabularAttachment<T> addAttachment(String id, double width, double height, int rowIndex, int colIndex, TabularAttachment.EHAlignment hAlign)
     {
         return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, hAlign, TabularAttachment.EVAlignment.Middle, false);
     }
 
-    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EHAlignment hAlign)
+    public TabularAttachment<T> addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EHAlignment hAlign)
     {
         return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, hAlign, TabularAttachment.EVAlignment.Middle, false);
     }
 
-    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, TabularAttachment.EVAlignment vAlign)
+    public TabularAttachment<T> addAttachment(String id, double width, double height, int rowIndex, int colIndex, TabularAttachment.EVAlignment vAlign)
     {
         return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, TabularAttachment.EHAlignment.Center, vAlign, false);
     }
 
-    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EVAlignment vAlign)
+    public TabularAttachment<T> addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EVAlignment vAlign)
     {
         return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, TabularAttachment.EHAlignment.Center, vAlign, false);
     }
 
-    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, TabularAttachment.EHAlignment hAlign, TabularAttachment.EVAlignment vAlign)
+    public TabularAttachment<T> addAttachment(String id, double width, double height, int rowIndex, int colIndex, TabularAttachment.EHAlignment hAlign, TabularAttachment.EVAlignment vAlign)
     {
         return addAttachment(id, width, height, rowIndex, colIndex, 1, 1, hAlign, vAlign, false);
     }
 
-    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EHAlignment hAlign, TabularAttachment.EVAlignment vAlign)
+    public TabularAttachment<T> addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EHAlignment hAlign, TabularAttachment.EVAlignment vAlign)
     {
         return addAttachment(id, width, height, rowIndex, colIndex, colSpan, rowSpan, hAlign, vAlign, false);
     }
 
-    public TabularAttachment addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EHAlignment hAlign, TabularAttachment.EVAlignment vAlign, boolean affectDynamicLayout)
+    public TabularAttachment<T> addAttachment(String id, double width, double height, int rowIndex, int colIndex, int colSpan, int rowSpan, TabularAttachment.EHAlignment hAlign, TabularAttachment.EVAlignment vAlign, boolean affectDynamicLayout)
     {
-        TabularAttachment a = new TabularAttachment(this, id, new Size(width, height), rowIndex, colIndex, colSpan, rowSpan, hAlign, vAlign, affectDynamicLayout);
+        TabularAttachment<T> a = new TabularAttachment<T>(this, id, new Size(width, height), rowIndex, colIndex, colSpan, rowSpan, hAlign, vAlign, affectDynamicLayout);
 
         clearTableSize();
 
@@ -156,14 +156,14 @@ public class Vertex extends GraphElement implements ISized
         return a;
     }
 
-    public FloatingAttachment addFloatingAttachment(String id, double width, double height, double posAngleOrX, double posDistanceOrY, FloatingAttachment.EPositioningMode posMode)
+    public FloatingAttachment<T> addFloatingAttachment(String id, double width, double height, double posAngleOrX, double posDistanceOrY, FloatingAttachment.EPositioningMode posMode)
     {
         return addFloatingAttachment(id, width, height, posAngleOrX, posDistanceOrY, posMode, false);
     }
 
-    public FloatingAttachment addFloatingAttachment(String id, double width, double height, double posAngleOrX, double posDistanceOrY, FloatingAttachment.EPositioningMode posMode, boolean isPixelCoordinates)
+    public FloatingAttachment<T> addFloatingAttachment(String id, double width, double height, double posAngleOrX, double posDistanceOrY, FloatingAttachment.EPositioningMode posMode, boolean isPixelCoordinates)
     {
-        FloatingAttachment a = new FloatingAttachment(this, id, new Size(width, height), posAngleOrX, posDistanceOrY, posMode, isPixelCoordinates);
+        FloatingAttachment<T> a = new FloatingAttachment<T>(this, id, new Size(width, height), posAngleOrX, posDistanceOrY, posMode, isPixelCoordinates);
 
         _attachments.put(id, a);
         _graph.attachmentAdded(a);
@@ -173,7 +173,7 @@ public class Vertex extends GraphElement implements ISized
 
     public void removeAttachment(String id)
     {
-        AttachmentBase a = _attachments.get(id);
+        AttachmentBase<T> a = _attachments.get(id);
 
         if (a != null)
         {
@@ -186,13 +186,10 @@ public class Vertex extends GraphElement implements ISized
         }
     }
 
-    public List<AttachmentBase> getAttachments()
+    public List<AttachmentBase<T>> getAttachments()
     {
-        LinkedList<AttachmentBase> attachments = new LinkedList<>();
-        for (AttachmentBase a : _attachments.values())
-        {
-            attachments.add(a);
-        }
+        LinkedList<AttachmentBase<T>> attachments = new LinkedList<>();
+        attachments.addAll(_attachments.values());
         return attachments;
     }
 

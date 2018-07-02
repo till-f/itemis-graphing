@@ -7,36 +7,36 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Graph
+public class Graph<T>
 {
-    private final LinkedHashMap<String, Edge> _uninsertedEdges = new LinkedHashMap<String, Edge>();
+    private final LinkedHashMap<String, Edge<T>> _uninsertedEdges = new LinkedHashMap<String, Edge<T>>();
 
-    private final LinkedHashMap<String, Vertex> _vertexes = new LinkedHashMap<String, Vertex>();
-    private final LinkedHashMap<String, Edge> _edges = new LinkedHashMap<String, Edge>();
-    private final LinkedHashMap<String, AttachmentBase> _attachments = new LinkedHashMap<String, AttachmentBase>();
+    private final LinkedHashMap<String, Vertex<T>> _vertexes = new LinkedHashMap<String, Vertex<T>>();
+    private final LinkedHashMap<String, Edge<T>> _edges = new LinkedHashMap<String, Edge<T>>();
+    private final LinkedHashMap<String, AttachmentBase<T>> _attachments = new LinkedHashMap<String, AttachmentBase<T>>();
 
-    private final LinkedHashSet<IGraphListener> _graphListeners = new LinkedHashSet<IGraphListener>();
+    private final LinkedHashSet<IGraphListener<T>> _graphListeners = new LinkedHashSet<IGraphListener<T>>();
 
     // -----------------------------------------------------------------------------------------------------------------
     // base graph elements
 
-    public List<Vertex> getVertexes()
+    public List<Vertex<T>> getVertexes()
     {
-        List<Vertex> vertexes = new LinkedList<Vertex>();
+        List<Vertex<T>> vertexes = new LinkedList<Vertex<T>>();
         vertexes.addAll(_vertexes.values());
         return vertexes;
     }
 
-    public List<Edge> getEdges()
+    public List<Edge<T>> getEdges()
     {
-        List<Edge> edges = new LinkedList<Edge>();
+        List<Edge<T>> edges = new LinkedList<Edge<T>>();
         edges.addAll(_edges.values());
         return edges;
     }
 
-    public List<AttachmentBase> getAttachments()
+    public List<AttachmentBase<T>> getAttachments()
     {
-        List<AttachmentBase> attachments = new LinkedList<AttachmentBase>();
+        List<AttachmentBase<T>> attachments = new LinkedList<AttachmentBase<T>>();
         attachments.addAll(_attachments.values());
         return attachments;
     }
@@ -70,30 +70,30 @@ public class Graph
         }
     }
 
-    public Vertex addVertex(String id, double width, double height)
+    public Vertex<T> addVertex(String id, double width, double height)
     {
         return addVertex(id, width, height, 0.0, new Padding(0.0));
     }
 
-    public Vertex addVertex(String id, double width, double height, double cellSpacing)
+    public Vertex<T> addVertex(String id, double width, double height, double cellSpacing)
     {
         return addVertex(id, width, height, cellSpacing, new Padding(0.0));
     }
 
-    public Vertex addVertex(String id, double width, double height, Padding padding)
+    public Vertex<T> addVertex(String id, double width, double height, Padding padding)
     {
         return addVertex(id, width, height, 0.0, padding);
     }
 
-    public Vertex addVertex(String id, double width, double height, double cellSpacing, Padding padding)
+    public Vertex<T> addVertex(String id, double width, double height, double cellSpacing, Padding padding)
     {
         if (_vertexes.containsKey(id))
             return null;
 
-        Vertex vertex = new Vertex(this, id, new Size(width, height), cellSpacing, padding);
+        Vertex<T> vertex = new Vertex<T>(this, id, new Size(width, height), cellSpacing, padding);
         _vertexes.put(id, vertex);
 
-        for(IGraphListener listener : _graphListeners)
+        for(IGraphListener<T> listener : _graphListeners)
         {
             listener.vertexAdded(vertex);
         }
@@ -105,20 +105,20 @@ public class Graph
 
     public void removeVertex(String id)
     {
-        Vertex removedVertex = _vertexes.get(id);
+        Vertex<T> removedVertex = _vertexes.get(id);
         if (removedVertex != null)
         {
-            for(Vertex vertex : removedVertex.getSources())
+            for(Vertex<T> vertex : removedVertex.getSources())
             {
-                for (Edge edge : vertex.getOutgoingEdges())
+                for (Edge<T> edge : vertex.getOutgoingEdges())
                 {
                     if (edge.getToId().equals(id))
                         removeEdge(edge.getId());
                 }
             }
-            for(Vertex vertex : removedVertex.getTargets())
+            for(Vertex<T> vertex : removedVertex.getTargets())
             {
-                for (Edge edge : vertex.getIncomingEdges())
+                for (Edge<T> edge : vertex.getIncomingEdges())
                 {
                     if (edge.getFromId().equals(id))
                         removeEdge(edge.getId());
@@ -127,36 +127,36 @@ public class Graph
 
             _vertexes.remove(id);
 
-            for(IGraphListener listener : _graphListeners)
+            for(IGraphListener<T> listener : _graphListeners)
             {
                 listener.vertexRemoved(removedVertex);
             }
         }
     }
 
-    public Edge addEdge(String fromId, String toId)
+    public Edge<T> addEdge(String fromId, String toId)
     {
         String edgeId = fromId + "." + toId;
         return addEdge(edgeId, fromId, toId);
     }
 
-    public Edge addEdge(String edgeId, String fromId, String toId)
+    public Edge<T> addEdge(String edgeId, String fromId, String toId)
     {
         if (_edges.containsKey(edgeId) || _uninsertedEdges.containsKey(edgeId))
             return null;
 
-        Vertex from = _vertexes.get(fromId);
-        Vertex to = _vertexes.get(toId);
+        Vertex<T> from = _vertexes.get(fromId);
+        Vertex<T> to = _vertexes.get(toId);
 
         if (from == null || to == null)
         {
-            Edge ue = new Edge(this, edgeId, fromId, toId);
+            Edge<T> ue = new Edge<T>(this, edgeId, fromId, toId);
             _uninsertedEdges.put(edgeId, ue);
             return ue;
         }
         else
         {
-            Edge e = new Edge(this, edgeId, from, to);
+            Edge<T> e = new Edge<T>(this, edgeId, from, to);
             doAddEdge(e);
             return e;
         }
@@ -164,7 +164,7 @@ public class Graph
 
     public void removeEdge(String edgeId)
     {
-        Edge e = _edges.get(edgeId);
+        Edge<T> e = _edges.get(edgeId);
 
         if (e != null)
         {
@@ -172,7 +172,7 @@ public class Graph
             e.getTo().removeIncomingEdge(e);
             _edges.remove(edgeId);
 
-            for(IGraphListener listener : _graphListeners)
+            for(IGraphListener<T> listener : _graphListeners)
             {
                 listener.edgeRemoved(e);
             }
@@ -181,28 +181,28 @@ public class Graph
         _uninsertedEdges.remove(edgeId);
     }
 
-    public List<Edge> getEdgesBetween(String vertexIdA, String vertexIdB)
+    public List<Edge<T>> getEdgesBetween(String vertexIdA, String vertexIdB)
     {
-        Vertex vertexA = _vertexes.get(vertexIdA);
-        Vertex vertexB = _vertexes.get(vertexIdB);
+        Vertex<T> vertexA = _vertexes.get(vertexIdA);
+        Vertex<T> vertexB = _vertexes.get(vertexIdB);
         if (vertexA != null && vertexB != null)
         {
-            Stream<Edge> e1 = vertexA.getOutgoingEdges().stream().filter(edge -> edge.getTo().equals(vertexB));
-            Stream<Edge> e2 = vertexB.getOutgoingEdges().stream().filter(edge -> edge.getTo().equals(vertexA));
+            Stream<Edge<T>> e1 = vertexA.getOutgoingEdges().stream().filter(edge -> edge.getTo().equals(vertexB));
+            Stream<Edge<T>> e2 = vertexB.getOutgoingEdges().stream().filter(edge -> edge.getTo().equals(vertexA));
             return Stream.concat(e1,  e2).collect(Collectors.toList());
         }
         else
         {
-            return new LinkedList<Edge>();
+            return new LinkedList<Edge<T>>();
         }
     }
 
-    public List<Vertex> getRootVertexes()
+    public List<Vertex<T>> getRootVertexes()
     {
         return _vertexes.values().stream().filter(it -> it.getSources().size() < 1).collect(Collectors.toList());
     }
 
-    public GraphElement getElement(String id)
+    public GraphElement<T> getElement(String id)
     {
         if (_vertexes.containsKey(id))
             return _vertexes.get(id);
@@ -217,12 +217,12 @@ public class Graph
     // -----------------------------------------------------------------------------------------------------------------
     // listener registration
 
-    public void registerGraphListener(IGraphListener listener)
+    public void registerGraphListener(IGraphListener<T> listener)
     {
         _graphListeners.add(listener);
     }
 
-    public void removeGraphListener(IGraphListener listener)
+    public void removeGraphListener(IGraphListener<T> listener)
     {
         _graphListeners.remove(listener);
     }
@@ -230,31 +230,31 @@ public class Graph
     // -----------------------------------------------------------------------------------------------------------------
     // internal methods
 
-    public void styleChanged(GraphElement element)
+    public void styleChanged(GraphElement<T> element)
     {
-        for(IGraphListener listener : _graphListeners)
+        for(IGraphListener<T> listener : _graphListeners)
         {
             listener.styleChanged(element);
         }
     }
 
-    public void labelChanged(GraphElement element)
+    public void labelChanged(GraphElement<T> element)
     {
-        for(IGraphListener listener : _graphListeners)
+        for(IGraphListener<T> listener : _graphListeners)
         {
             listener.labelChanged(element);
         }
     }
 
-    public void labelPriorityChanged(GraphElement element)
+    public void labelPriorityChanged(GraphElement<T> element)
     {
-        for(IGraphListener listener : _graphListeners)
+        for(IGraphListener<T> listener : _graphListeners)
         {
             listener.labelPriorityChanged(element);
         }
     }
 
-    public void attachmentAdded(AttachmentBase attachment)
+    public void attachmentAdded(AttachmentBase<T> attachment)
     {
         String id = attachment.getId();
         if (_attachments.containsKey(id))
@@ -262,17 +262,17 @@ public class Graph
 
         _attachments.put(id, attachment);
 
-        for(IGraphListener listener : _graphListeners)
+        for(IGraphListener<T> listener : _graphListeners)
         {
             listener.attachmentAdded(attachment);
         }
     }
 
-    public void attachmentRemoved(AttachmentBase attachment)
+    public void attachmentRemoved(AttachmentBase<T> attachment)
     {
         _attachments.remove(attachment.getId());
 
-        for(IGraphListener listener : _graphListeners)
+        for(IGraphListener<T> listener : _graphListeners)
         {
             listener.attachmentRemoved(attachment);
         }
@@ -281,10 +281,10 @@ public class Graph
     private void retryAddUninsertedEdges()
     {
         List<String> insertedEdgeIds = new LinkedList<>();
-        for(Edge ue : _uninsertedEdges.values())
+        for(Edge<T> ue : _uninsertedEdges.values())
         {
-            Vertex from = _vertexes.get(ue.getFromId());
-            Vertex to = _vertexes.get(ue.getToId());
+            Vertex<T> from = _vertexes.get(ue.getFromId());
+            Vertex<T> to = _vertexes.get(ue.getToId());
             if (from != null && to != null)
             {
                 ue.setFromTo(from, to);
@@ -299,13 +299,13 @@ public class Graph
         }
     }
 
-    private void doAddEdge(Edge e)
+    private void doAddEdge(Edge<T> e)
     {
         _edges.put(e.getId(), e);
         e.getFrom().addOutgoingEdge(e);
         e.getTo().addIncomingEdge(e);
 
-        for(IGraphListener listener : _graphListeners)
+        for(IGraphListener<T> listener : _graphListeners)
         {
             listener.edgeAdded(e);
         }

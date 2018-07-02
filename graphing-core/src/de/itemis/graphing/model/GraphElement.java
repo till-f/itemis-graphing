@@ -8,14 +8,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-public abstract class GraphElement implements IStyled
+public abstract class GraphElement<T> implements IStyled
 {
     public enum ELabelPriority { Normal, Low, AlwaysShown }
 
-    protected final Graph _graph;
+    protected final Graph<T> _graph;
     protected final String _id;
 
-    private Object _userObject = null;
+    private T _userObject = null;
     private String _label = null;
     private ELabelPriority _labelPrio = ELabelPriority.Normal;
 
@@ -30,7 +30,7 @@ public abstract class GraphElement implements IStyled
     protected Style _styleClicked;
     protected Style _styleSelected;
 
-    public GraphElement(Graph g, String id)
+    public GraphElement(Graph<T> g, String id)
     {
         _graph = g;
         _id = id;
@@ -39,7 +39,7 @@ public abstract class GraphElement implements IStyled
 
     protected abstract void setInitialStyles();
 
-    public Graph getGraph()
+    public Graph<T> getGraph()
     {
         return _graph;
     }
@@ -49,12 +49,12 @@ public abstract class GraphElement implements IStyled
         return _id;
     }
 
-    public Object getUserObject()
+    public T getUserObject()
     {
         return _userObject;
     }
 
-    public void setUserObject(Object userObject)
+    public void setUserObject(T userObject)
     {
         _userObject = userObject;
     }

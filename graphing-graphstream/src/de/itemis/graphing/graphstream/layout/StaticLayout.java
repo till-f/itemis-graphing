@@ -7,14 +7,16 @@ import org.graphstream.stream.PipeBase;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
 
+import java.util.List;
+
 public class StaticLayout extends PipeBase implements Layout
 {
     public static final int NUMBER_OF_RELAYOUTS_NEEDED_FOR_SATISFACTION = 1;
 
-    protected final Graph _graph;
-    protected final ILayout _layout;
+    private final Graph<?> _graph;
+    private final ILayout _layout;
 
-    protected int _relayoutCount = 0;
+    private int _relayoutCount = 0;
 
     public StaticLayout(Graph graph, ILayout layout)
     {
@@ -169,12 +171,12 @@ public class StaticLayout extends PipeBase implements Layout
         // not supported
     }
 
-    protected void relayoutNeeded()
+    private void relayoutNeeded()
     {
         _relayoutCount = 0;
     }
 
-    protected void resetLayout()
+    private void resetLayout()
     {
         for (Vertex n : _graph.getVertexes())
         {
@@ -182,7 +184,7 @@ public class StaticLayout extends PipeBase implements Layout
         }
     }
 
-    protected boolean publishLayout()
+    private boolean publishLayout()
     {
         for (Vertex n : _graph.getVertexes())
         {
@@ -199,7 +201,7 @@ public class StaticLayout extends PipeBase implements Layout
         return true;
     }
 
-    protected void computeLayout()
+    private void computeLayout()
     {
         _layout.apply(_graph);
     }

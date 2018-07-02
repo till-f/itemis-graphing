@@ -11,7 +11,7 @@ import de.itemis.graphing.view.AbstractViewManager;
 import java.awt.*;
 import java.util.HashMap;
 
-public class JGraphXViewManager extends AbstractViewManager implements IGraphListener {
+public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGraphListener<T> {
 
     private final HashMap<Vertex, mxCell> _vertexToCell = new HashMap<Vertex, mxCell>();
     private final mxGraph _mxGraph;
@@ -19,7 +19,7 @@ public class JGraphXViewManager extends AbstractViewManager implements IGraphLis
     private final mxGraphComponent _mxSwingComponent;
     private final Object _defaultParent;
 
-    public JGraphXViewManager(Graph graph)
+    public JGraphXViewManager(Graph<T> graph)
     {
         super(graph);
 
@@ -42,21 +42,21 @@ public class JGraphXViewManager extends AbstractViewManager implements IGraphLis
         graph.registerGraphListener(this);
     }
 
-    private void initMxGraph(Graph graph)
+    private void initMxGraph(Graph<T> graph)
     {
         _mxGraph.getModel().beginUpdate();
         try
         {
-            for (Vertex n : graph.getVertexes())
+            for (Vertex<T> n : graph.getVertexes())
             {
                 mxCell cell = (mxCell) _mxGraph.insertVertex(_defaultParent, n.getId(), n, 0, 0, n.getSize().getWidth(), n.getSize().getHeight());
                 _mxGraph.updateCellSize(cell);
                 _vertexToCell.put(n, cell);
             }
 
-            for (Vertex source : graph.getVertexes())
+            for (Vertex<T> source : graph.getVertexes())
             {
-                for (Vertex target : source.getTargets())
+                for (Vertex<T> target : source.getTargets())
                 {
                     mxCell sourceCell = _vertexToCell.get(source);
                     mxCell targetCell = _vertexToCell.get(target);
@@ -108,47 +108,47 @@ public class JGraphXViewManager extends AbstractViewManager implements IGraphLis
     }
 
     @Override
-    public void vertexAdded(Vertex vertex) {
+    public void vertexAdded(Vertex<T> vertex) {
 
     }
 
     @Override
-    public void vertexRemoved(Vertex vertex) {
+    public void vertexRemoved(Vertex<T> vertex) {
 
     }
 
     @Override
-    public void edgeAdded(Edge edge) {
+    public void edgeAdded(Edge<T> edge) {
 
     }
 
     @Override
-    public void edgeRemoved(Edge edge) {
+    public void edgeRemoved(Edge<T> edge) {
 
     }
 
     @Override
-    public void attachmentAdded(AttachmentBase attachment) {
+    public void attachmentAdded(AttachmentBase<T> attachment) {
 
     }
 
     @Override
-    public void attachmentRemoved(AttachmentBase attachment) {
+    public void attachmentRemoved(AttachmentBase<T> attachment) {
 
     }
 
     @Override
-    public void styleChanged(GraphElement element) {
+    public void styleChanged(GraphElement<T> element) {
 
     }
 
     @Override
-    public void labelChanged(GraphElement element) {
+    public void labelChanged(GraphElement<T> element) {
 
     }
 
     @Override
-    public void labelPriorityChanged(GraphElement element) {
+    public void labelPriorityChanged(GraphElement<T> element) {
 
     }
 }

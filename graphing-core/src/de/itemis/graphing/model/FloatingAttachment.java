@@ -1,6 +1,6 @@
 package de.itemis.graphing.model;
 
-public class FloatingAttachment extends AttachmentBase
+public class FloatingAttachment<T> extends AttachmentBase<T>
 {
     public enum EPositioningMode { Radial, XY }
 
@@ -9,7 +9,7 @@ public class FloatingAttachment extends AttachmentBase
     private final boolean _isPixelCoordinates;
     private final EPositioningMode _posMode;
 
-    public FloatingAttachment(Vertex vertex, String id, Size size, double posAngleOrX, double posDistanceOrY, EPositioningMode mode, boolean usePixelCoordinates)
+    public FloatingAttachment(Vertex<T> vertex, String id, Size size, double posAngleOrX, double posDistanceOrY, EPositioningMode mode, boolean usePixelCoordinates)
     {
         super(vertex, id, size, false);
 

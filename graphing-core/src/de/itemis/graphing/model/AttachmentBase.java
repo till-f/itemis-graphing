@@ -3,15 +3,15 @@ package de.itemis.graphing.model;
 import de.itemis.graphing.model.style.AttachmentStyle;
 import de.itemis.graphing.model.style.Style;
 
-public abstract class AttachmentBase  extends GraphElement implements ISized
+public abstract class AttachmentBase<T>  extends GraphElement<T> implements ISized
 {
-    private final Vertex _parent;
+    private final Vertex<T> _parent;
     private final Size _size;
     private final boolean _affectDynamicLayout;
 
     private boolean _delegateInteractionToParent = false;
 
-    public AttachmentBase(Vertex vertex, String id, Size size, boolean affectDynamicLayout)
+    public AttachmentBase(Vertex<T> vertex, String id, Size size, boolean affectDynamicLayout)
     {
         super(vertex.getGraph(), id);
 
@@ -42,7 +42,7 @@ public abstract class AttachmentBase  extends GraphElement implements ISized
         return _size;
     }
 
-    public Vertex getParent()
+    public Vertex<T> getParent()
     {
         return _parent;
     }

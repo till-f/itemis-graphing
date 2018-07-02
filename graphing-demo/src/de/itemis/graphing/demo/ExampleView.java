@@ -14,24 +14,12 @@ import java.awt.*;
 
 public class ExampleView
 {
-    private enum EAdapter { Graphstream, JGraphT }
-
     public static void main(String[] args)
     {
-        Graph graph = ExampleGraph.getExampleGraph();
+        Graph<Object> graph = ExampleGraph.getExampleGraph();
 
-        IViewManager viewManager;
-        switch (EAdapter.Graphstream)
-        {
-            case Graphstream:
-                viewManager = new GraphstreamViewManager(graph);
-                break;
-            case JGraphT:
-                viewManager = new JGraphXViewManager(graph);
-                break;
-            default:
-                throw new RuntimeException("invalid adapter");
-        }
+        IViewManager<Object> viewManager = new GraphstreamViewManager<>(graph);
+        // IViewManager<Object> viewManager = new JGraphXViewManager<>(graph);
 
         viewManager.registerHandler(new HighlightLinksClickHandler());
         viewManager.registerHandler(new ShowLabelTooltipHoverHandler());
@@ -39,7 +27,7 @@ public class ExampleView
 
         Component view = viewManager.getView();
         JFrame jframe = new JFrame("Graph Example");
-        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         double scale = Screen.getScalingFactor();
         jframe.setSize((int)(600 * scale), (int)(600 * scale));
         jframe.add(view);
