@@ -409,7 +409,7 @@ public class GraphstreamViewManager<T> extends AbstractViewManager<T> implements
 
     private void addVertex(Vertex<T> vertex)
     {
-        Node gsNode = _gsGraph.addNode(vertex.getId());
+        _gsGraph.addNode(vertex.getId());
 
         labelChanged(vertex);
         labelPriorityChanged(vertex);
@@ -430,7 +430,7 @@ public class GraphstreamViewManager<T> extends AbstractViewManager<T> implements
 
     private void addEdge(Edge<T> edge)
     {
-        org.graphstream.graph.Edge gsEdge = _gsGraph.addEdge(edge.getId(), edge.getFrom().getId(), edge.getTo().getId(), true);
+        _gsGraph.addEdge(edge.getId(), edge.getFrom().getId(), edge.getTo().getId(), true);
 
         labelChanged(edge);
         labelPriorityChanged(edge);

@@ -18,8 +18,8 @@ public class ExampleView
     {
         Graph<Object> graph = ExampleGraph.getExampleGraph();
 
-        IViewManager<Object> viewManager = new GraphstreamViewManager<>(graph);
-        // IViewManager<Object> viewManager = new JGraphXViewManager<>(graph);
+        // IViewManager<Object> viewManager = new GraphstreamViewManager<>(graph);
+        IViewManager<Object> viewManager = new JGraphXViewManager<>(graph);
 
         viewManager.registerHandler(new HighlightLinksClickHandler());
         viewManager.registerHandler(new ShowLabelTooltipHoverHandler());
