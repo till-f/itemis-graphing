@@ -8,7 +8,7 @@ import de.itemis.graphing.model.style.EdgeStyle;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.util.Screen;
 
-public class StyleToGraphstreamCSS
+public class GraphstreamStyleConverter
 {
     private final double SCALE = Screen.getScalingFactor();
 

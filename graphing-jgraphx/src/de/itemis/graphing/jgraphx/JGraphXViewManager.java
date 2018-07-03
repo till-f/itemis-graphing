@@ -3,26 +3,23 @@ package de.itemis.graphing.jgraphx;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.layout.mxGraphLayout;
 import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxGeometry;
-import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxEventObject;
-import com.mxgraph.util.mxEventSource;
-import com.mxgraph.view.mxGraph;
 import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.view.AbstractViewManager;
 
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGraphListener<T> {
 
     private final HashMap<GraphElement, mxCell> _graphElementToCell = new HashMap<>();
-    private final StyleToJGraphXCSS _styleConverter = new StyleToJGraphXCSS();
+    private final JGraphXStyleConverter _styleConverter = new JGraphXStyleConverter();
 
-    private final mxGraph _mxGraph;
+    private final DefaultMxGraph _mxGraph;
     private final Object _mxRootNode;
     private final DefaultMxGraphComponent _mxGraphComponent;
     private final mxGraphLayout _mxLayout;
@@ -31,16 +28,10 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
     {
         super(graph);
 
-        _mxGraph = new mxGraph();
+        _mxGraph = new DefaultMxGraph();
         _mxRootNode = _mxGraph.getDefaultParent();
         _mxGraphComponent = new DefaultMxGraphComponent(_mxGraph);
-
-        mxHierarchicalLayout layout = new mxHierarchicalLayout(_mxGraph);
-        layout.setFineTuning(true);
-        layout.setIntraCellSpacing(15);
-        layout.setInterHierarchySpacing(15);
-        layout.setInterRankCellSpacing(30);
-        _mxLayout = layout;
+        _mxLayout = new DefaultMxHierarchicalLayout(_mxGraph);
 
         initMxGraph(graph);
 
@@ -67,7 +58,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
             _mxGraph.getModel().endUpdate();
         }
 
-        _mxLayout.execute(_mxRootNode);
+        triggerLayout();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -81,13 +72,13 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
     @Override
     public void zoomIn()
     {
-
+        _mxGraphComponent.zoomIn();
     }
 
     @Override
     public void zoomOut()
     {
-
+        _mxGraphComponent.zoomOut();
     }
 
     @Override
@@ -99,7 +90,6 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
     @Override
     public void close()
     {
-
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -131,7 +121,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
             _mxGraph.getModel().endUpdate();
         }
 
-        _mxLayout.execute(_mxRootNode);
+        triggerLayout();
     }
 
     @Override
@@ -147,7 +137,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
             _mxGraph.getModel().endUpdate();
         }
 
-        _mxLayout.execute(_mxRootNode);
+        triggerLayout();
     }
 
     @Override
@@ -163,7 +153,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
             _mxGraph.getModel().endUpdate();
         }
 
-        _mxLayout.execute(_mxRootNode);
+        triggerLayout();
     }
 
     @Override
@@ -179,7 +169,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
             _mxGraph.getModel().endUpdate();
         }
 
-        _mxLayout.execute(_mxRootNode);
+        triggerLayout();
     }
 
     @Override
@@ -189,15 +179,13 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         try
         {
             addAttachment(attachment);
-            mxCell parent = _graphElementToCell.get(attachment.getParent());
-            _mxGraph.updateCellSize(parent);
         }
         finally
         {
             _mxGraph.getModel().endUpdate();
         }
 
-        _mxLayout.execute(_mxRootNode);
+        triggerLayout();
     }
 
     @Override
@@ -213,7 +201,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
             _mxGraph.getModel().endUpdate();
         }
 
-        _mxLayout.execute(_mxRootNode);
+        triggerLayout();
     }
 
     @Override
@@ -254,7 +242,10 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
             addAttachment(attachment);
         }
 
-        _mxGraph.updateCellSize(cell);
+        if (vertex.getSize().getWidth() == 0.0)
+        {
+            _mxGraph.updateCellSize(cell, false);
+        }
     }
 
     private void removeVertex(Vertex<T> vertex)
@@ -297,6 +288,11 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         _graphElementToCell.put(attachment, cell);
 
         setStyle(cell, attachment.getActiveStyle());
+
+        if (attachment.getSize().getWidth() == 0.0)
+        {
+            _mxGraph.updateCellSize(cell, false);
+        }
     }
 
     private void removeAttachment(AttachmentBase<T> attachment)
@@ -311,4 +307,21 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         cell.setStyle(_styleConverter.getStyleCSS(style));
     }
 
+    private void triggerLayout()
+    {
+        if (_mxLayout instanceof mxHierarchicalLayout)
+        {
+            // only layout top-level vertices (and edges in between)
+            // manually filtering edge labels as it seems to be placed together with the edge / connected vertices
+            List<Object> topLevelCells = Arrays.stream(_mxGraph.getChildCells(_mxRootNode, false, false))
+                    .filter(it -> !((mxCell)it).isEdge())
+                    .collect(Collectors.toList());
+
+            ((mxHierarchicalLayout) _mxLayout).execute(_mxRootNode, topLevelCells);
+        }
+        else
+        {
+            _mxLayout.execute(_mxRootNode);
+        }
+    }
 }

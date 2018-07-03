@@ -5,7 +5,7 @@
       <element id="archive" name="graphing-jgraphx.jar">
         <element id="module-output" name="graphing-jgraphx" />
       </element>
-      <element id="library" level="project" name="jgraphx-3.7.4" />
+      <element id="library" level="project" name="jgraphx-3.9.7" />
     </root>
   </artifact>
 </component>

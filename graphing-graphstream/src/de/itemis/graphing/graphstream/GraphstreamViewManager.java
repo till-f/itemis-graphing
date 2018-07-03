@@ -8,7 +8,6 @@ import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.util.Screen;
 import de.itemis.graphing.view.AbstractViewManager;
 import org.graphstream.graph.Element;
-import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.layout.Layout;
@@ -30,7 +29,7 @@ public class GraphstreamViewManager<T> extends AbstractViewManager<T> implements
     private final double SCALE = Screen.getScalingFactor();
 
     private final org.graphstream.graph.Graph _gsGraph;
-    private final StyleToGraphstreamCSS _styleConverter;
+    private final GraphstreamStyleConverter _styleConverter;
     private SpriteManager _spriteManager;                   // cannot be final due to bug in graphstream (reset of SpriteManager does not work properly)
 
     private ViewPanel _view = null;
@@ -56,7 +55,7 @@ public class GraphstreamViewManager<T> extends AbstractViewManager<T> implements
 
         _gsGraph = new SingleGraph("Graph");
         _spriteManager = new SpriteManager(_gsGraph);
-        _styleConverter = new StyleToGraphstreamCSS();
+        _styleConverter = new GraphstreamStyleConverter();
 
         _textThresholdMainText = textThresholdMainText * SCALE;
         _textThresholdLowPrioText = textThresholdLowPrioText * SCALE;

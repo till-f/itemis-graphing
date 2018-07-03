@@ -5,7 +5,7 @@
       <element id="archive" name="graphing-graphstream.jar">
         <element id="module-output" name="graphing-graphstream" />
       </element>
-      <element id="library" level="project" name="jgraphx-3.7.4" />
+      <element id="library" level="project" name="jgraphx-3.9.7" />
       <element id="library" level="project" name="graphstream-1.3.1" />
     </root>
   </artifact>

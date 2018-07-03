@@ -5,7 +5,7 @@ import de.itemis.graphing.model.style.BlockStyle;
 import de.itemis.graphing.model.style.EdgeStyle;
 import de.itemis.graphing.model.style.Style;
 
-public class StyleToJGraphXCSS
+public class JGraphXStyleConverter
 {
     public String getStyleCSS(Style style)
     {
@@ -13,10 +13,11 @@ public class StyleToJGraphXCSS
 
         if (style instanceof BlockStyle)
         {
+            sb.append(mxConstants.STYLE_VERTICAL_ALIGN + "=" + mxConstants.ALIGN_MIDDLE + ";");
             BlockStyle blockStyle = (BlockStyle) style;
             if(blockStyle.getShape() == BlockStyle.EShape.RoundedBox)
             {
-                sb.append(mxConstants.STYLE_ROUNDED + ";");
+                sb.append(mxConstants.STYLE_ROUNDED + "=1;");
             }
             else
             {
@@ -51,14 +52,14 @@ public class StyleToJGraphXCSS
             sb.append(mxConstants.STYLE_STROKEWIDTH + "=" + style.getLineThickness() + ";");
             if (style.getLineMode() == Style.ELineMode.Dotted)
             {
-                sb.append(mxConstants.STYLE_DASHED + ";");
+                sb.append(mxConstants.STYLE_DASHED + "=1;");
             }
         }
 
         sb.append(mxConstants.STYLE_STROKECOLOR + "=#" + style.getLineColor() + ";");
         sb.append(mxConstants.STYLE_FONTCOLOR + "=#" + style.getTextColor() + ";");
         sb.append(mxConstants.STYLE_FONTSIZE + "=" + style.getFontSize() + ";");
-        sb.append(mxConstants.STYLE_ALIGN + "=" + getJGraphXAlignment(style.getLabelAlignment()) + ";");
+        sb.append(mxConstants.STYLE_ALIGN + "=" + getJGraphXHorizontalAlignment(style.getLabelAlignment()) + ";");
 
         return sb.toString();
     }
@@ -108,23 +109,19 @@ public class StyleToJGraphXCSS
         throw new IllegalArgumentException("invalid shape: " + shape);
     }
 
-    private String getJGraphXAlignment(Style.ELabelAlignment alignment)
+    private String getJGraphXHorizontalAlignment(Style.ELabelAlignment alignment)
     {
         switch (alignment)
         {
             case Center:
                 return mxConstants.ALIGN_CENTER;
-            case Above:
-                return mxConstants.ALIGN_TOP;
             case AtRight:
                 return mxConstants.ALIGN_RIGHT;
-            case Under:
-                return mxConstants.ALIGN_BOTTOM;
             case AtLeft:
                 return mxConstants.ALIGN_LEFT;
+            default:
+                return mxConstants.ALIGN_CENTER;
         }
-
-        throw new IllegalArgumentException("invalid mode: " + alignment);
     }
 
 }

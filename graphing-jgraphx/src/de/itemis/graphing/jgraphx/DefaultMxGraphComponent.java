@@ -2,6 +2,7 @@ package de.itemis.graphing.jgraphx;
 
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxRectangle;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxGraphView;
 
@@ -26,6 +27,8 @@ public class DefaultMxGraphComponent extends mxGraphComponent
         this.setCenterZoom(true);
         this.setAutoExtend(true);
         this.setConnectable(false);
+        this.setFoldingEnabled(false);
+        this.setDragEnabled(false);
 
         this.addComponentListener(new ComponentListener()
         {
@@ -52,11 +55,7 @@ public class DefaultMxGraphComponent extends mxGraphComponent
     @Override
     public boolean isPanningEvent(MouseEvent mouseEvent)
     {
-        if (SwingUtilities.isRightMouseButton(mouseEvent))
-        {
-            return true;
-        }
-        return false;
+        return SwingUtilities.isRightMouseButton(mouseEvent);
     }
 
     public void fitView()
@@ -70,21 +69,23 @@ public class DefaultMxGraphComponent extends mxGraphComponent
         double availHeight = this.getHeight() - _graphPadding * 2;
         if (availHeight < 10) availHeight = 10;
 
-        double width = view.getGraphBounds().getWidth();
-        double height = view.getGraphBounds().getHeight();
+        mxRectangle bounds = view.getGraphBounds();
+        double width = bounds.getWidth();
+        double height = bounds.getHeight();
 
         double scaleW = availWidth/width * view.getScale();
         double scaleH = availHeight/height * view.getScale();
         double newScale = Math.min(scaleW, scaleH);
         view.setScale(newScale);
 
-        double newWidth = view.getGraphBounds().getWidth();
-        double newHeight = view.getGraphBounds().getHeight();
+        mxRectangle newBounds = view.getGraphBounds();
+        double newWidth = newBounds.getWidth();
+        double newHeight = newBounds.getHeight();
 
         double wOffs = Math.abs(availWidth - newWidth) / 2 / newScale + _graphPadding;
         double hOffs = Math.abs(availHeight - newHeight) / 2 / newScale + _graphPadding;
 
-        this.getGraph().getModel().setGeometry(this.getGraph().getDefaultParent(), new mxGeometry(wOffs, hOffs, newWidth, newHeight));
+        this.getGraph().getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(wOffs, hOffs, newWidth, newHeight));
     }
 
 }

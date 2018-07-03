@@ -23,50 +23,50 @@ public class ExampleGraph {
         VertexStyle operatorStyleClicked = VertexStyle.Empty();
         operatorStyleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
 
-        Vertex<Object> vertexA = graph.addVertex("A", 0.0, 0.0);
-        vertexA.addAttachment("N1", 0.3, 0.2, 0, 0).setLabel("N1");
-        vertexA.addAttachment("N2", 0.85, 0.2, 0, 1, 2, 1).setLabel("N2");
-        vertexA.addAttachment("M1", 0.3, 0.2, 1, 0).setLabel("M1");
-        vertexA.addAttachment("M2", 0.25, 0.15, 1, 1, TabularAttachment.EHAlignment.Center, TabularAttachment.EVAlignment.Middle).setLabel("M2");
-        vertexA.addAttachment("M3", 0.3, 0.8, 1, 2, 1, 2).setLabel("M3");
-        vertexA.addAttachment("S1", 0.3, 0.2, 2, 0).setLabel("S1");
-        vertexA.addAttachment("S2", 0.3, 0.2, 2, 1).setLabel("S2");
+        Vertex<Object> vertexA = graph.addVertex("A", 0, 0);
+        vertexA.addAttachment("N1", 15, 10, 0, 0).setLabel("N1");
+        vertexA.addAttachment("N2", 15, 10, 0, 1, 2, 1).setLabel("N2");
+        vertexA.addAttachment("M1", 15, 10, 1, 0).setLabel("M1");
+        vertexA.addAttachment("M2", 12, 8, 1, 1, TabularAttachment.EHAlignment.Center, TabularAttachment.EVAlignment.Middle).setLabel("M2");
+        vertexA.addAttachment("M3", 15, 40, 1, 2, 1, 2).setLabel("M3");
+        vertexA.addAttachment("S1", 15, 10, 2, 0).setLabel("S1");
+        vertexA.addAttachment("S2", 15, 10, 2, 1).setLabel("S2");
         vertexA.getAttachments().forEach(it -> it.setLabelPrio(GraphElement.ELabelPriority.Low));
 
-        Vertex vertexB = graph.addVertex("B", 1.0, 0.5);
+        Vertex vertexB = graph.addVertex("B", 50, 30);
         vertexB.setLabel("vertex B");
 
-        Vertex vertexC = graph.addVertex("C", 1.0, 0.5);
+        Vertex vertexC = graph.addVertex("C", 50, 30);
         vertexC.setLabel("vertex C");
 
-        Vertex vertexD = graph.addVertex("D", 1.0, 0.5);
+        Vertex vertexD = graph.addVertex("D", 50, 30);
         vertexD.setLabel("vertex D");
 
-        Vertex vertexE = graph.addVertex("E", 1.0, 0.5);
+        Vertex vertexE = graph.addVertex("E", 50, 30);
         vertexE.setLabel("vertex E");
 
-        Vertex vertexF = graph.addVertex("F", 1.0, 0.5); // 2nd root
+        Vertex vertexF = graph.addVertex("F", 50, 30); // 2nd root
         vertexF.setLabel("vertex F");
 
-        Vertex vertexG = graph.addVertex("G", 1.0, 0.5);
+        Vertex vertexG = graph.addVertex("G", 50, 30);
         vertexG.setLabel("vertex G");
 
-        Vertex vertexH = graph.addVertex("H", 1.0, 0.5);
+        Vertex vertexH = graph.addVertex("H", 50, 30);
         vertexH.setLabel("vertex H");
 
-        Vertex vertex1 = graph.addVertex("&1", 0.5, 0.5);
+        Vertex vertex1 = graph.addVertex("&1", 20, 20);
         vertex1.setLabel("&");
         vertex1.setStyleRegular(operatorStyle);
         vertex1.setStyleClicked(operatorStyleClicked);
         vertex1.setIsSelectable(false);
 
-        Vertex vertex2 = graph.addVertex("&2", 0.5, 0.5);
+        Vertex vertex2 = graph.addVertex("&2", 20, 20);
         vertex2.setLabel("&");
         vertex2.setStyleRegular(operatorStyle);
         vertex2.setStyleClicked(operatorStyleClicked);
         vertex2.setIsSelectable(false);
 
-        Vertex vertex3 = graph.addVertex("&3", 0.5, 0.5);
+        Vertex vertex3 = graph.addVertex("&3", 20, 20);
         vertex3.setLabel("&");
         vertex3.setStyleRegular(operatorStyle);
         vertex3.setStyleClicked(operatorStyleClicked);
