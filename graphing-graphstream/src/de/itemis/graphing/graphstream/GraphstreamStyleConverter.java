@@ -42,6 +42,9 @@ public class GraphstreamStyleConverter
             sb.append("arrow-shape: " + getGraphstreamArrowShape(edgeStyle.getShape()) + ";");
             sb.append("arrow-orientation: " + getGraphstreamArrowOrientation(edgeStyle.getArrowOrientation())  + ";");
             sb.append("fill-color: #" + style.getLineColor() + ";");
+            double arrowSize1 = 7 * SCALE;
+            double arrowSize2 = 5 * SCALE;
+            sb.append("arrow-size: "+arrowSize1+"px,"+arrowSize2+"px" + ";");
 
             if (style.getLineMode() == Style.ELineMode.None)
             {

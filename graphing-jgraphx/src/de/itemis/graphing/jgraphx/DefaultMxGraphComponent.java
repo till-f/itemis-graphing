@@ -14,9 +14,11 @@ import java.awt.event.MouseEvent;
 
 public class DefaultMxGraphComponent extends mxGraphComponent
 {
+    // additional padding around graph - raises probability that whole graph is displayed with fitView()
+    // (background: bounding box of graph is calculated wrong by JGraphX! -- Why is EVERY java graph framework just crap with really evil bugs?)
+    private final static int AUTOSIZE_GRAPH_PADDING = 10;
 
     private boolean _isViewLocked = true;
-    private int _graphPadding = 5;
 
     public DefaultMxGraphComponent(mxGraph mxGraph)
     {
@@ -62,30 +64,50 @@ public class DefaultMxGraphComponent extends mxGraphComponent
     {
         _isViewLocked = true;
 
-        mxGraphView view = this.getGraph().getView();
-
-        double availWidth = this.getWidth() - _graphPadding * 2;
+        double availWidth = this.getWidth();
         if (availWidth < 10) availWidth = 10;
-        double availHeight = this.getHeight() - _graphPadding * 2;
+        double availHeight = this.getHeight();
         if (availHeight < 10) availHeight = 10;
 
-        mxRectangle bounds = view.getGraphBounds();
-        double width = bounds.getWidth();
-        double height = bounds.getHeight();
+        mxGraphView view = this.getGraph().getView();
+        view.setScale(1.0);
 
-        double scaleW = availWidth/width * view.getScale();
-        double scaleH = availHeight/height * view.getScale();
+        mxRectangle bounds = view.getGraphBounds();
+        double width = bounds.getWidth() + AUTOSIZE_GRAPH_PADDING * 2;
+        double height = bounds.getHeight() + AUTOSIZE_GRAPH_PADDING * 2;
+
+        double scaleW = availWidth/width;
+        double scaleH = availHeight/height;
         double newScale = Math.min(scaleW, scaleH);
         view.setScale(newScale);
 
-        mxRectangle newBounds = view.getGraphBounds();
-        double newWidth = newBounds.getWidth();
-        double newHeight = newBounds.getHeight();
+        double newWidth = bounds.getWidth() * newScale;
+        double newHeight = bounds.getHeight() * newScale;
+        double xOffs = (availWidth - newWidth) / 2 / newScale;
+        double yOffs = (availHeight - newHeight) / 2 / newScale;
 
-        double wOffs = Math.abs(availWidth - newWidth) / 2 / newScale + _graphPadding;
-        double hOffs = Math.abs(availHeight - newHeight) / 2 / newScale + _graphPadding;
+        this.getGraph().getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(xOffs, yOffs, 0, 0));
+    }
 
-        this.getGraph().getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(wOffs, hOffs, newWidth, newHeight));
+    @Override
+    public void zoom(double factor)
+    {
+        _isViewLocked = false;
+        super.zoom(factor);
+    }
+
+    @Override
+    public void zoomTo(double newScale, boolean center)
+    {
+        _isViewLocked = false;
+        super.zoomTo(newScale, center);
+    }
+
+    @Override
+    public void zoomActual()
+    {
+        _isViewLocked = false;
+        super.zoomActual();
     }
 
 }

@@ -1,5 +1,6 @@
 package de.itemis.graphing.jgraphx;
 
+import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxGraph;
 
 public class DefaultMxGraph extends mxGraph
@@ -29,9 +30,12 @@ public class DefaultMxGraph extends mxGraph
     }
 
     @Override
-    public boolean isEdgeLabelsMovable()
+    public boolean isCellSelectable(Object cell)
     {
-        return false;
+        if (cell instanceof mxCell && ((mxCell) cell).isEdge())
+        {
+            return false;
+        }
+        return super.isCellSelectable(cell);
     }
-
 }

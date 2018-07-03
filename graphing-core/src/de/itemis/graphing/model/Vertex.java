@@ -100,6 +100,15 @@ public class Vertex<T> extends GraphElement<T> implements ISized
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    // getters
+
+    public Padding getPadding()
+    {
+        return _padding;
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------
     // attachments and size calculation
 
     public TabularAttachment<T> addAttachment(String id, double width, double height, int rowIndex, int colIndex)

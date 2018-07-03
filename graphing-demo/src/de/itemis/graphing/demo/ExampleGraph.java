@@ -23,14 +23,18 @@ public class ExampleGraph {
         VertexStyle operatorStyleClicked = VertexStyle.Empty();
         operatorStyleClicked.setLineThickness(Style.DEFAULT_LINE_THICKNESS_HL);
 
-        Vertex<Object> vertexA = graph.addVertex("A", 0, 0);
-        vertexA.addAttachment("N1", 15, 10, 0, 0).setLabel("N1");
-        vertexA.addAttachment("N2", 15, 10, 0, 1, 2, 1).setLabel("N2");
-        vertexA.addAttachment("M1", 15, 10, 1, 0).setLabel("M1");
-        vertexA.addAttachment("M2", 12, 8, 1, 1, TabularAttachment.EHAlignment.Center, TabularAttachment.EVAlignment.Middle).setLabel("M2");
-        vertexA.addAttachment("M3", 15, 40, 1, 2, 1, 2).setLabel("M3");
-        vertexA.addAttachment("S1", 15, 10, 2, 0).setLabel("S1");
-        vertexA.addAttachment("S2", 15, 10, 2, 1).setLabel("S2");
+        VertexStyle rootStyle = VertexStyle.Default();
+        rootStyle.setShape(BlockStyle.EShape.Box);
+
+        Vertex<Object> vertexA = graph.addVertex("A", 0, 0, new Padding(6));
+        vertexA.setStyleRegular(rootStyle);
+        vertexA.addAttachment("N1", 30, 20, 0, 0).setLabel("N1");
+        vertexA.addAttachment("N2", 30, 20, 0, 1, 2, 1).setLabel("N2");
+        vertexA.addAttachment("M1", 30, 20, 1, 0).setLabel("M1");
+        vertexA.addAttachment("M2", 24, 16, 1, 1, TabularAttachment.EHAlignment.Center, TabularAttachment.EVAlignment.Middle).setLabel("M2");
+        vertexA.addAttachment("M3", 30, 80, 1, 2, 1, 2).setLabel("M3");
+        vertexA.addAttachment("S1", 30, 20, 2, 0).setLabel("S1");
+        vertexA.addAttachment("S2", 30, 20, 2, 1, TabularAttachment.EHAlignment.Center, TabularAttachment.EVAlignment.Bottom).setLabel("S2");
         vertexA.getAttachments().forEach(it -> it.setLabelPrio(GraphElement.ELabelPriority.Low));
 
         Vertex vertexB = graph.addVertex("B", 50, 30);

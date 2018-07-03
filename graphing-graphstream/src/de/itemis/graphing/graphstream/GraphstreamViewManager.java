@@ -41,7 +41,7 @@ public class GraphstreamViewManager<T> extends AbstractViewManager<T> implements
 
     public GraphstreamViewManager(Graph<T> graph)
     {
-        this(graph,0.03, 0.02);
+        this(graph,1.5, 0.8);
     }
 
     public GraphstreamViewManager(Graph<T> graph,  double textThresholdMainText, double textThresholdLowPrioText)

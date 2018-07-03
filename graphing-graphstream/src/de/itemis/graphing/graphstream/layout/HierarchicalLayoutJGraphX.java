@@ -15,8 +15,6 @@ public class HierarchicalLayoutJGraphX implements ILayout
 {
     public enum EHierarchyDirection { WEST, SOUTH, EAST, NORTH;}
 
-    private static final int SCALE_FACTOR = 100;
-
     private final double _intraCellSpacing;
     private final double _interHierarchySpacing;
     private final double _interRankCellSpacing;
@@ -24,19 +22,19 @@ public class HierarchicalLayoutJGraphX implements ILayout
 
     public HierarchicalLayoutJGraphX()
     {
-        this(0.6, 0.6, 0.6, EHierarchyDirection.SOUTH);
+        this(EHierarchyDirection.SOUTH);
     }
 
     public HierarchicalLayoutJGraphX(EHierarchyDirection hierarchyDirection)
     {
-        this(0.6, 0.6, 0.6, hierarchyDirection);
+        this(15, 15, 30, hierarchyDirection);
     }
 
     public HierarchicalLayoutJGraphX(double intraCellSpacing, double interHierarchySpacing, double interRankCellSpacing, EHierarchyDirection hierarchyDirection)
     {
-        _intraCellSpacing = intraCellSpacing * SCALE_FACTOR;
-        _interHierarchySpacing = interHierarchySpacing * SCALE_FACTOR;
-        _interRankCellSpacing = interRankCellSpacing * SCALE_FACTOR;
+        _intraCellSpacing = intraCellSpacing;
+        _interHierarchySpacing = interHierarchySpacing ;
+        _interRankCellSpacing = interRankCellSpacing;
 
         // get rid of the insane practice in java to use int for everything
         switch (hierarchyDirection)
@@ -70,7 +68,7 @@ public class HierarchicalLayoutJGraphX implements ILayout
         {
             for (Vertex n : graph.getVertexes())
             {
-                mxCell cell = (mxCell) mxGraph.insertVertex(parent, n.getId(), n, 0, 0, n.getSize().getWidth()*SCALE_FACTOR, n.getSize().getHeight()*SCALE_FACTOR);
+                mxCell cell = (mxCell) mxGraph.insertVertex(parent, n.getId(), n, 0, 0, n.getSize().getWidth(), n.getSize().getHeight());
                 vertexToCell.put(n, cell);
             }
 
@@ -89,6 +87,9 @@ public class HierarchicalLayoutJGraphX implements ILayout
             layout.setIntraCellSpacing(_intraCellSpacing);
             layout.setInterHierarchySpacing(_interHierarchySpacing);
             layout.setInterRankCellSpacing(_interRankCellSpacing);
+            layout.setResizeParent(false);
+            layout.setMoveParent(false);
+            layout.setUseBoundingBox(false);
             layout.execute(parent);
         }
         finally
@@ -100,7 +101,7 @@ public class HierarchicalLayoutJGraphX implements ILayout
         {
             mxGeometry geometry = vertex.getGeometry();
             Vertex n = (Vertex) vertex.getValue();
-            n.place(geometry.getX() / SCALE_FACTOR, geometry.getY() / SCALE_FACTOR, true);
+            n.place(geometry.getX(), geometry.getY(), true);
         }
     }
 }

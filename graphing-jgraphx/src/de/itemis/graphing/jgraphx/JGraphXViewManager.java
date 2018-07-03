@@ -3,6 +3,7 @@ package de.itemis.graphing.jgraphx;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.layout.mxGraphLayout;
 import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxGeometry;
 import de.itemis.graphing.model.*;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.view.AbstractViewManager;
@@ -10,7 +11,6 @@ import de.itemis.graphing.view.AbstractViewManager;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -179,6 +179,10 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         try
         {
             addAttachment(attachment);
+
+            Vertex<T> vertex = attachment.getParent();
+            mxCell cell = _graphElementToCell.get(vertex);
+            cell.setGeometry(new mxGeometry(0, 0, vertex.getSize().getWidth(), vertex.getSize().getHeight()));
         }
         finally
         {
@@ -232,7 +236,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
     private void addVertex(Vertex<T> vertex)
     {
-        mxCell cell = (mxCell) _mxGraph.insertVertex(_mxRootNode, vertex.getId(), vertex.getLabel(), 0, 0, vertex.getSize().getWidth(), vertex.getSize().getHeight());
+        mxCell cell = (mxCell) _mxGraph.insertVertex(_mxRootNode, vertex.getId(), vertex.getLabel(), 0, 0, 0, 0);
         _graphElementToCell.put(vertex, cell);
 
         setStyle(cell, vertex.getActiveStyle());
@@ -242,10 +246,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
             addAttachment(attachment);
         }
 
-        if (vertex.getSize().getWidth() == 0.0)
-        {
-            _mxGraph.updateCellSize(cell, false);
-        }
+        cell.setGeometry(new mxGeometry(0, 0, vertex.getSize().getWidth(), vertex.getSize().getHeight()));
     }
 
     private void removeVertex(Vertex<T> vertex)
@@ -289,9 +290,9 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
         setStyle(cell, attachment.getActiveStyle());
 
-        if (attachment.getSize().getWidth() == 0.0)
+        if (attachment instanceof TabularAttachment)
         {
-            _mxGraph.updateCellSize(cell, false);
+            placeAttachment_Tabular((TabularAttachment<T>) attachment, cell);
         }
     }
 
@@ -300,6 +301,49 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         mxCell[] toRemove = { _graphElementToCell.get(attachment) };
         _mxGraph.removeCells(toRemove, true);
         _graphElementToCell.remove(attachment);
+    }
+
+    private void placeAttachment_Tabular(TabularAttachment<T> attachment, mxCell mxCell)
+    {
+        Vertex vertex = attachment.getParent();
+        Size cellOffset = vertex.getCellOffset(attachment.getRowIndex(), attachment.getColIndex());
+        Size cellSize = vertex.getCellSize(attachment.getRowIndex(), attachment.getColIndex(), attachment.getColSpan(), attachment.getRowSpan());
+
+        double x;
+        switch (attachment.getHAlignment())
+        {
+            case Left:
+                x = cellOffset.getWidth();
+                break;
+            case Center:
+                x = cellOffset.getWidth() + (cellSize.getWidth() - attachment.getSize().getWidth()) / 2;
+                break;
+            case Right:
+                x = cellOffset.getWidth() + cellSize.getWidth() - attachment.getSize().getWidth();
+                break;
+            default:
+                throw new RuntimeException("unexpected alignment: " + attachment.getHAlignment());
+        }
+        x += vertex.getPadding().getWest();
+
+        double y;
+        switch (attachment.getVAlignment())
+        {
+            case Top:
+                y = cellOffset.getHeight();
+                break;
+            case Middle:
+                y = cellOffset.getHeight() + (cellSize.getHeight() - attachment.getSize().getHeight()) / 2;
+                break;
+            case Bottom:
+                y = cellOffset.getHeight() + cellSize.getHeight() - attachment.getSize().getHeight();
+                break;
+            default:
+                throw new RuntimeException("unexpected alignment: " + attachment.getVAlignment());
+        }
+        y += vertex.getPadding().getNorth();
+
+        mxCell.setGeometry(new mxGeometry(x, y, attachment.getSize().getWidth(), attachment.getSize().getHeight()));
     }
 
     private void setStyle(mxCell cell, Style style)
@@ -311,6 +355,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
     {
         if (_mxLayout instanceof mxHierarchicalLayout)
         {
+            // mxHierarchicalLayouter cannot handle vertexes with child vertexes correctly. attachments are not supposed to be layouted anyway.
             // only layout top-level vertices (and edges in between)
             // manually filtering edge labels as it seems to be placed together with the edge / connected vertices
             List<Object> topLevelCells = Arrays.stream(_mxGraph.getChildCells(_mxRootNode, false, false))
