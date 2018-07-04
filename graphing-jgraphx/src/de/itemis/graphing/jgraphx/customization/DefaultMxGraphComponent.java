@@ -119,7 +119,7 @@ public class DefaultMxGraphComponent extends mxGraphComponent
     protected void unlockView()
     {
         _isViewLocked = false;
-        this.getGraph().getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(0, 0, 0, 0));
+        this.getGraph().getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(AUTOSIZE_GRAPH_PADDING, AUTOSIZE_GRAPH_PADDING, 0, 0));
     }
 
 }
