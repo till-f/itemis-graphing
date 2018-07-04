@@ -1,4 +1,4 @@
-package de.itemis.graphing.graphstream;
+package de.itemis.graphing.graphstream.customization;
 
 import de.itemis.graphing.view.IViewManager;
 import org.graphstream.graph.Node;

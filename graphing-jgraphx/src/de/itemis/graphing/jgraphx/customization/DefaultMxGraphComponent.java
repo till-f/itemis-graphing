@@ -1,4 +1,4 @@
-package de.itemis.graphing.jgraphx;
+package de.itemis.graphing.jgraphx.customization;
 
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.swing.mxGraphComponent;

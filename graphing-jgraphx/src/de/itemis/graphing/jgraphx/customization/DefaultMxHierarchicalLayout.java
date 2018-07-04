@@ -1,4 +1,4 @@
-package de.itemis.graphing.jgraphx;
+package de.itemis.graphing.jgraphx.customization;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.view.mxGraph;

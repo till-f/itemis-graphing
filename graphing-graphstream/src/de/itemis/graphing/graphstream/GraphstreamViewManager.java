@@ -1,5 +1,6 @@
 package de.itemis.graphing.graphstream;
 
+import de.itemis.graphing.graphstream.customization.NotifyingMouseManager;
 import de.itemis.graphing.graphstream.layout.ILayout;
 import de.itemis.graphing.graphstream.layout.StaticLayout;
 import de.itemis.graphing.graphstream.layout.HierarchicalLayoutJGraphX;
