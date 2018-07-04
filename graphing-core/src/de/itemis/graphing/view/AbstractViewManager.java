@@ -71,6 +71,12 @@ public abstract class AbstractViewManager<T> implements IViewManager<T>
     }
 
     @Override
+    public boolean isMultiSelectHotkey(MouseEvent e)
+    {
+        return e.isShiftDown();
+    }
+
+    @Override
     public Set<GraphElement<T>> getSelectedElements()
     {
         LinkedHashSet<GraphElement<T>> currentSelection = new LinkedHashSet<>();
@@ -126,6 +132,15 @@ public abstract class AbstractViewManager<T> implements IViewManager<T>
     @Override
     public void applyClickInteraction(String elementId, boolean clickBegin, MouseEvent event)
     {
+        if (event.getButton() == 1 && !isMultiSelectHotkey(event))
+        {
+            for(GraphElement<?> element : getSelectedElements())
+            {
+                applySelectInteraction(element.getId(), false);
+            }
+            selectionCompleted();
+        }
+
         GraphElement element = elementId == null ? null : getInteractionElement(elementId);
 
         if (element != null)

@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
 
 public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGraphListener<T> {
 
-    private final HashMap<GraphElement, mxCell> _graphElementToCell = new HashMap<>();
+    private final HashMap<GraphElement<T>, mxCell> _graphElementToCell = new HashMap<>();
+    private final HashMap<mxCell, GraphElement<T>> _cellToGraphElement = new HashMap<>();
     private final JGraphXStyleConverter _styleConverter = new JGraphXStyleConverter();
 
     private final DefaultMxGraph _mxGraph;
@@ -33,12 +34,16 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
         _mxGraph = new DefaultMxGraph();
         _mxRootNode = _mxGraph.getDefaultParent();
-        _mxGraphComponent = new DefaultMxGraphComponent(_mxGraph);
+        _mxGraphComponent = new DefaultMxGraphComponent(_mxGraph, this);
         _mxLayout = new DefaultMxHierarchicalLayout(_mxGraph);
 
         initMxGraph(graph);
 
         graph.registerGraphListener(this);
+
+        JGraphXMouseListener mouseListener = new JGraphXMouseListener(this, _mxGraphComponent);
+        _mxGraphComponent.getGraphControl().addMouseListener(mouseListener);
+        _mxGraphComponent.getGraphControl().addMouseWheelListener(mouseListener);
     }
 
     private void initMxGraph(Graph<T> graph)
@@ -62,6 +67,11 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         }
 
         triggerLayout();
+    }
+
+    public GraphElement<T> getGraphElement(mxCell cell)
+    {
+        return _cellToGraphElement.get(cell);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -217,7 +227,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         _mxGraph.getModel().beginUpdate();
         try
         {
-            setStyle(_graphElementToCell.get(element) , element.getActiveStyle());
+            setStyle(_graphElementToCell.get(element), element.getActiveStyle());
         }
         finally
         {
@@ -241,6 +251,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
     {
         mxCell cell = (mxCell) _mxGraph.insertVertex(_mxRootNode, vertex.getId(), vertex.getLabel(), 0, 0, 0, 0);
         _graphElementToCell.put(vertex, cell);
+        _cellToGraphElement.put(cell, vertex);
 
         setStyle(cell, vertex.getActiveStyle());
 
@@ -254,9 +265,11 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
     private void removeVertex(Vertex<T> vertex)
     {
-        mxCell[] toRemove = { _graphElementToCell.get(vertex) };
-        _mxGraph.removeCells(toRemove, true);
+        mxCell toRemove = _graphElementToCell.get(vertex);
+        mxCell[] toRemoveArr = { toRemove };
+        _mxGraph.removeCells(toRemoveArr, true);
         _graphElementToCell.remove(vertex);
+        _cellToGraphElement.remove(toRemove);
     }
 
     private void addEdge(Edge<T> edge)
@@ -265,6 +278,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         mxCell targetCell = _graphElementToCell.get(edge.getTo());
         mxCell cell = (mxCell)_mxGraph.insertEdge(_mxRootNode, edge.getId(), edge.getLabel(), sourceCell, targetCell);
         _graphElementToCell.put(edge, cell);
+        _cellToGraphElement.put(cell, edge);
 
         setStyle(cell, edge.getActiveStyle());
     }
@@ -279,7 +293,9 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         Object[] edges = _mxGraph.getEdgesBetween(sourceCell, targetCell);
         for (Object mxEdge : edges)
         {
-            _mxGraph.getModel().remove(mxEdge);
+            mxCell toRemove = (mxCell)mxEdge;
+            _mxGraph.getModel().remove(toRemove);
+            _cellToGraphElement.remove(toRemove);
         }
 
         _graphElementToCell.remove(edge);
@@ -290,6 +306,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         mxCell parent = _graphElementToCell.get(attachment.getParent());
         mxCell cell = (mxCell)_mxGraph.insertVertex(parent, attachment.getId(), attachment.getLabel(), 0, 0, attachment.getSize().getWidth(), attachment.getSize().getHeight());
         _graphElementToCell.put(attachment, cell);
+        _cellToGraphElement.put(cell, attachment);
 
         setStyle(cell, attachment.getActiveStyle());
 
@@ -301,9 +318,11 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
     private void removeAttachment(AttachmentBase<T> attachment)
     {
-        mxCell[] toRemove = { _graphElementToCell.get(attachment) };
-        _mxGraph.removeCells(toRemove, true);
+        mxCell toRemove = _graphElementToCell.get(attachment);
+        mxCell[] toRemoveArr = { toRemove };
+        _mxGraph.removeCells(toRemoveArr, true);
         _graphElementToCell.remove(attachment);
+        _cellToGraphElement.remove(toRemove);
     }
 
     private void placeAttachment_Tabular(TabularAttachment<T> attachment, mxCell mxCell)
@@ -351,7 +370,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
     private void setStyle(mxCell cell, Style style)
     {
-        cell.setStyle(_styleConverter.getStyleCSS(style));
+        _mxGraph.getModel().setStyle(cell, _styleConverter.getStyleCSS(style));
     }
 
     private void triggerLayout()

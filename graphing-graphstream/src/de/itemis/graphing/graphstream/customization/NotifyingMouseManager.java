@@ -93,29 +93,6 @@ public class NotifyingMouseManager implements MouseManager
         _view.removeMouseMotionListener(this);
     }
 
-    protected void mouseButtonPress(MouseEvent event)
-    {
-        _view.requestFocus();
-
-        if (event.getButton() == 1)
-        {
-            // unselect all.
-            if (!event.isShiftDown())
-            {
-                for (Node node : _gsGraph)
-                {
-                    _viewManager.applySelectInteraction(node.getId(), false);
-                }
-
-                for (GraphicSprite sprite : _gsGraph.spriteSet())
-                {
-                    _viewManager.applySelectInteraction(sprite.getId(), false);
-                }
-                _viewManager.selectionCompleted();
-            }
-        }
-    }
-
     protected void selectElementsInArea(Iterable<GraphicElement> elementsInArea)
     {
         for (GraphicElement gsElement : elementsInArea)
@@ -144,7 +121,7 @@ public class NotifyingMouseManager implements MouseManager
         if (event.getButton() == 1)
         {
 
-            if (event.isShiftDown())
+            if (_viewManager.isMultiSelectHotkey(event))
             {
                 _viewManager.applySelectInteraction(gsElement.getId(), null);
             }
@@ -198,7 +175,7 @@ public class NotifyingMouseManager implements MouseManager
     @Override
     public void mousePressed(MouseEvent event)
     {
-        mouseButtonPress(event);
+        _view.requestFocus();
 
         _lastTouchedElement = _view.findNodeOrSpriteAt(event.getX(), event.getY());
 
@@ -222,7 +199,6 @@ public class NotifyingMouseManager implements MouseManager
         {
             _mousePan.startPan(event.getX(), event.getY());
         }
-
     }
 
     @Override

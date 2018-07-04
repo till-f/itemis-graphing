@@ -30,12 +30,15 @@ public class DefaultMxGraph extends mxGraph
     }
 
     @Override
+    public boolean isCellEditable(Object cell)
+    {
+        return false;
+    }
+
+    @Override
     public boolean isCellSelectable(Object cell)
     {
-        if (cell instanceof mxCell && ((mxCell) cell).isEdge())
-        {
-            return false;
-        }
-        return super.isCellSelectable(cell);
+        return false;
     }
+
 }

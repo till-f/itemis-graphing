@@ -1,10 +1,13 @@
 package de.itemis.graphing.jgraphx.customization;
 
 import com.mxgraph.model.mxGeometry;
+import com.mxgraph.swing.handler.mxCellHandler;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxRectangle;
+import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxGraphView;
+import de.itemis.graphing.jgraphx.JGraphXViewManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,11 +21,14 @@ public class DefaultMxGraphComponent extends mxGraphComponent
     // (background: bounding box of graph is calculated wrong by JGraphX! -- Why is EVERY java graph framework just crap with really evil bugs?)
     private final static int AUTOSIZE_GRAPH_PADDING = 10;
 
+    private final JGraphXViewManager<?> _viewManager;
+
     private boolean _isViewLocked = true;
 
-    public DefaultMxGraphComponent(mxGraph mxGraph)
+    public DefaultMxGraphComponent(mxGraph mxGraph, JGraphXViewManager<?> viewManager)
     {
         super(mxGraph);
+        _viewManager = viewManager;
 
         this.getViewport().setOpaque(true);
         this.getViewport().setBackground(Color.WHITE);
@@ -92,22 +98,28 @@ public class DefaultMxGraphComponent extends mxGraphComponent
     @Override
     public void zoom(double factor)
     {
-        _isViewLocked = false;
+        unlockView();
         super.zoom(factor);
     }
 
     @Override
     public void zoomTo(double newScale, boolean center)
     {
-        _isViewLocked = false;
+        unlockView();
         super.zoomTo(newScale, center);
     }
 
     @Override
     public void zoomActual()
     {
-        _isViewLocked = false;
+        unlockView();
         super.zoomActual();
+    }
+
+    protected void unlockView()
+    {
+        _isViewLocked = false;
+        this.getGraph().getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(0, 0, 0, 0));
     }
 
 }

@@ -3,8 +3,8 @@ package de.itemis.graphing.model.style;
 public abstract class Style implements Cloneable
 {
     public static final String DEFAULT_LINE_COLOR_HL = "0099FF";
-    public static final Double DEFAULT_LINE_THICKNESS_HL = 3.0;
-    public static final Double DEFAULT_LINE_THICKNESS_HLEDGE = 5.0;
+    public static final Double DEFAULT_LINE_THICKNESS_HL = 2.0;
+    public static final Double DEFAULT_LINE_THICKNESS_HLEDGE = 2.0;
 
     public enum ELineMode { None, Solid, Dotted }
 

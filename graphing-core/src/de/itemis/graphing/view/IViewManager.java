@@ -37,6 +37,8 @@ public interface IViewManager<T>
 
     void removeHandler(IInteractionHandler handler);
 
+    boolean isMultiSelectHotkey(MouseEvent e);
+
     /**
      * Must be called by the interaction handling component (e.g. mouse controller) when the mouse is entering / exiting.
      * one of enterId, exitId may be null to indicate enter/exit from/to empty space.
