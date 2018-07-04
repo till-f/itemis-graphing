@@ -9,8 +9,6 @@ import de.itemis.graphing.model.style.EdgeStyle;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.model.style.VertexStyle;
 
-import java.util.List;
-
 public class HighlightLinksClickHandler implements IClickHandler
 {
     private enum EDirection { both, incoming, outgoing }

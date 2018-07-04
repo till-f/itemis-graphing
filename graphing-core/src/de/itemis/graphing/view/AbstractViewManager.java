@@ -6,8 +6,8 @@ import de.itemis.graphing.model.GraphElement;
 import de.itemis.graphing.model.Size;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.view.interaction.IClickHandler;
-import de.itemis.graphing.view.interaction.IInteractionHandler;
 import de.itemis.graphing.view.interaction.IHoverHandler;
+import de.itemis.graphing.view.interaction.IInteractionHandler;
 import de.itemis.graphing.view.interaction.ISelectionHandler;
 
 import java.awt.event.MouseEvent;

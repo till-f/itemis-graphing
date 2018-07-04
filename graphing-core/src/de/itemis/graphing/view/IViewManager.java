@@ -6,7 +6,6 @@ import de.itemis.graphing.model.Size;
 import de.itemis.graphing.model.style.Style;
 import de.itemis.graphing.view.interaction.IInteractionHandler;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Set;

@@ -4,8 +4,6 @@ import de.itemis.graphing.model.style.Style;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
 
 public abstract class GraphElement<T> implements IStyled
