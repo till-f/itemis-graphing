@@ -30,12 +30,17 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
     public JGraphXViewManager(Graph<T> graph)
     {
+        this(graph, 15, 15, 30);
+    }
+
+    public JGraphXViewManager(Graph<T> graph, double spacingIntraCell, double spacingInterHierarchy, double spacingInterRank)
+    {
         super(graph);
 
         _mxGraph = new DefaultMxGraph();
         _mxRootNode = _mxGraph.getDefaultParent();
         _mxGraphComponent = new DefaultMxGraphComponent(_mxGraph, this);
-        _mxLayout = new DefaultMxHierarchicalLayout(_mxGraph);
+        _mxLayout = new DefaultMxHierarchicalLayout(_mxGraph, spacingIntraCell, spacingInterHierarchy, spacingInterRank);
 
         initMxGraph(graph);
 

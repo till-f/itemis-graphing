@@ -6,13 +6,13 @@ import com.mxgraph.view.mxGraph;
 public class DefaultMxHierarchicalLayout extends mxHierarchicalLayout
 {
 
-    public DefaultMxHierarchicalLayout(mxGraph mxGraph)
+    public DefaultMxHierarchicalLayout(mxGraph mxGraph, double spacingIntraCell, double spacingInterHierarchy, double spacingInterRank)
     {
         super(mxGraph);
         this.setFineTuning(true);
-        this.setIntraCellSpacing(15);
-        this.setInterHierarchySpacing(15);
-        this.setInterRankCellSpacing(30);
+        this.setIntraCellSpacing(spacingIntraCell);
+        this.setInterHierarchySpacing(spacingInterHierarchy);
+        this.setInterRankCellSpacing(spacingInterRank);
         this.setResizeParent(false);
         this.setMoveParent(false);
         this.setUseBoundingBox(false);

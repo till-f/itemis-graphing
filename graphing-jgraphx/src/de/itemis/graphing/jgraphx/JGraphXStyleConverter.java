@@ -46,18 +46,19 @@ public class JGraphXStyleConverter
 
         if (style.getLineMode() == Style.ELineMode.None)
         {
-            sb.append(mxConstants.STYLE_STROKEWIDTH + "=0;");
+            sb.append(mxConstants.STYLE_STROKECOLOR + "=" + mxConstants.NONE + ";");
         }
         else
         {
-            sb.append(mxConstants.STYLE_STROKEWIDTH + "=" + style.getLineThickness() + ";");
-            if (style.getLineMode() == Style.ELineMode.Dotted)
-            {
-                sb.append(mxConstants.STYLE_DASHED + "=1;");
-            }
+            sb.append(mxConstants.STYLE_STROKECOLOR + "=#" + style.getLineColor() + ";");
         }
 
-        sb.append(mxConstants.STYLE_STROKECOLOR + "=#" + style.getLineColor() + ";");
+        sb.append(mxConstants.STYLE_STROKEWIDTH + "=" + style.getLineThickness() + ";");
+        if (style.getLineMode() == Style.ELineMode.Dotted)
+        {
+            sb.append(mxConstants.STYLE_DASHED + "=1;");
+        }
+
         sb.append(mxConstants.STYLE_FONTCOLOR + "=#" + style.getTextColor() + ";");
         sb.append(mxConstants.STYLE_FONTSIZE + "=" + style.getFontSize() + ";");
         sb.append(mxConstants.STYLE_ALIGN + "=" + getJGraphXHorizontalAlignment(style.getLabelAlignment()) + ";");
