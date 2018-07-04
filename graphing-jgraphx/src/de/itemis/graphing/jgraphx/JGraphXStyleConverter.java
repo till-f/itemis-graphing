@@ -14,6 +14,7 @@ public class JGraphXStyleConverter
         if (style instanceof BlockStyle)
         {
             sb.append(mxConstants.STYLE_VERTICAL_ALIGN + "=" + mxConstants.ALIGN_MIDDLE + ";");
+            sb.append(mxConstants.STYLE_VERTICAL_LABEL_POSITION + "=" + mxConstants.ALIGN_MIDDLE + ";");
             BlockStyle blockStyle = (BlockStyle) style;
             if(blockStyle.getShape() == BlockStyle.EShape.RoundedBox)
             {
