@@ -248,6 +248,8 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
     @Override
     public void labelChanged(GraphElement<T> element)
     {
+        mxCell cell = _graphElementToCell.get(element);
+        _mxGraph.getModel().setValue(cell, element.getLabel());
     }
 
     @Override
