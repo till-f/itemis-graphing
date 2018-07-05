@@ -198,7 +198,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         _mxGraph.getModel().beginUpdate();
         try
         {
-            addAttachment(attachment);
+            addAttachment(attachment, true);
 
             Vertex<T> vertex = attachment.getParent();
             mxCell cell = _graphElementToCell.get(vertex);
@@ -269,7 +269,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
         for (AttachmentBase<T> attachment : vertex.getAttachments())
         {
-            addAttachment(attachment);
+            addAttachment(attachment, false);
         }
 
         cell.setGeometry(new mxGeometry(0, 0, vertex.getSize().getWidth(), vertex.getSize().getHeight()));
@@ -304,10 +304,28 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         removeGraphElement(edge);
     }
 
-    private void addAttachment(AttachmentBase<T> attachment)
+    private void addAttachment(AttachmentBase<T> attachment, boolean relayout)
     {
-        mxCell parent = _graphElementToCell.get(attachment.getParent());
-        mxCell cell = (mxCell)_mxGraph.insertVertex(parent, attachment.getId(), attachment.getLabel(), 0, 0, attachment.getSize().getWidth(), attachment.getSize().getHeight());
+        Vertex<T> parentVertex = attachment.getParent();
+        mxCell parentCell = _graphElementToCell.get(parentVertex);
+
+        if (relayout)
+        {
+            _mxGraph.getModel().setGeometry(parentCell, new mxGeometry(0, 0, parentVertex.getSize().getWidth(), parentVertex.getSize().getHeight()));
+            for(AttachmentBase<T> otherAttachment : parentVertex.getAttachments())
+            {
+                if (otherAttachment instanceof TabularAttachment)
+                {
+                    mxCell otherAttachmentCell = _graphElementToCell.get(otherAttachment);
+                    if (otherAttachmentCell != null)
+                    {
+                        placeAttachment_Tabular((TabularAttachment<T>) otherAttachment, otherAttachmentCell);
+                    }
+                }
+            }
+        }
+
+        mxCell cell = (mxCell)_mxGraph.insertVertex(parentCell, attachment.getId(), attachment.getLabel(), 0, 0, attachment.getSize().getWidth(), attachment.getSize().getHeight());
         _graphElementToCell.put(attachment, cell);
         _cellToGraphElement.put(cell, attachment);
 
