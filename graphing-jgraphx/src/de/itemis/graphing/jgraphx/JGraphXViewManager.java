@@ -119,6 +119,8 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
         try
         {
             _mxGraph.removeCells(_mxGraph.getChildCells(_mxGraph.getDefaultParent(), true, true));
+            _graphElementToCell.clear();
+            _cellToGraphElement.clear();
         }
         finally
         {
@@ -229,10 +231,13 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
     @Override
     public void styleChanged(GraphElement<T> element)
     {
+        mxCell cell = _graphElementToCell.get(element);
+        if (cell == null) return;  // this may be called for dangling edges (which have not yet been notified / added before)
+        
         _mxGraph.getModel().beginUpdate();
         try
         {
-            setStyle(_graphElementToCell.get(element), element.getActiveStyle());
+            setStyle(cell, element.getActiveStyle());
         }
         finally
         {
@@ -270,11 +275,15 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
     private void removeVertex(Vertex<T> vertex)
     {
-        mxCell toRemove = _graphElementToCell.get(vertex);
-        mxCell[] toRemoveArr = { toRemove };
-        _mxGraph.removeCells(toRemoveArr, true);
-        _graphElementToCell.remove(vertex);
-        _cellToGraphElement.remove(toRemove);
+        for (Edge<T> edge : vertex.getOutgoingEdges())
+        {
+            removeEdge(edge);
+        }
+        for (Edge<T> edge : vertex.getIncomingEdges())
+        {
+            removeEdge(edge);
+        }
+        removeGraphElement(vertex);
     }
 
     private void addEdge(Edge<T> edge)
@@ -290,20 +299,7 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
     private void removeEdge(Edge<T> edge)
     {
-        mxCell sourceCell = _graphElementToCell.get(edge.getFrom());
-        mxCell targetCell = _graphElementToCell.get(edge.getTo());
-
-        if (sourceCell == null || targetCell == null) return;
-
-        Object[] edges = _mxGraph.getEdgesBetween(sourceCell, targetCell);
-        for (Object mxEdge : edges)
-        {
-            mxCell toRemove = (mxCell)mxEdge;
-            _mxGraph.getModel().remove(toRemove);
-            _cellToGraphElement.remove(toRemove);
-        }
-
-        _graphElementToCell.remove(edge);
+        removeGraphElement(edge);
     }
 
     private void addAttachment(AttachmentBase<T> attachment)
@@ -323,10 +319,14 @@ public class JGraphXViewManager<T> extends AbstractViewManager<T> implements IGr
 
     private void removeAttachment(AttachmentBase<T> attachment)
     {
-        mxCell toRemove = _graphElementToCell.get(attachment);
-        mxCell[] toRemoveArr = { toRemove };
-        _mxGraph.removeCells(toRemoveArr, true);
-        _graphElementToCell.remove(attachment);
+        removeGraphElement(attachment);
+    }
+
+    private void removeGraphElement(GraphElement<T> element)
+    {
+        mxCell toRemove = _graphElementToCell.get(element);
+        _mxGraph.getModel().remove(toRemove);
+        _graphElementToCell.remove(element);
         _cellToGraphElement.remove(toRemove);
     }
 
