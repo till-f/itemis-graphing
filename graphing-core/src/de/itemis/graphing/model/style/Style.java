@@ -2,13 +2,14 @@ package de.itemis.graphing.model.style;
 
 public abstract class Style implements Cloneable
 {
+
     public static final String DEFAULT_LINE_COLOR_HL = "0099FF";
     public static final Double DEFAULT_LINE_THICKNESS_HL = 2.0;
     public static final Double DEFAULT_LINE_THICKNESS_HLEDGE = 2.0;
 
     public enum ELineMode { None, Solid, Dotted }
 
-    public enum ELabelAlignment { Center, Above, AtRight, Under, AtLeft }
+    public enum ELabelHAlignment { Center, Left, Right }
 
     protected String lineColor = null;
     protected String fillColor = null;
@@ -16,7 +17,7 @@ public abstract class Style implements Cloneable
     protected Double lineThickness = null;
     protected ELineMode lineMode = null;
     protected Double fontSize = null;
-    protected ELabelAlignment labelAlignment = null;
+    protected ELabelHAlignment labelHAlignment = null;
     protected Boolean isInLevelForeground = null;
     protected Integer zIndex = 1;
 
@@ -60,9 +61,9 @@ public abstract class Style implements Cloneable
         return fontSize;
     }
 
-    public ELabelAlignment getLabelAlignment()
+    public ELabelHAlignment getLabelHAlignment()
     {
-        return labelAlignment;
+        return labelHAlignment;
     }
 
     public Boolean isInLevelForeground()
@@ -105,9 +106,9 @@ public abstract class Style implements Cloneable
         this.fontSize = fontSize;
     }
 
-    public void setLabelAlignment(ELabelAlignment labelAlignment)
+    public void setLabelHAlignment(ELabelHAlignment labelHAlignment)
     {
-        this.labelAlignment = labelAlignment;
+        this.labelHAlignment = labelHAlignment;
     }
 
     public void setIsInLevelForeground(boolean isInLevelForeground)
@@ -123,7 +124,8 @@ public abstract class Style implements Cloneable
         lineThickness = 1.0;
         lineMode = ELineMode.Solid;
         fontSize = 12.0;
-        labelAlignment = ELabelAlignment.Center;
+        labelHAlignment = ELabelHAlignment.Center;
         isInLevelForeground = false;
     }
+
 }

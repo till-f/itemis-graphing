@@ -89,7 +89,7 @@ public class GraphstreamStyleConverter
         sb.append("text-padding: " + (int)(3.0 * SCALE + 0.1) + "px,0.0px;");
         sb.append("text-background-mode: plain;");
         sb.append("text-background-color: #" + style.getFillColor() + ";");
-        sb.append("text-alignment: " + getGraphstreamTextAlignment(style.getLabelAlignment()) + ";");
+        sb.append("text-alignment: " + getGraphstreamTextAlignment(style.getLabelHAlignment()) + ";");
 
         if (element instanceof FloatingAttachment)
         {
@@ -177,19 +177,15 @@ public class GraphstreamStyleConverter
         throw new IllegalArgumentException("invalid mode: " + mode);
     }
 
-    private String getGraphstreamTextAlignment(Style.ELabelAlignment alignment)
+    private String getGraphstreamTextAlignment(Style.ELabelHAlignment alignment)
     {
         switch (alignment)
         {
             case Center:
                 return "center";
-            case Above:
-                return "above";
-            case AtRight:
+            case Right:
                 return "at-right";
-            case Under:
-                return "under";
-            case AtLeft:
+            case Left:
                 return "at-left";
         }
 

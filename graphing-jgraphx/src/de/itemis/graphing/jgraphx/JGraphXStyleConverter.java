@@ -61,7 +61,7 @@ public class JGraphXStyleConverter
 
         sb.append(mxConstants.STYLE_FONTCOLOR + "=#" + style.getTextColor() + ";");
         sb.append(mxConstants.STYLE_FONTSIZE + "=" + style.getFontSize() + ";");
-        sb.append(mxConstants.STYLE_ALIGN + "=" + getJGraphXHorizontalAlignment(style.getLabelAlignment()) + ";");
+        sb.append(mxConstants.STYLE_ALIGN + "=" + getJGraphXHorizontalAlignment(style.getLabelHAlignment()) + ";");
 
         return sb.toString();
     }
@@ -111,15 +111,15 @@ public class JGraphXStyleConverter
         throw new IllegalArgumentException("invalid shape: " + shape);
     }
 
-    private String getJGraphXHorizontalAlignment(Style.ELabelAlignment alignment)
+    private String getJGraphXHorizontalAlignment(Style.ELabelHAlignment alignment)
     {
         switch (alignment)
         {
             case Center:
                 return mxConstants.ALIGN_CENTER;
-            case AtRight:
+            case Right:
                 return mxConstants.ALIGN_RIGHT;
-            case AtLeft:
+            case Left:
                 return mxConstants.ALIGN_LEFT;
             default:
                 return mxConstants.ALIGN_CENTER;
