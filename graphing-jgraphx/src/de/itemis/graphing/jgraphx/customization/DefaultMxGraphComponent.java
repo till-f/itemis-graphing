@@ -1,10 +1,8 @@
 package de.itemis.graphing.jgraphx.customization;
 
 import com.mxgraph.model.mxGeometry;
-import com.mxgraph.swing.handler.mxCellHandler;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxRectangle;
-import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxGraphView;
 import de.itemis.graphing.jgraphx.JGraphXViewManager;
@@ -79,7 +77,6 @@ public class DefaultMxGraphComponent extends mxGraphComponent
         view.setScale(1.0);
 
         mxRectangle bounds = view.getGraphBounds();
-        System.out.println("debug: " + bounds.getX());
         double width = bounds.getWidth() + AUTOSIZE_GRAPH_PADDING * 2;
         double height = bounds.getHeight() + AUTOSIZE_GRAPH_PADDING * 2;
 
@@ -117,7 +114,7 @@ public class DefaultMxGraphComponent extends mxGraphComponent
         super.zoomActual();
     }
 
-    protected void unlockView()
+    private void unlockView()
     {
         _isViewLocked = false;
         graph.getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(AUTOSIZE_GRAPH_PADDING, AUTOSIZE_GRAPH_PADDING, 0, 0));

@@ -19,6 +19,7 @@ public class JGraphXStyleConverter
             if(blockStyle.getShape() == BlockStyle.EShape.RoundedBox)
             {
                 sb.append(mxConstants.STYLE_ROUNDED + "=1;");
+                sb.append(mxConstants.STYLE_ARCSIZE + "=" + blockStyle.getCornerRadiusPercent() + ";");
             }
             else
             {
