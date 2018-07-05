@@ -12,6 +12,7 @@ public class DefaultMxGraph extends mxGraph
     public DefaultMxGraph()
     {
         this.setCellsDisconnectable(false);
+        this.setAutoOrigin(true);
     }
 
     @Override

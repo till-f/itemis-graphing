@@ -75,10 +75,11 @@ public class DefaultMxGraphComponent extends mxGraphComponent
         double availHeight = this.getHeight();
         if (availHeight < 10) availHeight = 10;
 
-        mxGraphView view = this.getGraph().getView();
+        mxGraphView view = graph.getView();
         view.setScale(1.0);
 
         mxRectangle bounds = view.getGraphBounds();
+        System.out.println("debug: " + bounds.getX());
         double width = bounds.getWidth() + AUTOSIZE_GRAPH_PADDING * 2;
         double height = bounds.getHeight() + AUTOSIZE_GRAPH_PADDING * 2;
 
@@ -92,7 +93,7 @@ public class DefaultMxGraphComponent extends mxGraphComponent
         double xOffs = (availWidth - newWidth) / 2 / newScale;
         double yOffs = (availHeight - newHeight) / 2 / newScale;
 
-        this.getGraph().getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(xOffs, yOffs, 0, 0));
+        graph.getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(xOffs, yOffs, 0, 0));
     }
 
     @Override
@@ -119,7 +120,7 @@ public class DefaultMxGraphComponent extends mxGraphComponent
     protected void unlockView()
     {
         _isViewLocked = false;
-        this.getGraph().getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(AUTOSIZE_GRAPH_PADDING, AUTOSIZE_GRAPH_PADDING, 0, 0));
+        graph.getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(AUTOSIZE_GRAPH_PADDING, AUTOSIZE_GRAPH_PADDING, 0, 0));
     }
 
 }
