@@ -19,6 +19,8 @@ public class DefaultMxGraphComponent extends mxGraphComponent
     // (background: bounding box of graph is calculated wrong by JGraphX! -- Why is EVERY java graph framework just crap with really evil bugs?)
     private final static int AUTOSIZE_GRAPH_PADDING = 10;
 
+    private final static int MAX_ZOOM_SCALE = 10;
+
     private final JGraphXViewManager<?> _viewManager;
 
     private boolean _isViewLocked = true;
@@ -91,6 +93,21 @@ public class DefaultMxGraphComponent extends mxGraphComponent
         double yOffs = (availHeight - newHeight) / 2 / newScale;
 
         graph.getModel().setGeometry(graph.getDefaultParent(), new mxGeometry(xOffs, yOffs, 0, 0));
+    }
+
+    @Override
+    public void zoomIn()
+    {
+        mxGraphView view = graph.getView();
+        double scale = view.getScale();
+        if (scale > MAX_ZOOM_SCALE)
+        {
+            return;
+        }
+        else
+        {
+            super.zoomIn();
+        }
     }
 
     @Override
