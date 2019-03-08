@@ -93,7 +93,9 @@ public class JGraphXMouseListener implements MouseInputListener, MouseWheelListe
     @Override
     public void mouseWheelMoved(MouseWheelEvent e)
     {
-        if (e.getWheelRotation() > 0)
+        double rot = e.getPreciseWheelRotation() != 0 ? e.getPreciseWheelRotation() : e.getWheelRotation();
+
+        if (rot > 0)
         {
             _viewManager.zoomOut();
         }
