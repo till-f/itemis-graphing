@@ -1,1 +1,0 @@
-copy "C:\git\de.itemis.graphing\out\artifacts\*.jar" "C:\git\mbeddr.core\code\languages\com.mbeddr.mpsutil\languages\com.mbeddr.mpsutil.graphstream\runtime\lib\"
